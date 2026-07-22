@@ -19,15 +19,13 @@ chapter: false
 
 &emsp; **Ngành:** Khoa học máy tính
 
-&emsp; **Lớp:** AWS082025
-
 &emsp; **Công ty thực tập:** Công ty TNHH Amazon Web Services Viet Nam
 
 &emsp; **Vị trí thực tập:** Workforce Bootcamp - First Cloud AI Journey
 
-&emsp; **Thời gian thực tập:** Từ ngày 15/06/2026 đến ngày 15/08/2026
+&emsp; **Thời gian thực tập:** Từ ngày 15/06/2026 đến ngày 14/08/2026
 
-![Ảnh đại diện của bạn](../images/3-4.jpg)
+![Ảnh đại diện của bạn](/images/3-4.jpg)
     
 ### Nội dung báo cáo
 

@@ -19,15 +19,13 @@ chapter: false
 
 &emsp; **Major:** Computer Science
 
-&emsp; **Class:** AWS082025
-
 &emsp; **Internship Company:** Amazon Web Services Viet Nam Company Limited
 
 &emsp; **Internship Position:** Workforce Bootcamp - First Cloud AI Journey
 
 &emsp; **Internship Duration:** From 15/06/2026 to 15/08/2026
 
-![Profile Picture](../images/3-4.jpg)
+![Profile Picture](/images/3-4.jpg)
 
 ### Report Content
 
