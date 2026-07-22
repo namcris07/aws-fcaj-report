@@ -1,115 +1,215 @@
 ---
 title: "Proposal"
-date: 2024-01-01
+date: 2026-07-06
 weight: 2
 chapter: false
 pre: " <b> 2. </b> "
 ---
-{{% notice warning %}}
-⚠️ **Note:** The information below is for reference purposes only. Please **do not copy verbatim** for your report, including this warning.
-{{% /notice %}}
 
 In this section, you need to summarize the contents of the workshop that you **plan** to conduct.
 
-# IoT Weather Platform for Lab Research
-## A Unified AWS Serverless Solution for Real-Time Weather Monitoring
+# DevSecOps Factory on AWS
+## Building an End-to-End CI/CD DevSecOps System for a React Web Application on Amazon EKS
 
 ### 1. Executive Summary
-The IoT Weather Platform is designed for the ITea Lab team in Ho Chi Minh City to enhance weather data collection and analysis. It supports up to 5 weather stations, with potential scalability to 10-15, utilizing Raspberry Pi edge devices with ESP32 sensors to transmit data via MQTT. The platform leverages AWS Serverless services to deliver real-time monitoring, predictive analytics, and cost efficiency, with access restricted to 5 lab members via Amazon Cognito.
+DevSecOps Factory is a complete CI/CD system that integrates security into every stage of the software development lifecycle (Shift-Left Security). The project builds an automated pipeline from the moment a developer pushes code until the application is deployed to staging and production environments on Amazon EKS, using Jenkins as the CI engine, Argo CD as the GitOps CD engine, and Amazon CloudWatch as the monitoring platform. The system adopts a **Local-first, Cloud-after** strategy — developing and testing everything on local machines with k3d before migrating to real AWS infrastructure, saving costs and reducing risks during development.
+
+The pipeline integrates 6 automated Security Gates: Secrets Scan, SCA (Software Composition Analysis), SAST (Static Application Security Testing), IaC Scan, Container Image Scan, and DAST (Dynamic Application Security Testing), ensuring every build is validated before going live.
 
 ### 2. Problem Statement
-### What’s the Problem?
-Current weather stations require manual data collection, becoming unmanageable with multiple units. There is no centralized system for real-time data or analytics, and third-party platforms are costly and overly complex.
 
-### The Solution
-The platform uses AWS IoT Core to ingest MQTT data, AWS Lambda and API Gateway for processing, Amazon S3 for storage (including a data lake), and AWS Glue Crawlers and ETL jobs to extract, transform, and load data from the S3 data lake to another S3 bucket for analysis. AWS Amplify with Next.js provides the web interface, and Amazon Cognito ensures secure access. Similar to Thingsboard and CoreIoT, users can register new devices and manage connections, though this platform operates on a smaller scale and is designed for private use. Key features include real-time dashboards, trend analysis, and low operational costs.
+*Current Challenges*
 
-### Benefits and Return on Investment
-The solution establishes a foundational resource for lab members to develop a larger IoT platform, serving as a study resource, and provides a data foundation for AI enthusiasts for model training or analysis. It reduces manual reporting for each station via a centralized platform, simplifying management and maintenance, and improves data reliability. Monthly costs are $0.66 USD per the AWS Pricing Calculator, with a 12-month total of $7.92 USD. All IoT equipment costs are covered by the existing weather station setup, eliminating additional development expenses. The break-even period of 6-12 months is achieved through significant time savings from reduced manual work.
+In software development practice, many teams still deploy manually, lack automated security checks, and have no observability after applications run in production. Specifically:
+- **Manual Deployments:** Copying files, SSH-ing into servers to deploy, leading to human error and inconsistency across environments.
+- **Lack of Security Checks:** Vulnerabilities in source code, dependencies, and container images are only discovered after the application is live, creating significant risk.
+- **No Observability:** When applications fail in production, teams have no dashboards, centralized logs, or alerts to detect and respond in time.
+- **Configuration Drift:** The actual state on Kubernetes clusters gradually diverges from the declared configuration in Git, causing hard-to-reproduce errors.
+
+*The Solution*
+
+The project builds an end-to-end CI/CD DevSecOps pipeline on AWS with key components:
+- **Jenkins** orchestrates a 12-stage pipeline, automating build, security scanning, Docker image packaging, and pushing to Amazon ECR.
+- **6 Security Gates** integrated directly into the pipeline: Gitleaks (secrets), Trivy (SCA + container scan), SonarQube (SAST), Checkov (IaC scan), OWASP ZAP (DAST).
+- **Argo CD** applies pull-based GitOps deployment to automatically synchronize manifests from the Git repository to Amazon EKS, ensuring the cluster state always matches the declared configuration.
+- **Amazon CloudWatch Container Insights** provides centralized monitoring for logs, metrics, and performance alerts.
+
+*Benefits and Return on Investment (ROI)*
+
+- Reduces deployment time from hours (manual) to minutes (automated).
+- Detects security vulnerabilities early during CI, before code reaches production.
+- Prevents configuration drift through GitOps — all infrastructure changes are version-controlled via Git.
+- Provides comprehensive observability for rapid incident detection and response.
+- Creates a reusable foundation for future software projects within the organization.
 
 ### 3. Solution Architecture
-The platform employs a serverless AWS architecture to manage data from 5 Raspberry Pi-based stations, scalable to 15. Data is ingested via AWS IoT Core, stored in an S3 data lake, and processed by AWS Glue Crawlers and ETL jobs to transform and load it into another S3 bucket for analysis. Lambda and API Gateway handle additional processing, while Amplify with Next.js hosts the dashboard, secured by Cognito. The architecture is detailed below:
 
-![IoT Weather Station Architecture](/images/2-Proposal/edge_architecture.jpeg)
+The system is designed using a microservices architecture on Kubernetes, utilizing Kustomize to manage configurations for multiple environments (staging/production). The end-to-end workflow is as follows:
 
-![IoT Weather Platform Architecture](/images/2-Proposal/platform_architecture.jpeg)
+```text
+React App → Docker Image → Jenkins Security Gates → Amazon ECR → Argo CD → Amazon EKS → CloudWatch
+```
 
-### AWS Services Used
-- **AWS IoT Core**: Ingests MQTT data from 5 stations, scalable to 15.
-- **AWS Lambda**: Processes data and triggers Glue jobs (two functions).
-- **Amazon API Gateway**: Facilitates web app communication.
-- **Amazon S3**: Stores raw data in a data lake and processed outputs (two buckets).
-- **AWS Glue**: Crawlers catalog data, and ETL jobs transform and load it.
-- **AWS Amplify**: Hosts the Next.js web interface.
-- **Amazon Cognito**: Secures access for lab users.
+```text
+Developer pushes code to GitHub
+    ↓
+GitHub webhook → Jenkins pipeline
+    ↓
+Jenkins Jenkinsfile 12 stages:
+  ① Secrets scan        (Gitleaks)
+  ② Build + unit tests  (npm build)
+  ③ SCA                 (Trivy filesystem)
+  ④ SAST                (SonarQube)
+  ⑤ Docker build        (multi-stage Dockerfile)
+  ⑥ Container scan      (Trivy image)
+  ⑦ IaC scan            (Checkov)
+  ⑧ Push image → Amazon ECR
+  ⑨ Update image tag → Argo CD auto-sync staging
+  ⑩ DAST                (OWASP ZAP vs staging URL)
+  ⑪ Manual approval gate
+  ⑫ Promote → production
+    ↓
+CloudWatch Container Insights (logs, metrics, alarms)
+```
 
-### Component Design
-- **Edge Devices**: Raspberry Pi collects and filters sensor data, sending it to IoT Core.
-- **Data Ingestion**: AWS IoT Core receives MQTT messages from the edge devices.
-- **Data Storage**: Raw data is stored in an S3 data lake; processed data is stored in another S3 bucket.
-- **Data Processing**: AWS Glue Crawlers catalog the data, and ETL jobs transform it for analysis.
-- **Web Interface**: AWS Amplify hosts a Next.js app for real-time dashboards and analytics.
-- **User Management**: Amazon Cognito manages user access, allowing up to 5 active accounts.
+![DevSecOps CI/CD Pipeline Architecture on AWS](/images/2-Proposal/devsecops_pipeline_architecture.png)
+
+*AWS Services Used*
+
+| AWS Service | Role in the System |
+|---|---|
+| **Amazon EKS** | Kubernetes container orchestration for the web application, managed Node Group with `t3.small` instance type, multi-namespace support (staging/production). |
+| **Amazon ECR** | Secure Docker image storage with Scan on Push, image tagging by Git Commit SHA. |
+| **Amazon CloudWatch** | Centralized monitoring: Container Insights for Node/Pod metrics, Logs Insights for application log queries, Budget Alerts for cost warnings. |
+| **AWS IAM** | Fine-grained permissions following Least Privilege; IRSA (IAM Roles for Service Accounts) for EKS workloads. |
+| **AWS Load Balancer Controller** | Auto-provisions Application Load Balancers (ALB) from Kubernetes Ingress configurations, Layer 7 routing. |
+
+*Supporting DevOps Tools*
+
+| Tool | Role |
+|---|---|
+| **Jenkins** | CI engine orchestrating the 12-stage pipeline; Configuration as Code (CasC). |
+| **Argo CD** | GitOps CD engine, pull-based deployment, auto-sync staging, manual approval for production. |
+| **Docker** | Packages the React application into a multi-stage container image with non-root runtime (Nginx Unprivileged). |
+| **Kustomize** | Manages Kubernetes base/overlays configurations for staging and production. |
+| **k3d** | Local Kubernetes cluster for offline development and testing before cloud migration. |
+
+*Security Gate Tools*
+
+| Gate | Tool | Purpose |
+|---|---|---|
+| Secrets Scan | Gitleaks | Detects secrets, tokens, and passwords committed to source code. |
+| SCA | Trivy Filesystem | Scans CVE vulnerabilities in dependencies (npm packages). |
+| SAST | SonarQube | Static code analysis to detect code injection, bugs, and code smells. |
+| IaC Scan | Checkov | Validates Kubernetes manifests and Dockerfiles against security benchmarks. |
+| Container Scan | Trivy Image | Scans CVE vulnerabilities in Docker base images and layers. |
+| DAST | OWASP ZAP | Scans running web applications on staging (security headers, XSS, injection). |
+
+*Component Design*
+
+- **Application Layer:** A Tetris web application built with React, packaged via multi-stage Dockerfile (Node 16 build → Nginx Unprivileged runtime), exposing port 8080 with health check endpoint `/`.
+- **CI Pipeline (Jenkins):** Jenkinsfile declaring 12 sequential stages, standardized environment variables (`AWS_REGION`, `REGISTRY`, `IMAGE_TAG`), security reports archived as artifacts.
+- **CD GitOps (Argo CD):** Application CRDs for staging (auto-sync) and production (manual sync), tracking image tag changes in `kustomization.yaml`.
+- **Kubernetes Infrastructure (EKS):** Deployments with Liveness/Readiness Probes, SecurityContext (runAsNonRoot, drop ALL capabilities, readOnlyRootFilesystem), Services and Ingress ALB.
+- **Observability:** CloudWatch Container Insights with DaemonSet agent, Fluent Bit for log collection, CloudWatch Logs Insights for queries, AWS Budget for cost alerts.
 
 ### 4. Technical Implementation
-**Implementation Phases**
-This project has two parts—setting up weather edge stations and building the weather platform—each following 4 phases:
-- Build Theory and Draw Architecture: Research Raspberry Pi setup with ESP32 sensors and design the AWS serverless architecture (1 month pre-internship)
-- Calculate Price and Check Practicality: Use AWS Pricing Calculator to estimate costs and adjust if needed (Month 1).
-- Fix Architecture for Cost or Solution Fit: Tweak the design (e.g., optimize Lambda with Next.js) to stay cost-effective and usable (Month 2).
-- Develop, Test, and Deploy: Code the Raspberry Pi setup, AWS services with CDK/SDK, and Next.js app, then test and release to production (Months 2-3).
 
-**Technical Requirements**
-- Weather Edge Station: Sensors (temperature, humidity, rainfall, wind speed), a microcontroller (ESP32), and a Raspberry Pi as the edge device. Raspberry Pi runs Raspbian, handles Docker for filtering, and sends 1 MB/day per station via MQTT over Wi-Fi.
-- Weather Platform: Practical knowledge of AWS Amplify (hosting Next.js), Lambda (minimal use due to Next.js), AWS Glue (ETL), S3 (two buckets), IoT Core (gateway and rules), and Cognito (5 users). Use AWS CDK/SDK to code interactions (e.g., IoT Core rules to S3). Next.js reduces Lambda workload for the fullstack web app.
+*Implementation Phases*
+
+The project spans 9 internship weeks (15/06/2026 – 14/08/2026), structured into 3 main phases:
+
+1. **Phase 1 — Foundation & Analysis (Weeks 1–3, 15/06 – 05/07):** Study core AWS services (VPC, IAM, EC2, EKS), analyze the existing system, create a report outline, and define the project scope. Test building the React app, Dockerfile, and Kubernetes manifests locally.
+
+2. **Phase 2 — Pipeline, Security Gates & Deployment (Weeks 4–6, 06/07 – 26/07):** Standardize the Jenkins pipeline, integrate 6 security scan scripts, create the ECR repository, push images tagged with commit SHAs, provision the EKS cluster, install AWS Load Balancer Controller, deploy applications via Argo CD, and finalize the GitOps staging/production workflow.
+
+3. **Phase 3 — Monitoring, Documentation, Acceptance & Submission (Weeks 7–9, 27/07 – 14/08):** Enable CloudWatch Container Insights, consolidate security findings, design presentation slides, build the bilingual Hugo workshop website, write step-by-step Lab guides, write 3 blog posts, gather events/self-evaluation/feedback, audit bilingual quality, cross-check against grading criteria, submit the final report, and clean up AWS resources.
+
+*Technical Requirements*
+
+- **AWS Infrastructure:** AWS account with permissions for EKS, ECR, IAM, CloudWatch; region `ap-southeast-1`; AWS Budget alerts configured.
+- **CI/CD:** Jenkins (Docker Compose local or EC2), Docker, Argo CD installed on EKS via Helm.
+- **Security:** Gitleaks, Trivy, SonarQube (Docker Compose), Checkov, OWASP ZAP.
+- **Kubernetes:** kubectl, Kustomize, k3d (local), Helm (AWS Load Balancer Controller, Argo CD).
+- **Documentation:** Hugo (workshop website), Markdown, Git (source code and content management).
+
+*Team Roles*
+
+| Member | Primary Role | Focus Areas |
+|---|---|---|
+| Member 1 | AWS Infrastructure & Kubernetes Platform | AWS account, IAM, EKS, networking, ECR, deployment platform. |
+| Member 2 | CI/CD & GitOps | Jenkinsfile, pipeline, push image, Argo CD, staging/production promotion. |
+| Member 3 | DevSecOps Security | Secrets scan, SCA, SAST, IaC scan, container scan, DAST, security policies. |
+| Member 4 | Application, Docker & K8s Manifests | React app, Dockerfile, health check, Kubernetes base/overlays. |
+| Member 5 | Observability, QA, Documentation & Demo | CloudWatch, testing, workshop website, reports, demo slides. |
 
 ### 5. Timeline & Milestones
-**Project Timeline**
-- Pre-Internship (Month 0): 1 month for planning and old station review.
-- Internship (Months 1-3): 3 months.
-    - Month 1: Study AWS and upgrade hardware.
-    - Month 2: Design and adjust architecture.
-    - Month 3: Implement, test, and launch.
-- Post-Launch: Up to 1 year for research.
+
+| Phase | Timeframe | Key Activities | Deliverables |
+|---|---|---|---|
+| Foundation & Analysis | Weeks 1–3 (15/06 – 05/07) | Study AWS, analyze the system, build app/Docker locally, implement secrets scan, create report outline. | App builds successfully, Dockerfile runs locally, pipeline draft, report outline. |
+| Pipeline, Security & Deployment | Weeks 4–6 (06/07 – 26/07) | Create ECR, push images, provision EKS cluster, install ALB Controller, complete 6 security gates, deploy staging/production via Argo CD. | End-to-end pipeline, ECR with images, EKS nodes Ready, Argo CD Synced & Healthy. |
+| Monitoring, Documentation & Acceptance | Weeks 7–9 (27/07 – 14/08) | Enable CloudWatch, consolidate findings, design slides, build Hugo website, write workshop labs, write 3 blogs, gather events/evaluation, audit bilingual content, submit deliverables, clean up AWS. | CloudWatch dashboard, slide deck, complete workshop website, 3 blogs published, deliverables submitted, AWS cleaned up. |
 
 ### 6. Budget Estimation
-You can find the budget estimation on the [AWS Pricing Calculator](https://calculator.aws/#/estimate?id=621f38b12a1ef026842ba2ddfe46ff936ed4ab01).  
-Or you can download the [Budget Estimation File](../attachments/budget_estimation.pdf).
 
-### Infrastructure Costs
-- AWS Services:
-    - AWS Lambda: $0.00/month (1,000 requests, 512 MB storage).
-    - S3 Standard: $0.15/month (6 GB, 2,100 requests, 1 GB scanned).
-    - Data Transfer: $0.02/month (1 GB inbound, 1 GB outbound).
-    - AWS Amplify: $0.35/month (256 MB, 500 ms requests).
-    - Amazon API Gateway: $0.01/month (2,000 requests).
-    - AWS Glue ETL Jobs: $0.02/month (2 DPUs).
-    - AWS Glue Crawlers: $0.07/month (1 crawler).
-    - MQTT (IoT Core): $0.08/month (5 devices, 45,000 messages).
+*Monthly AWS Infrastructure Costs (Estimated)*
 
-Total: $0.7/month, $8.40/12 months
+| Service | Estimated Cost | Notes |
+|---|---|---|
+| Amazon EKS (Control Plane) | ~$73.00/month | 1 cluster. |
+| EC2 Managed Node Group (t3.small × 2) | ~$30.00/month | 2 nodes, On-Demand pricing. |
+| Amazon ECR | ~$1.00/month | < 5 GB image storage. |
+| Amazon CloudWatch | ~$5.00/month | Container Insights + Logs Insights. |
+| Elastic Load Balancer (ALB) | ~$20.00/month | 1 ALB for staging + production. |
+| Data Transfer | ~$2.00/month | Outbound traffic. |
+| **Total Estimated** | **~$131/month** | |
 
-- Hardware: $265 one-time (Raspberry Pi 5 and sensors).
+> **Note:** The primary costs come from the EKS Control Plane and EC2 nodes. To minimize costs during development, the team adopts a **Local-first** strategy with k3d — only provisioning the EKS cluster on AWS for actual demos, and cleaning up immediately afterward. The estimated total real AWS cost for the entire project is approximately **$150–$250** (as the cloud environment runs for only 1–2 weeks).
+
+*Cost Optimization Strategies*
+
+- Develop and test on local k3d clusters (free), only migrating to EKS when needed.
+- Use AWS Budget alerts at 50%, 80%, and 100% thresholds for early warnings.
+- Thoroughly clean up all resources (EKS, ALB, ECR, CloudWatch) immediately after demos.
+- Use cost-effective instance types (`t3.small`) and maintain minimum node counts.
 
 ### 7. Risk Assessment
-#### Risk Matrix
-- Network Outages: Medium impact, medium probability.
-- Sensor Failures: High impact, low probability.
-- Cost Overruns: Medium impact, low probability.
 
-#### Mitigation Strategies
-- Network: Local storage on Raspberry Pi with Docker.
-- Sensors: Regular checks and spares.
-- Cost: AWS budget alerts and optimization.
+*Risk Matrix*
 
-#### Contingency Plans
-- Revert to manual methods if AWS fails.
-- Use CloudFormation for cost-related rollbacks.
+| Risk | Impact | Probability | Mitigation Strategy |
+|---|---|---|---|
+| AWS Budget Overrun | High | Medium | AWS Budget alerts; Local-first strategy; immediate cleanup after demo; use t3.small instances. |
+| EKS Cluster Failure During Demo | High | Low | Prepare static demo slides (screenshot backups); thoroughly test before defense; use local k3d as fallback. |
+| Security Scan Blocking Pipeline | Medium | Medium | Use `--soft-fail` during early phases; enable `--exit-code 1` during demo to showcase real security gates. |
+| Code Merge Conflicts Between Members | Medium | Medium | Each member works on dedicated branches; Pull Requests require reviews; CODEOWNERS enforced. |
+| Network Loss During Live Demo | Medium | Low | Demo offline on local k3d; screenshot backups for each pipeline step. |
+| Outdated Dependencies Causing Build Failures | Low | Medium | Document dependency issues in `VULNERABILITIES.md`; accept some warnings for security scan demo purposes. |
+
+*Contingency Plans*
+
+- If EKS is unavailable: Switch to demo on local k3d cluster with local Docker registry.
+- If Jenkins fails: Present via static demo slides with screenshots of successful pipeline logs.
+- If budget is exceeded: Immediately terminate the EKS cluster, revert to local-only; use CloudFormation/Terraform for automated cleanup.
 
 ### 8. Expected Outcomes
-#### Technical Improvements: 
-Real-time data and analytics replace manual processes.  
-Scalable to 10-15 stations.
-#### Long-term Value
-1-year data foundation for AI research.  
-Reusable for future projects.
+
+*Technical Improvements*
+- Successfully build an end-to-end CI/CD DevSecOps pipeline within 9 weeks, running completely from code push to production deployment.
+- Integrate 6 automated security gates that detect and report vulnerabilities before code reaches production.
+- Implement GitOps with Argo CD, auto-syncing staging and controlling production via manual approval.
+- Comprehensive monitoring via CloudWatch Container Insights with dashboards, log queries, and cost alerts.
+
+*Deliverables*
+- Bilingual workshop website (Vietnamese – English) following FCAJ template standards, with step-by-step Lab guides.
+- Project source code on GitHub with clear structure and complete documentation.
+- 3 blog posts published on AWS Study Group.
+- Project presentation slides and a set of operational evidence screenshots.
+- Consolidated security findings table with remediation recommendations.
+- AWS cleanup checklist to prevent post-project cost overruns.
+
+*Long-term Value*
+- The pipeline model can be reused for other software projects within the organization.
+- The workshop website becomes a reference resource for future internship cohorts.
+- Hands-on experience with DevSecOps, Kubernetes, GitOps, and AWS services for all team members.

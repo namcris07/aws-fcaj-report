@@ -1,39 +1,36 @@
 ---
 title: "Self-Assessment"
-date: 2024-01-01
+date: 2026-08-14
 weight: 6
 chapter: false
 pre: " <b> 6. </b> "
 ---
 
-{{% notice warning %}}
-⚠️ **Note:** The information below is for reference purposes only. Please **do not copy it verbatim** into your report, including this warning.
-{{% /notice %}}
+During my internship program at **First Cloud AI Journey (FCAJ)** from **June 15, 2026** to **August 14, 2026**, I had a valuable opportunity to learn, practice, and apply cloud computing and DevOps skills to a real-world enterprise project model.  
 
-During my internship at **[Company/Organization Name]** from **[start date]** to **[end date]**, I had the opportunity to learn, practice, and apply the knowledge acquired in school to a real-world working environment.  
-I participated in **[briefly describe the main project or task]**, through which I improved my skills in **[list skills: programming, analysis, reporting, communication, etc.]**.  
+Throughout the internship, I collaborated with my team to implement the project **"Building an Automated DevSecOps CI/CD Factory for Application Delivery and Deployment on AWS EKS"**. Through this project, I significantly enhanced my technical skills in AWS VPC network design, container registry management with Amazon ECR, Jenkins security pipeline creation with 6 Security Gates (Trivy, SonarQube, OWASP), automated GitOps deployments with Argo CD, observability setup via CloudWatch Container Insights, as well as teamwork collaboration and technical documentation.  
 
-In terms of work ethic, I always strived to complete tasks well, complied with workplace regulations, and actively engaged with colleagues to improve work efficiency.
+In terms of work ethic, I consistently completed assigned tasks on time, strictly adhered to program guidelines and weekly roadmaps, and actively sought feedback from mentors, community speakers, and teammates to continuously improve work quality.
 
-To objectively reflect on my internship period, I would like to evaluate myself based on the following criteria:
+To objectively reflect on my 9-week internship journey, I self-evaluate based on the following criteria:
 
-| No. | Criteria                            | Description                                                                                      | Good | Fair | Average |
-| --- | ----------------------------------- | ------------------------------------------------------------------------------------------------ | ---- | ---- | ------- |
-| 1   | **Professional knowledge & skills** | Understanding of the field, applying knowledge in practice, proficiency with tools, work quality | ✅    | ☐    | ☐       |
-| 2   | **Ability to learn**                | Ability to absorb new knowledge and learn quickly                                                | ☐    | ✅    | ☐       |
-| 3   | **Proactiveness**                   | Taking initiative, seeking out tasks without waiting for instructions                            | ✅    | ☐    | ☐       |
-| 4   | **Sense of responsibility**         | Completing tasks on time and ensuring quality                                                    | ✅    | ☐    | ☐       |
-| 5   | **Discipline**                      | Adhering to schedules, rules, and work processes                                                 | ☐    | ☐    | ✅       |
-| 6   | **Progressive mindset**             | Willingness to receive feedback and improve oneself                                              | ☐    | ✅    | ☐       |
-| 7   | **Communication**                   | Presenting ideas and reporting work clearly                                                      | ☐    | ✅    | ☐       |
-| 8   | **Teamwork**                        | Working effectively with colleagues and participating in teams                                   | ✅    | ☐    | ☐       |
-| 9   | **Professional conduct**            | Respecting colleagues, partners, and the work environment                                        | ✅    | ☐    | ☐       |
-| 10  | **Problem-solving skills**          | Identifying problems, proposing solutions, and showing creativity                                | ☐    | ✅    | ☐       |
-| 11  | **Contribution to project/team**    | Work effectiveness, innovative ideas, recognition from the team                                  | ✅    | ☐    | ☐       |
-| 12  | **Overall**                         | General evaluation of the entire internship period                                               | ✅    | ☐    | ☐       |
+| No. | Criteria | Description | Good | Fair | Average |
+| --- | --- | --- | --- | --- | --- |
+| 1 | **Professional knowledge & skills** | Solid grasp of AWS services (VPC, EC2, ECR, EKS, IAM), proficient with Docker, Jenkins, Argo CD, CloudWatch | ✅ | ☐ | ☐ |
+| 2 | **Ability to learn** | Rapidly absorb Cloud-Native, DevSecOps, and GitOps concepts and apply them effectively to the project | ✅ | ☐ | ☐ |
+| 3 | **Proactiveness** | Independently research official AWS documentation and troubleshoot pipeline/manifest errors | ✅ | ☐ | ☐ |
+| 4 | **Sense of responsibility** | Deliver assigned tasks punctually according to the weekly roadmap (Weeks 1 - 9 Worklog), maintaining high quality | ✅ | ☐ | ☐ |
+| 5 | **Discipline** | Strictly adhere to schedules, attend all team meetings, community events, and tech workshops | ✅ | ☐ | ☐ |
+| 6 | **Progressive mindset** | Openly receive feedback, proactively refactor code, and optimize infrastructure configurations | ✅ | ☐ | ☐ |
+| 7 | **Communication** | Clearly report weekly progress, present technical ideas coherently in slides and team discussions | ☐ | ✅ | ☐ |
+| 8 | **Teamwork** | Collaborate smoothly across infrastructure, CI/CD, and reporting subteams; assist peers in debugging | ✅ | ☐ | ☐ |
+| 9 | **Professional conduct** | Maintain professional respect, support teammates, and demonstrate a positive learning attitude | ✅ | ☐ | ☐ |
+| 10 | **Problem-solving skills** | Identify root causes such as container port mismatches, ECR token expiry, or Argo CD sync drifts, and apply fixes | ☐ | ✅ | ☐ |
+| 11 | **Contribution to project/team** | Contribute to final report documentation, step-by-step Workshop Lab guides, and Hugo site deployment | ✅ | ☐ | ☐ |
+| 12 | **Overall** | Comprehensive assessment of growth, skill development, and overall value gained during the internship | ✅ | ☐ | ☐ |
 
-### Needs Improvement
+### Areas for Improvement
 
-* Strengthen discipline and strictly comply with the rules and regulations of the company or any organization  
-* Improve problem-solving thinking  
-* Enhance communication skills in both daily interactions and professional contexts, including handling situations effectively
+* **Enhance Public Speaking & Presentation Skills:** Practice technical presentation delivery to build greater confidence when speaking before audiences and review committees.  
+* **Deepen Complex Problem-Solving:** Strengthen root cause analysis capabilities for large-scale distributed system incidents.  
+* **Reinforce Personal Discipline:** Maintain systematic worklog documentation habits and optimize daily time management workflows.  

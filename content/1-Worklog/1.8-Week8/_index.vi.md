@@ -1,59 +1,32 @@
 ---
 title: "Worklog Tuần 8"
-date: 2024-01-01
-weight: 1
+date: 2026-08-03
+weight: 8
 chapter: false
 pre: " <b> 1.8. </b> "
 ---
-{{% notice warning %}}
-⚠️ **Lưu ý:** Các thông tin dưới đây chỉ nhằm mục đích tham khảo, vui lòng **không sao chép nguyên văn** cho bài báo cáo của bạn kể cả warning này.
-{{% /notice %}}
-
 
 ### Mục tiêu tuần 8:
 
-* Kết nối, làm quen với các thành viên trong First Cloud AI Journey.
-* Hiểu dịch vụ AWS cơ bản, cách dùng console & CLI.
+* Tập hợp toàn bộ kết quả kỹ thuật từ các phân hệ (VPC/EKS foundation, Jenkins CI/CD pipeline, Security gates, Argo CD GitOps, Observability).
+* Thiết kế slide thuyết trình báo cáo đồ án với bố cục chuẩn, sơ đồ kiến trúc hệ thống và 6 Security Gates trong pipeline.
+* Soạn thảo cẩm nang hướng dẫn thực hành (Workshop Lab) chi tiết từng bước (Step-by-step), tích hợp code snippets mẫu (Dockerfile, Jenkinsfile, deployment.yaml, Kustomization), hình ảnh minh chứng thực tế và kịch bản demo backup.
 
 ### Các công việc cần triển khai trong tuần này:
-| Thứ | Công việc                                                                                                                                                                                   | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu                            |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------------- | ----------------------------------------- |
-| 2   | - Làm quen với các thành viên FCAJ <br> - Đọc và lưu ý các nội quy, quy định tại đơn vị thực tập                                                                                             | 11/08/2025   | 11/08/2025      |
-| 3   | - Tìm hiểu AWS và các loại dịch vụ <br>&emsp; + Compute <br>&emsp; + Storage <br>&emsp; + Networking <br>&emsp; + Database <br>&emsp; + ... <br>                                            | 12/08/2025   | 12/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 4   | - Tạo AWS Free Tier account <br> - Tìm hiểu AWS Console & AWS CLI <br> - **Thực hành:** <br>&emsp; + Tạo AWS account <br>&emsp; + Cài AWS CLI & cấu hình <br> &emsp; + Cách sử dụng AWS CLI | 13/08/2025   | 13/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Tìm hiểu EC2 cơ bản: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - Các cách remote SSH vào EC2 <br> - Tìm hiểu Elastic IP   <br>                  | 14/08/2025   | 15/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Thực hành:** <br>&emsp; + Tạo EC2 instance <br>&emsp; + Kết nối SSH <br>&emsp; + Gắn EBS volume                                                                                         | 15/08/2025   | 15/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-
+| Thứ | Công việc | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu |
+| --- | --- | --- | --- | --- |
+| 2 | - **Thu thập & Đối chiếu số liệu kỹ thuật:** <br>&emsp; + Tập hợp báo cáo kết quả thực hiện chi tiết từ các thành viên (AWS Infra, Jenkins CI/CD, Trivy/SonarQube/OWASP Dependency Check security scans, EKS workloads). <br>&emsp; + Đối chiếu sự thống nhất giữa hạ tầng thực tế và sơ đồ logic; xác định các điểm sáng kỹ thuật (6 Security Gates, GitOps Sync, IRSA) cần nhấn mạnh trong bài báo cáo. | 03/08/2026 | 03/08/2026 | [Project Tasks](file:///d:/AWS%20FCAJ/CICD-DevSecOps-using-AWS-services/tasks.md) |
+| 3 | - **Thiết kế Slide thuyết trình đồ án:** <br>&emsp; + Thiết kế bộ slide thuyết trình cho buổi bảo vệ đồ án, thống nhất bố cục và flow trình bày chung của nhóm. <br>&emsp; + Vẽ lại sơ đồ kiến trúc hệ thống tổng thể và sơ đồ chi tiết 6 Security Gates tích hợp trong pipeline Jenkins. <br>&emsp; + Tùy biến slide với màu sắc chuyên nghiệp, hiện đại đồng nhất với giao diện website. | 04/08/2026 | 04/08/2026 | [Architecture & Pipeline](file:///d:/AWS%20FCAJ/CICD-DevSecOps-using-AWS-services/README.md) |
+| 4 | - **Soạn thảo Workshop Lab Step-by-Step:** <br>&emsp; + Soạn thảo hướng dẫn thực hành chi tiết từng bước cho các bài Lab (Khởi tạo VPC & EKS cluster, Cài đặt Jenkins, Cấu hình Webhook, Deploy ứng dụng với Argo CD). <br>&emsp; + Đảm bảo văn bản hướng dẫn mạch lạc, có tính khả thi cao giúp người đọc dễ dàng tự thực hành tái lập (replicability). | 05/08/2026 | 05/08/2026 | [Workshop Structure](file:///d:/AWS%20FCAJ/fcj-workshop-template/content/5-Workshop/) |
+| 5 | - **Tích hợp Code Snippets & Images cho Lab:** <br>&emsp; + Tích hợp các đoạn mã nguồn cấu hình mẫu thực tế (Jenkinsfile, Dockerfile, deployment.yaml, kustomization.yaml, Helm values) vào bài hướng dẫn Lab với định dạng code block highlight. <br>&emsp; + Nhúng hình ảnh thực tế từ giao diện AWS Console, Jenkins, Argo CD, CloudWatch và bổ sung mục Kết quả mong đợi (Expected Results) ở cuối mỗi bước. | 06/08/2026 | 06/08/2026 | [Technical Codebase](file:///d:/AWS%20FCAJ/CICD-DevSecOps-using-AWS-services/) |
+| 6 | - **Hoàn thiện Demo Script & Review:** <br>&emsp; + Xây dựng kịch bản thuyết trình và slide demo tĩnh (ảnh chụp từng bước pipeline thành công) làm phương án backup phòng ngừa sự cố khi demo live. <br>&emsp; + Phân chia vai trò thuyết trình cho từng thành viên trong buổi bảo vệ; rà soát lỗi chính tả và tổng kết tiến độ tuần 8. | 07/08/2026 | 07/08/2026 | [Project Roadmap](file:///d:/AWS%20FCAJ/CICD-DevSecOps-using-AWS-services/tasks.md) |
 
 ### Kết quả đạt được tuần 8:
 
-* Hiểu AWS là gì và nắm được các nhóm dịch vụ cơ bản: 
-  * Compute
-  * Storage
-  * Networking 
-  * Database
-  * ...
+* **Hoàn thiện Bộ Slide thuyết trình và Kịch bản trình bày:**
+  * Thu thập đầy đủ số liệu, nhật ký quét bảo mật và hình ảnh thực tế từ các phân hệ infra, CI/CD, GitOps và Observability.
+  * Hoàn thành slide thuyết trình đồ án với giao diện thẩm mỹ cao, sơ đồ kiến trúc mạch lạc và kịch bản demo tĩnh backup an toàn.
 
-* Đã tạo và cấu hình AWS Free Tier account thành công.
-
-* Làm quen với AWS Management Console và biết cách tìm, truy cập, sử dụng dịch vụ từ giao diện web.
-
-* Cài đặt và cấu hình AWS CLI trên máy tính bao gồm:
-  * Access Key
-  * Secret Key
-  * Region mặc định
-  * ...
-
-* Sử dụng AWS CLI để thực hiện các thao tác cơ bản như:
-
-  * Kiểm tra thông tin tài khoản & cấu hình
-  * Lấy danh sách region
-  * Xem dịch vụ EC2
-  * Tạo và quản lý key pair
-  * Kiểm tra thông tin dịch vụ đang chạy
-  * ...
-
-* Có khả năng kết nối giữa giao diện web và CLI để quản lý tài nguyên AWS song song.
-* ...
-
-
+* **Biên soạn Cẩm nang Workshop Lab chi tiết từng bước:**
+  * Hoàn thành biên soạn cẩm nang Workshop Lab từng bước từ cơ bản đến nâng cao, tích hợp đầy đủ các đoạn code snippets mẫu thực tế.
+  * Nhúng hình ảnh giao diện minh chứng và phần kết quả mong đợi giúp người thực hành dễ dàng đối chiếu và tái lập thành công.

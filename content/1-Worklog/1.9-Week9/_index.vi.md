@@ -1,59 +1,32 @@
 ---
 title: "Worklog Tuần 9"
-date: 2024-01-01
-weight: 1
+date: 2026-08-10
+weight: 9
 chapter: false
 pre: " <b> 1.9. </b> "
 ---
-{{% notice warning %}}
-⚠️ **Lưu ý:** Các thông tin dưới đây chỉ nhằm mục đích tham khảo, vui lòng **không sao chép nguyên văn** cho bài báo cáo của bạn kể cả warning này.
-{{% /notice %}}
-
 
 ### Mục tiêu tuần 9:
 
-* Kết nối, làm quen với các thành viên trong First Cloud AI Journey.
-* Hiểu dịch vụ AWS cơ bản, cách dùng console & CLI.
+* Khởi tạo dự án Workshop Website trên Hugo framework (`FCAJ-workshop-template`), thiết lập menu, thanh điều hướng và giao diện song ngữ (Việt - Anh).
+* Đưa toàn bộ tài liệu dự án (Student Info, Proposal, Worklog 9 tuần, 3 bài Blogs, Events Participated, Self-Evaluation & Sharing Feedback) lên website.
+* Rà soát song ngữ chéo (VI/EN), kiểm thử toàn bộ liên kết/hình ảnh hiển thị, build sản phẩm production (`hugo --minify`), bàn giao báo cáo hoàn chỉnh và thực hiện dọn dẹp tài nguyên trên AWS (EKS cluster, Load Balancer, ECR) để tối ưu chi phí.
 
 ### Các công việc cần triển khai trong tuần này:
-| Thứ | Công việc                                                                                                                                                                                   | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu                            |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------------- | ----------------------------------------- |
-| 2   | - Làm quen với các thành viên FCAJ <br> - Đọc và lưu ý các nội quy, quy định tại đơn vị thực tập                                                                                             | 11/08/2025   | 11/08/2025      |
-| 3   | - Tìm hiểu AWS và các loại dịch vụ <br>&emsp; + Compute <br>&emsp; + Storage <br>&emsp; + Networking <br>&emsp; + Database <br>&emsp; + ... <br>                                            | 12/08/2025   | 12/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 4   | - Tạo AWS Free Tier account <br> - Tìm hiểu AWS Console & AWS CLI <br> - **Thực hành:** <br>&emsp; + Tạo AWS account <br>&emsp; + Cài AWS CLI & cấu hình <br> &emsp; + Cách sử dụng AWS CLI | 13/08/2025   | 13/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Tìm hiểu EC2 cơ bản: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - Các cách remote SSH vào EC2 <br> - Tìm hiểu Elastic IP   <br>                  | 14/08/2025   | 15/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Thực hành:** <br>&emsp; + Tạo EC2 instance <br>&emsp; + Kết nối SSH <br>&emsp; + Gắn EBS volume                                                                                         | 15/08/2025   | 15/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-
+| Thứ | Công việc | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu |
+| --- | --- | --- | --- | --- |
+| 2 | - **Khởi tạo Hugo Website & Menu Navigation:** <br>&emsp; + Nghiên cứu cấu trúc Hugo và khởi dựng codebase website local bằng lệnh `hugo server`. <br>&emsp; + Cấu hình `config.toml` và thiết lập thứ tự trọng số (weight) cho thanh điều hướng menu (Student Info, Worklog, Proposal, Blogs, Events, Self-evaluation, Sharing & Feedback). | 10/08/2026 | 10/08/2026 | [FCAJ Workshop Template](file:///d:/AWS%20FCAJ/fcj-workshop-template/) |
+| 3 | - **Đưa nội dung Info, Proposal & Worklog lên Site:** <br>&emsp; + Soạn thảo và đưa thông tin sinh viên (Student Information), đề xuất dự án (Proposal) và toàn bộ nhật ký công việc 9 tuần (Worklog Tuần 1 - 9) lên hệ thống nội dung `content/`. <br>&emsp; + Nhúng các sơ đồ kiến trúc hệ thống và sơ đồ luồng CI/CD dưới dạng hình ảnh chất lượng cao. | 11/08/2026 | 11/08/2026 | [Website Content Map](file:///d:/AWS%20FCAJ/fcj-workshop-template/content/) |
+| 4 | - **Tích hợp Blogs, Events & Evaluation Pages:** <br>&emsp; + Đưa 3 bài Blog kỹ thuật (IAM/VPC, EKS CI/CD, CloudWatch/Cost) kèm link/screenshot bài đăng thực tế lên mục Blogs. <br>&emsp; + Cập nhật thông tin các sự kiện ngoại khóa (Events Participated) cùng ảnh minh chứng. <br>&emsp; + Thu thập và cập nhật các trang Tự đánh giá (Self-evaluation) & Cảm nhận phản hồi (Sharing & Feedback) của cả nhóm. | 12/08/2026 | 12/08/2026 | [Blogs & Events](file:///d:/AWS%20FCAJ/fcj-workshop-template/content/4-EventParticipated/) |
+| 5 | - **Rà soát Song ngữ & Kiểm thử UI/Links:** <br>&emsp; + Thực hiện so khớp chéo bản dịch tiếng Việt và tiếng Anh trên tất cả các trang, đảm bảo thuật ngữ kỹ thuật chính xác và chuẩn nghĩa. <br>&emsp; + Rà soát kiểm tra toàn bộ hyperlinks, shortcodes, bảng biểu và responsive UI trên các kích thước màn hình khác nhau. | 13/08/2026 | 13/08/2026 | [Bilingual Review](file:///d:/AWS%20FCAJ/fcj-workshop-template/config.toml) |
+| 6 | - **Build Production, Nộp Báo cáo & Dọn dẹp AWS:** <br>&emsp; + Chạy lệnh build Hugo production (`hugo --minify`), kiểm tra không còn lỗi render hay broken link. <br>&emsp; + Đóng gói và bàn giao báo cáo cuối khóa cùng slide thuyết trình cho ban tổ chức. <br>&emsp; + Thực hiện dọn dẹp triệt để các tài nguyên AWS (xóa EKS cluster, ALB Ingress, ECR images, VPC resources) để chấm dứt phát sinh chi phí. | 14/08/2026 | 14/08/2026 | [Final Handover](file:///d:/AWS%20FCAJ/CICD-DevSecOps-using-AWS-services/tasks.md) |
 
 ### Kết quả đạt được tuần 9:
 
-* Hiểu AWS là gì và nắm được các nhóm dịch vụ cơ bản: 
-  * Compute
-  * Storage
-  * Networking 
-  * Database
-  * ...
+* **Hoàn thiện Workshop Website Báo cáo Đồ án:**
+  * Xây dựng thành công trang web workshop báo cáo đồ án trên Hugo framework đẹp mắt, chuẩn SEO, hỗ trợ song ngữ Việt - Anh hoàn chỉnh.
+  * Tích hợp 100% tài liệu đồ án: Thông tin nhóm, Đề xuất dự án, Worklog 9 tuần, Workshop Labs step-by-step, 3 bài Blogs, Events ngoại khóa, Tự đánh giá và Phản hồi.
 
-* Đã tạo và cấu hình AWS Free Tier account thành công.
-
-* Làm quen với AWS Management Console và biết cách tìm, truy cập, sử dụng dịch vụ từ giao diện web.
-
-* Cài đặt và cấu hình AWS CLI trên máy tính bao gồm:
-  * Access Key
-  * Secret Key
-  * Region mặc định
-  * ...
-
-* Sử dụng AWS CLI để thực hiện các thao tác cơ bản như:
-
-  * Kiểm tra thông tin tài khoản & cấu hình
-  * Lấy danh sách region
-  * Xem dịch vụ EC2
-  * Tạo và quản lý key pair
-  * Kiểm tra thông tin dịch vụ đang chạy
-  * ...
-
-* Có khả năng kết nối giữa giao diện web và CLI để quản lý tài nguyên AWS song song.
-* ...
-
-
+* **Nghiệm thu Sản phẩm & Dọn dẹp Tài nguyên Đám mây:**
+  * Kiểm thử giao diện mượt mà, build thành công gói production không lỗi; hoàn tất đóng gói bàn giao đồ án đúng thời hạn 14/08/2026.
+  * Thực hiện dọn dẹp sạch sẽ toàn bộ tài nguyên chạy trên AWS (EKS cluster, Load Balancer, ECR repos), ngăn ngừa hoàn toàn rủi ro phát sinh chi phí bất ngờ.

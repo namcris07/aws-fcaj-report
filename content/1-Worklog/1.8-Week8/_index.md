@@ -1,57 +1,32 @@
 ---
 title: "Week 8 Worklog"
-date: 2024-01-01
-weight: 1
+date: 2026-08-03
+weight: 8
 chapter: false
 pre: " <b> 1.8. </b> "
 ---
-{{% notice warning %}} 
-⚠️ **Note:** The following information is for reference purposes only. Please **do not copy verbatim** for your own report, including this warning.
-{{% /notice %}}
-
 
 ### Week 8 Objectives:
 
-* Connect and get acquainted with members of First Cloud AI Journey.
-* Understand basic AWS services, how to use the console & CLI.
+* Consolidate all technical results across submodules (VPC/EKS foundation, Jenkins CI/CD pipeline, Security gates, Argo CD GitOps, Observability).
+* Design project presentation slide deck featuring system architecture diagrams and the 6 Security Gates integrated into the pipeline.
+* Draft a step-by-step Workshop Lab manual with real code snippets (Dockerfile, Jenkinsfile, deployment.yaml, Kustomization), interface screenshots, and backup demo scenarios.
 
 ### Tasks to be carried out this week:
-| Day | Task                                                                                                                                                                                                   | Start Date | Completion Date | Reference Material                        |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- | --------------- | ----------------------------------------- |
-| 2   | - Get acquainted with FCAJ members <br> - Read and take note of internship unit rules and regulations                                                                                                   | 08/11/2025 | 08/11/2025      |
-| 3   | - Learn about AWS and its types of services <br>&emsp; + Compute <br>&emsp; + Storage <br>&emsp; + Networking <br>&emsp; + Database <br>&emsp; + ... <br>                                              | 08/12/2025 | 08/12/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 4   | - Create AWS Free Tier account <br> - Learn about AWS Console & AWS CLI <br> - **Practice:** <br>&emsp; + Create AWS account <br>&emsp; + Install & configure AWS CLI <br> &emsp; + How to use AWS CLI | 08/13/2025 | 08/13/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Learn basic EC2: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - SSH connection methods to EC2 <br> - Learn about Elastic IP   <br>                            | 08/14/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Practice:** <br>&emsp; + Launch an EC2 instance <br>&emsp; + Connect via SSH <br>&emsp; + Attach an EBS volume                                                                                     | 08/15/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
-
+| Day | Task | Start Date | Completion Date | Reference Material |
+| --- | --- | --- | --- | --- |
+| 2 | - **Consolidate & Cross-check Technical Metrics:** <br>&emsp; + Gather implementation results from all submodules (AWS Infra, Jenkins CI/CD, Trivy/SonarQube/OWASP security scans, EKS workloads). <br>&emsp; + Ensure consistency between deployed infrastructure and logical diagrams; highlight key technical highlights (6 Security Gates, GitOps Sync, IRSA) for presentation. | 03/08/2026 | 03/08/2026 | [Project Tasks](file:///d:/AWS%20FCAJ/CICD-DevSecOps-using-AWS-services/tasks.md) |
+| 3 | - **Design Project Defense Slide Deck:** <br>&emsp; + Design technical slide deck for final project defense, establishing uniform presentation layouts and flow. <br>&emsp; + Re-render end-to-end architecture diagrams and detailed 6 Security Gates pipeline workflow. <br>&emsp; + Customize slides with modern, professional styling matching the workshop website theme. | 04/08/2026 | 04/08/2026 | [Architecture & Pipeline](file:///d:/AWS%20FCAJ/CICD-DevSecOps-using-AWS-services/README.md) |
+| 4 | - **Draft Step-by-Step Workshop Labs:** <br>&emsp; + Draft comprehensive step-by-step lab instructions (VPC & EKS setup, Jenkins installation, Webhook configuration, Argo CD application deployment). <br>&emsp; + Ensure clear, reproducible step guides allowing users to easily replicate the entire environment. | 05/08/2026 | 05/08/2026 | [Workshop Structure](file:///d:/AWS%20FCAJ/fcj-workshop-template/content/5-Workshop/) |
+| 5 | - **Integrate Code Snippets & Screenshots:** <br>&emsp; + Embed production-ready configuration snippets (Jenkinsfile, Dockerfile, deployment.yaml, kustomization.yaml, Helm values) into lab guides using highlighted code blocks. <br>&emsp; + Insert actual AWS Console, Jenkins, Argo CD, and CloudWatch screenshots along with Expected Results sections at the end of each lab step. | 06/08/2026 | 06/08/2026 | [Technical Codebase](file:///d:/AWS%20FCAJ/CICD-DevSecOps-using-AWS-services/) |
+| 6 | - **Finalize Demo Script & Review:** <br>&emsp; + Construct presentation script and static screenshot backup slides covering all pipeline execution steps for live demo safety. <br>&emsp; + Assign speaker roles among team members, review typography/spelling, and evaluate Week 8 achievements. | 07/08/2026 | 07/08/2026 | [Project Roadmap](file:///d:/AWS%20FCAJ/CICD-DevSecOps-using-AWS-services/tasks.md) |
 
 ### Week 8 Achievements:
 
-* Understood what AWS is and mastered the basic service groups: 
-  * Compute
-  * Storage
-  * Networking 
-  * Database
-  * ...
+* **Finalized Slide Deck & Defense Script:**
+  * Collected all performance metrics, security scan logs, and console screenshots across infra, CI/CD, GitOps, and Observability layers.
+  * Completed the project defense slide deck with modern aesthetic layouts, clear architecture diagrams, and static backup demo slides.
 
-* Successfully created and configured an AWS Free Tier account.
-
-* Became familiar with the AWS Management Console and learned how to find, access, and use services via the web interface.
-
-* Installed and configured AWS CLI on the computer, including:
-  * Access Key
-  * Secret Key
-  * Default Region
-  * ...
-
-* Used AWS CLI to perform basic operations such as:
-
-  * Check account & configuration information
-  * Retrieve the list of regions
-  * View EC2 service
-  * Create and manage key pairs
-  * Check information about running services
-  * ...
-
-* Acquired the ability to connect between the web interface and CLI to manage AWS resources in parallel.
-* ...
+* **Compiled Comprehensive Step-by-Step Workshop Lab Manual:**
+  * Completed step-by-step lab guides ranging from foundational setup to advanced GitOps deployments, enriched with actual production code snippets.
+  * Embedded interface evidence screenshots and expected result verification steps ensuring high replicability.

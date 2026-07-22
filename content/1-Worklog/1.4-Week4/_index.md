@@ -1,57 +1,33 @@
 ---
 title: "Week 4 Worklog"
-date: 2024-01-01
-weight: 1
+date: 2026-07-06
+weight: 4
 chapter: false
 pre: " <b> 1.4. </b> "
 ---
-{{% notice warning %}} 
-⚠️ **Note:** The following information is for reference purposes only. Please **do not copy verbatim** for your own report, including this warning.
-{{% /notice %}}
-
 
 ### Week 4 Objectives:
 
-* Connect and get acquainted with members of First Cloud AI Journey.
-* Understand basic AWS services, how to use the console & CLI.
+* Study and understand Docker Image storage on Amazon ECR.
+* Coordinate the creation of image delivery flow and tag management documentation.
+* Capture ECR screenshots for reporting.
 
 ### Tasks to be carried out this week:
-| Day | Task                                                                                                                                                                                                   | Start Date | Completion Date | Reference Material                        |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- | --------------- | ----------------------------------------- |
-| 2   | - Get acquainted with FCAJ members <br> - Read and take note of internship unit rules and regulations                                                                                                   | 08/11/2025 | 08/11/2025      |
-| 3   | - Learn about AWS and its types of services <br>&emsp; + Compute <br>&emsp; + Storage <br>&emsp; + Networking <br>&emsp; + Database <br>&emsp; + ... <br>                                              | 08/12/2025 | 08/12/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 4   | - Create AWS Free Tier account <br> - Learn about AWS Console & AWS CLI <br> - **Practice:** <br>&emsp; + Create AWS account <br>&emsp; + Install & configure AWS CLI <br> &emsp; + How to use AWS CLI | 08/13/2025 | 08/13/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Learn basic EC2: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - SSH connection methods to EC2 <br> - Learn about Elastic IP   <br>                            | 08/14/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Practice:** <br>&emsp; + Launch an EC2 instance <br>&emsp; + Connect via SSH <br>&emsp; + Attach an EBS volume                                                                                     | 08/15/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
-
+| Day | Task | Start Date | Completion Date | Reference Material |
+| --- | --- | --- | --- | --- |
+| 2 | - **Amazon ECR Research & Authentication:** <br>&emsp; + Learn about Amazon ECR (Elastic Container Registry) storage capabilities on AWS. <br>&emsp; + Differentiate between Public and Private Repositories; study automated Scan on Push security features. <br>&emsp; + Study secure IAM authentication methods using `aws ecr get-login-password` via AWS CLI to log in the docker client. | 06/07/2026 | 06/07/2026 | [ECR Module](https://github.com/namcris07/aws-fcaj-learning/) |
+| 3 | - **Packaging & Storage Coordination:** <br>&emsp; + Assist team members in aligning Dockerfile directory structures and Docker registry settings. <br>&emsp; + Coordinate with Member 1 and Member 4 to draft the automated Image Delivery Flow (from Jenkins CI, through Trivy security scans, to Amazon ECR). <br>&emsp; + Define required environment variables: `REGISTRY`, `REPO_NAME`, `IMAGE_NAME`, `IMAGE_TAG`. | 07/07/2026 | 07/07/2026 | [Image Delivery Flow](file:///d:/AWS%20FCAJ/CICD-DevSecOps-using-AWS-services/README.md) |
+| 4 | - **CI/CD ECR Documentation:** <br>&emsp; + Document ECR configurations and draft image tagging instructions based on dynamic Git Commit SHAs to prevent overwriting old builds. <br>&emsp; + Detail configuration parameters in `ci/Jenkinsfile` and explain ECR credential integration inside Jenkins Credentials Provider. | 08/07/2026 | 08/07/2026 | [Jenkins Pipeline](file:///d:/AWS%20FCAJ/CICD-DevSecOps-using-AWS-services/tasks.md) |
+| 5 | - **Report Updates & Capture:** <br>&emsp; + Capture screenshots of ECR repository operations in the AWS Console. <br>&emsp; + Log ECR image scan findings and vulnerability summaries. <br>&emsp; + Update the "AWS Image Registry" section in the project documentation; update project folder structures related to `ci/` and ECR. | 09/07/2026 | 09/07/2026 | [Project Docs](file:///d:/AWS%20FCAJ/CICD-DevSecOps-using-AWS-services/README.md) |
+| 6 | - **ECR Checklist & Review:** <br>&emsp; + Formulate a test checklist for verifying ECR registry readiness (testing login, pull, push from local and Jenkins agent). <br>&emsp; + Review and evaluate Week 4 deliverables, preparing for the EKS deployment phase. | 10/07/2026 | 10/07/2026 | [Test Checklist](file:///d:/AWS%20FCAJ/CICD-DevSecOps-using-AWS-services/tasks.md) |
 
 ### Week 4 Achievements:
 
-* Understood what AWS is and mastered the basic service groups: 
-  * Compute
-  * Storage
-  * Networking 
-  * Database
-  * ...
-
-* Successfully created and configured an AWS Free Tier account.
-
-* Became familiar with the AWS Management Console and learned how to find, access, and use services via the web interface.
-
-* Installed and configured AWS CLI on the computer, including:
-  * Access Key
-  * Secret Key
-  * Default Region
-  * ...
-
-* Used AWS CLI to perform basic operations such as:
-
-  * Check account & configuration information
-  * Retrieve the list of regions
-  * View EC2 service
-  * Create and manage key pairs
-  * Check information about running services
-  * ...
-
-* Acquired the ability to connect between the web interface and CLI to manage AWS resources in parallel.
-* ...
+* **Mastered Amazon ECR Service & Permission Management:**
+  * Acquired in-depth knowledge of Amazon ECR operations, access permissions (IAM Policies, ECR Repository Policies), and secure image storage.
+  * Clarified the difference between IAM Identity Center SSO authentication and temporary token generation via AWS CLI for Docker daemon login.
+  
+* **Finalized Documentation & Automation Workflows:**
+  * Collaboratively designed the automated image delivery flow diagram from Jenkins CI to Amazon ECR.
+  * Aligned environment variables and image paths in the `Jenkinsfile` to block image overwrite risks in ECR.
+  * Completed documentation and captured screenshots demonstrating ECR Repository operations with image tags mapped to Git Commit SHAs.

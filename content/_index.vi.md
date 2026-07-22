@@ -1,6 +1,6 @@
 ---
 title: "Báo cáo thực tập"
-date: 2024-01-01
+date: 2026-06-15
 weight: 1
 chapter: false
 ---
@@ -13,7 +13,7 @@ chapter: false
 
 &emsp; **Số điện thoại:** 0367581213
 
-&emsp; **Email:** [EMAIL_ADDRESS]
+&emsp; **Email:** nam.nguyennamcris7@hcmut.edu.vn
 
 &emsp; **Trường:** Đại học Bách Khoa Thành phố Hồ Chí Minh
 
@@ -28,7 +28,6 @@ chapter: false
 &emsp; **Thời gian thực tập:** Từ ngày 15/06/2026 đến ngày 15/08/2026
 
 ![Ảnh đại diện của bạn](/images/3-4.jpg)
-
 
 ### Nội dung báo cáo
 

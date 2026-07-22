@@ -1,57 +1,33 @@
 ---
 title: "Week 6 Worklog"
-date: 2024-01-01
-weight: 1
+date: 2026-07-20
+weight: 6
 chapter: false
 pre: " <b> 1.6. </b> "
 ---
-{{% notice warning %}} 
-⚠️ **Note:** The following information is for reference purposes only. Please **do not copy verbatim** for your own report, including this warning.
-{{% /notice %}}
-
 
 ### Week 6 Objectives:
 
-* Connect and get acquainted with members of First Cloud AI Journey.
-* Understand basic AWS services, how to use the console & CLI.
+* Understand GitOps principles and Argo CD operations.
+* Establish verification processes for GitOps auto-sync and manual approval gates.
+* Capture Argo CD staging/production application status screenshots.
 
 ### Tasks to be carried out this week:
-| Day | Task                                                                                                                                                                                                   | Start Date | Completion Date | Reference Material                        |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- | --------------- | ----------------------------------------- |
-| 2   | - Get acquainted with FCAJ members <br> - Read and take note of internship unit rules and regulations                                                                                                   | 08/11/2025 | 08/11/2025      |
-| 3   | - Learn about AWS and its types of services <br>&emsp; + Compute <br>&emsp; + Storage <br>&emsp; + Networking <br>&emsp; + Database <br>&emsp; + ... <br>                                              | 08/12/2025 | 08/12/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 4   | - Create AWS Free Tier account <br> - Learn about AWS Console & AWS CLI <br> - **Practice:** <br>&emsp; + Create AWS account <br>&emsp; + Install & configure AWS CLI <br> &emsp; + How to use AWS CLI | 08/13/2025 | 08/13/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Learn basic EC2: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - SSH connection methods to EC2 <br> - Learn about Elastic IP   <br>                            | 08/14/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Practice:** <br>&emsp; + Launch an EC2 instance <br>&emsp; + Connect via SSH <br>&emsp; + Attach an EBS volume                                                                                     | 08/15/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
-
+| Day | Task | Start Date | Completion Date | Reference Material |
+| --- | --- | --- | --- | --- |
+| 2 | - **GitOps & Argo CD Research:** <br>&emsp; + Learn GitOps principles and pull-based deployments on Kubernetes. <br>&emsp; + Study Argo CD Application CRD (Custom Resource Definition) specifications for multi-environment configurations. <br>&emsp; + Compare deployment sync strategies (Manual Sync vs Automated Sync). | 20/07/2026 | 20/07/2026 | [GitOps Guides](https://000062.awsstudygroup.com/) |
+| 3 | - **Staging Auto-Sync QA Design:** <br>&emsp; + Design test cases for validating Argo CD automated synchronization (Auto-sync) from Git to EKS staging namespace when Jenkins pushes new image tags. <br>&emsp; + Establish criteria for Synced (manifest matching) and Healthy (running without crashes) application status. | 21/07/2026 | 21/07/2026 | [Argo CD Documentation](https://argoproj.github.io/cd/) |
+| 4 | - **Manual Approval Gate Workflow:** <br>&emsp; + Document verification procedures for the manual approval gate in the Jenkins pipeline to promote builds to Production. <br>&emsp; + Establish safety verification test scenarios to block untested code from production. | 22/07/2026 | 22/07/2026 | [Jenkins Approval](file:///d:/AWS%20FCAJ/CICD-DevSecOps-using-AWS-services/tasks.md) |
+| 5 | - **Gather GitOps Capture:** <br>&emsp; + Capture screenshots of Argo CD application status (Synced & Healthy) for both environments. <br>&emsp; + Record synchronization logs from the Argo CD server and capture Git bump actions inside Jenkins. | 23/07/2026 | 23/07/2026 | [Argo CD UI](file:///d:/AWS%20FCAJ/CICD-DevSecOps-using-AWS-services/README.md) |
+| 6 | - **QA Summary & Weekly Review:** <br>&emsp; + Consolidate the GitOps testing checklist. <br>&emsp; + Review the security configurations of Git credentials (SSH Keys/Personal Access Tokens) used in Jenkins. <br>&emsp; + Review and evaluate Week 6 deliverables. | 24/07/2026 | 24/07/2026 | [Test Checklist](file:///d:/AWS%20FCAJ/CICD-DevSecOps-using-AWS-services/tasks.md) |
 
 ### Week 6 Achievements:
 
-* Understood what AWS is and mastered the basic service groups: 
-  * Compute
-  * Storage
-  * Networking 
-  * Database
-  * ...
+* **Mastered GitOps Continuous Delivery Workflows:**
+  * Acquired in-depth knowledge of pull-based deployment paradigms and manifest synchronization via Argo CD on EKS.
+  * Evaluated GitOps advantages over traditional push CD in preventing Configuration Drift.
 
-* Successfully created and configured an AWS Free Tier account.
-
-* Became familiar with the AWS Management Console and learned how to find, access, and use services via the web interface.
-
-* Installed and configured AWS CLI on the computer, including:
-  * Access Key
-  * Secret Key
-  * Default Region
-  * ...
-
-* Used AWS CLI to perform basic operations such as:
-
-  * Check account & configuration information
-  * Retrieve the list of regions
-  * View EC2 service
-  * Create and manage key pairs
-  * Check information about running services
-  * ...
-
-* Acquired the ability to connect between the web interface and CLI to manage AWS resources in parallel.
-* ...
+* **Established Safety & QA Controls:**
+  * Successfully designed and verified test cases for Staging Auto-Sync and Production Manual Approval Gates.
+  * Captured clear screenshots of Argo CD displaying Synced and Healthy states for both environments, ready for the final report.
+  * Ensured secure storage of Git credentials in Jenkins Credentials Provider without leaking secrets.

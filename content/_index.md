@@ -1,15 +1,11 @@
 ---
 title: "Internship Report"
-date: 2024-01-01
+date: 2026-06-15
 weight: 1
 chapter: false
 ---
 
 # Internship Report
-
-{{% notice warning %}}
-⚠️ **Note:** The information below is for reference purposes only. Please **do not copy verbatim** for your report, including this warning.
-{{% /notice %}}
 
 ### Student Information:
 
@@ -17,7 +13,7 @@ chapter: false
 
 &emsp; **Phone Number:** 0367581213
 
-&emsp; **Email:** [EMAIL_ADDRESS]
+&emsp; **Email:** nam.nguyennamcris7@hcmut.edu.vn
 
 &emsp; **University:** Ho Chi Minh City University of Technology
 

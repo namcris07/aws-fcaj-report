@@ -1,59 +1,31 @@
 ---
 title: "Worklog Tuần 7"
-date: 2024-01-01
-weight: 1
+date: 2026-07-27
+weight: 7
 chapter: false
 pre: " <b> 1.7. </b> "
 ---
-{{% notice warning %}}
-⚠️ **Lưu ý:** Các thông tin dưới đây chỉ nhằm mục đích tham khảo, vui lòng **không sao chép nguyên văn** cho bài báo cáo của bạn kể cả warning này.
-{{% /notice %}}
-
 
 ### Mục tiêu tuần 7:
 
-* Kết nối, làm quen với các thành viên trong First Cloud AI Journey.
-* Hiểu dịch vụ AWS cơ bản, cách dùng console & CLI.
+* Thiết lập và rà soát giám sát logs/metrics của EKS cluster bằng CloudWatch Container Insights.
+* Tổng hợp hình ảnh giám sát, các cảnh báo chi phí (AWS Budget) và viết tài liệu Observability.
 
 ### Các công việc cần triển khai trong tuần này:
-| Thứ | Công việc                                                                                                                                                                                   | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu                            |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------------- | ----------------------------------------- |
-| 2   | - Làm quen với các thành viên FCAJ <br> - Đọc và lưu ý các nội quy, quy định tại đơn vị thực tập                                                                                             | 11/08/2025   | 11/08/2025      |
-| 3   | - Tìm hiểu AWS và các loại dịch vụ <br>&emsp; + Compute <br>&emsp; + Storage <br>&emsp; + Networking <br>&emsp; + Database <br>&emsp; + ... <br>                                            | 12/08/2025   | 12/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 4   | - Tạo AWS Free Tier account <br> - Tìm hiểu AWS Console & AWS CLI <br> - **Thực hành:** <br>&emsp; + Tạo AWS account <br>&emsp; + Cài AWS CLI & cấu hình <br> &emsp; + Cách sử dụng AWS CLI | 13/08/2025   | 13/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Tìm hiểu EC2 cơ bản: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - Các cách remote SSH vào EC2 <br> - Tìm hiểu Elastic IP   <br>                  | 14/08/2025   | 15/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Thực hành:** <br>&emsp; + Tạo EC2 instance <br>&emsp; + Kết nối SSH <br>&emsp; + Gắn EBS volume                                                                                         | 15/08/2025   | 15/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-
+| Thứ | Công việc | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu |
+| --- | --- | --- | --- | --- |
+| 2 | - **Nghiên cứu CloudWatch Observability:** <br>&emsp; + Tìm hiểu dịch vụ CloudWatch và các tính năng giám sát Container Insights trên AWS. <br>&emsp; + Nghiên cứu cơ chế hoạt động của CloudWatch agent chạy dưới dạng DaemonSet trên EKS và Fluent Bit thu thập log container chuyển tiếp về CloudWatch Logs. | 27/07/2026 | 27/07/2026 | [CloudWatch Insights](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContainerInsights.html) |
+| 3 | - **Cấu hình Container Insights:** <br>&emsp; + Phối hợp với Thành viên 1 để triển khai và kích hoạt CloudWatch Observability add-on cho EKS. <br>&emsp; + Xác nhận các Log Groups liên quan đến cluster, node, pod và log ứng dụng bắt đầu đổ về AWS CloudWatch console. | 28/07/2026 | 28/07/2026 | [Observability Config](file:///d:/AWS%20FCAJ/CICD-DevSecOps-using-AWS-services/tasks.md) |
+| 4 | - **Xây dựng Log query & Dashboard:** <br>&emsp; + Thiết lập các câu truy vấn CloudWatch Logs Insights để lọc nhanh log ứng dụng web (truy vấn lỗi, thống kê mã trạng thái HTTP). <br>&emsp; + Hỗ trợ xây dựng giao diện hiển thị metric hiệu năng CPU/RAM, Network I/O của Pod/Node phục vụ giám sát vận hành. | 29/07/2026 | 29/07/2026 | [AWS Observability](https://github.com/namcris07/aws-fcaj-learning/) |
+| 5 | - **Chụp ảnh minh chứng giám sát:** <br>&emsp; + Chụp lại giao diện Dashboard Container Insights hiển thị biểu đồ CPU/Memory, EKS log streams. <br>&emsp; + Ghi nhận ảnh chụp cấu hình AWS Budget và các cảnh báo chi phí thực tế ở mức 50%, 80%, 100% để bổ sung vào báo cáo. | 30/07/2026 | 30/07/2026 | [Observability Dashboard](file:///d:/AWS%20FCAJ/CICD-DevSecOps-using-AWS-services/README.md) |
+| 6 | - **Hoàn thiện tài liệu Observability:** <br>&emsp; + Biên soạn nội dung chi tiết cho phần Observability (giám sát ứng dụng và tài nguyên) trong tài liệu báo cáo. <br>&emsp; + Rà soát giải pháp tối ưu chi phí hạ tầng và dọn dẹp tài nguyên sau khi kết thúc dự án. <br>&emsp; + Tổng kết tuần 7. | 31/07/2026 | 31/07/2026 | [Observability Section](file:///d:/AWS%20FCAJ/CICD-DevSecOps-using-AWS-services/tasks.md) |
 
 ### Kết quả đạt được tuần 7:
 
-* Hiểu AWS là gì và nắm được các nhóm dịch vụ cơ bản: 
-  * Compute
-  * Storage
-  * Networking 
-  * Database
-  * ...
+* **Xây dựng giải pháp giám sát tập trung CloudWatch:**
+  * Kích hoạt và cấu hình thành công CloudWatch Container Insights trên EKS cluster để tự động thu thập chỉ số hiệu năng Node/Pod.
+  * Xây dựng thành công các câu truy vấn logs và dashboard giám sát tài nguyên CPU/Memory trực quan trên CloudWatch Console.
 
-* Đã tạo và cấu hình AWS Free Tier account thành công.
-
-* Làm quen với AWS Management Console và biết cách tìm, truy cập, sử dụng dịch vụ từ giao diện web.
-
-* Cài đặt và cấu hình AWS CLI trên máy tính bao gồm:
-  * Access Key
-  * Secret Key
-  * Region mặc định
-  * ...
-
-* Sử dụng AWS CLI để thực hiện các thao tác cơ bản như:
-
-  * Kiểm tra thông tin tài khoản & cấu hình
-  * Lấy danh sách region
-  * Xem dịch vụ EC2
-  * Tạo và quản lý key pair
-  * Kiểm tra thông tin dịch vụ đang chạy
-  * ...
-
-* Có khả năng kết nối giữa giao diện web và CLI để quản lý tài nguyên AWS song song.
-* ...
-
-
+* **Hoàn thiện minh chứng Observability & Quản lý chi phí:**
+  * Thu thập đầy đủ minh chứng ảnh chụp màn hình CloudWatch Dashboard, Log group và cấu hình AWS Budget ở các hạn mức cảnh báo.
+  * Hoàn tất phần tài liệu Observability phục vụ báo cáo đồ án, thiết lập kế hoạch tối ưu và dọn dẹp tài nguyên AWS sau dự án để tránh phát sinh chi phí thừa.

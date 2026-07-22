@@ -1,108 +1,214 @@
 ---
 title: "Bản đề xuất"
-date: 2024-01-01
+date: 2026-07-06
 weight: 2
 chapter: false
 pre: " <b> 2. </b> "
 ---
-{{% notice warning %}}
-⚠️ **Lưu ý:** Các thông tin dưới đây chỉ nhằm mục đích tham khảo, vui lòng **không sao chép nguyên văn** cho bài báo cáo của bạn kể cả warning này.
-{{% /notice %}}
 
-Tại phần này, bạn cần tóm tắt các nội dung trong workshop mà bạn **dự tính** sẽ làm.
 
-# IoT Weather Platform for Lab Research  
-## Giải pháp AWS Serverless hợp nhất cho giám sát thời tiết thời gian thực  
+# DevSecOps Factory trên AWS
+## Xây dựng hệ thống CI/CD DevSecOps end-to-end cho ứng dụng Web React trên Amazon EKS
 
-### 1. Tóm tắt điều hành  
-IoT Weather Platform được thiết kế dành cho nhóm *ITea Lab* tại TP. Hồ Chí Minh nhằm nâng cao khả năng thu thập và phân tích dữ liệu thời tiết. Nền tảng hỗ trợ tối đa 5 trạm thời tiết, có khả năng mở rộng lên 10–15 trạm, sử dụng thiết bị biên Raspberry Pi kết hợp cảm biến ESP32 để truyền dữ liệu qua MQTT. Nền tảng tận dụng các dịch vụ AWS Serverless để cung cấp giám sát thời gian thực, phân tích dự đoán và tiết kiệm chi phí, với quyền truy cập giới hạn cho 5 thành viên phòng lab thông qua Amazon Cognito.  
+### 1. Tóm tắt điều hành
+DevSecOps Factory là một hệ thống CI/CD hoàn chỉnh tích hợp bảo mật vào mọi giai đoạn của vòng đời phát triển phần mềm (Shift-Left Security). Dự án xây dựng pipeline tự động hóa từ lúc developer push code cho đến khi ứng dụng được triển khai lên môi trường staging và production trên Amazon EKS, sử dụng Jenkins làm CI engine, Argo CD làm GitOps CD engine, và Amazon CloudWatch làm nền tảng giám sát. Hệ thống áp dụng chiến lược **Local-first, Cloud-after** — phát triển và kiểm thử toàn bộ trên máy cá nhân với k3d trước khi chuyển lên hạ tầng AWS thật, giúp tiết kiệm chi phí và giảm rủi ro trong quá trình phát triển.
 
-### 2. Tuyên bố vấn đề  
-*Vấn đề hiện tại*  
-Các trạm thời tiết hiện tại yêu cầu thu thập dữ liệu thủ công, khó quản lý khi có nhiều trạm. Không có hệ thống tập trung cho dữ liệu hoặc phân tích thời gian thực, và các nền tảng bên thứ ba thường tốn kém và quá phức tạp.  
+Pipeline tích hợp 6 cổng kiểm tra bảo mật (Security Gates) tự động bao gồm: Secrets Scan, SCA (Software Composition Analysis), SAST (Static Application Security Testing), IaC Scan, Container Image Scan và DAST (Dynamic Application Security Testing), đảm bảo mỗi bản build đều được kiểm định trước khi đưa vào vận hành.
 
-*Giải pháp*  
-Nền tảng sử dụng AWS IoT Core để tiếp nhận dữ liệu MQTT, AWS Lambda và API Gateway để xử lý, Amazon S3 để lưu trữ (bao gồm data lake), và AWS Glue Crawlers cùng các tác vụ ETL để trích xuất, chuyển đổi, tải dữ liệu từ S3 data lake sang một S3 bucket khác để phân tích. AWS Amplify với Next.js cung cấp giao diện web, và Amazon Cognito đảm bảo quyền truy cập an toàn. Tương tự như Thingsboard và CoreIoT, người dùng có thể đăng ký thiết bị mới và quản lý kết nối, nhưng nền tảng này hoạt động ở quy mô nhỏ hơn và phục vụ mục đích sử dụng nội bộ. Các tính năng chính bao gồm bảng điều khiển thời gian thực, phân tích xu hướng và chi phí vận hành thấp.  
+### 2. Tuyên bố vấn đề
 
-*Lợi ích và hoàn vốn đầu tư (ROI)*  
-Giải pháp tạo nền tảng cơ bản để các thành viên phòng lab phát triển một nền tảng IoT lớn hơn, đồng thời cung cấp nguồn dữ liệu cho những người nghiên cứu AI phục vụ huấn luyện mô hình hoặc phân tích. Nền tảng giảm bớt báo cáo thủ công cho từng trạm thông qua hệ thống tập trung, đơn giản hóa quản lý và bảo trì, đồng thời cải thiện độ tin cậy dữ liệu. Chi phí hàng tháng ước tính 0,66 USD (theo AWS Pricing Calculator), tổng cộng 7,92 USD cho 12 tháng. Tất cả thiết bị IoT đã được trang bị từ hệ thống trạm thời tiết hiện tại, không phát sinh chi phí phát triển thêm. Thời gian hoàn vốn 6–12 tháng nhờ tiết kiệm đáng kể thời gian thao tác thủ công.  
+*Vấn đề hiện tại*
 
-### 3. Kiến trúc giải pháp  
-Nền tảng áp dụng kiến trúc AWS Serverless để quản lý dữ liệu từ 5 trạm dựa trên Raspberry Pi, có thể mở rộng lên 15 trạm. Dữ liệu được tiếp nhận qua AWS IoT Core, lưu trữ trong S3 data lake và xử lý bởi AWS Glue Crawlers và ETL jobs để chuyển đổi và tải vào một S3 bucket khác cho mục đích phân tích. Lambda và API Gateway xử lý bổ sung, trong khi Amplify với Next.js cung cấp bảng điều khiển được bảo mật bởi Cognito.  
+Trong thực tiễn phát triển phần mềm, nhiều đội nhóm vẫn triển khai thủ công, không có quy trình kiểm tra bảo mật tự động, và thiếu khả năng quan sát (observability) sau khi ứng dụng chạy trên môi trường production. Cụ thể:
+- **Triển khai thủ công:** Copy file, SSH vào server để deploy, dẫn đến sai sót con người và thiếu tính nhất quán giữa các môi trường.
+- **Thiếu kiểm tra bảo mật:** Lỗ hổng bảo mật trong mã nguồn, dependency và container image chỉ được phát hiện sau khi ứng dụng đã chạy thật, gây rủi ro lớn.
+- **Không có khả năng quan sát:** Khi ứng dụng gặp lỗi trên production, đội ngũ không có dashboard, log tập trung hoặc cảnh báo để phát hiện và xử lý kịp thời.
+- **Trôi lệch cấu hình (Configuration Drift):** Trạng thái thực tế trên cluster Kubernetes dần lệch khỏi cấu hình khai báo trong Git, gây ra lỗi khó tái hiện.
 
-![IoT Weather Station Architecture](/images/2-Proposal/edge_architecture.jpeg)
+*Giải pháp*
 
-![IoT Weather Platform Architecture](/images/2-Proposal/platform_architecture.jpeg)
+Dự án xây dựng một pipeline CI/CD DevSecOps end-to-end trên AWS với các thành phần chính:
+- **Jenkins** điều phối pipeline 12 bước (stage), tự động hóa từ build, scan bảo mật, đóng gói Docker image đến push lên Amazon ECR.
+- **6 Security Gates** tích hợp trực tiếp vào pipeline: Gitleaks (secrets), Trivy (SCA + container scan), SonarQube (SAST), Checkov (IaC scan), OWASP ZAP (DAST).
+- **Argo CD** áp dụng mô hình GitOps kéo (pull-based deployment) để tự động đồng bộ manifest từ Git repository lên Amazon EKS, đảm bảo trạng thái cluster luôn khớp với cấu hình khai báo.
+- **Amazon CloudWatch Container Insights** cung cấp khả năng giám sát tập trung cho logs, metrics và cảnh báo hiệu năng.
 
-*Dịch vụ AWS sử dụng*  
-- *AWS IoT Core*: Tiếp nhận dữ liệu MQTT từ 5 trạm, mở rộng lên 15.  
-- *AWS Lambda*: Xử lý dữ liệu và kích hoạt Glue jobs (2 hàm).  
-- *Amazon API Gateway*: Giao tiếp với ứng dụng web.  
-- *Amazon S3*: Lưu trữ dữ liệu thô (data lake) và dữ liệu đã xử lý (2 bucket).  
-- *AWS Glue*: Crawlers lập chỉ mục dữ liệu, ETL jobs chuyển đổi và tải dữ liệu.  
-- *AWS Amplify*: Lưu trữ giao diện web Next.js.  
-- *Amazon Cognito*: Quản lý quyền truy cập cho người dùng phòng lab.  
+*Lợi ích và hoàn vốn đầu tư (ROI)*
 
-*Thiết kế thành phần*  
-- *Thiết bị biên*: Raspberry Pi thu thập và lọc dữ liệu cảm biến, gửi tới IoT Core.  
-- *Tiếp nhận dữ liệu*: AWS IoT Core nhận tin nhắn MQTT từ thiết bị biên.  
-- *Lưu trữ dữ liệu*: Dữ liệu thô lưu trong S3 data lake; dữ liệu đã xử lý lưu ở một S3 bucket khác.  
-- *Xử lý dữ liệu*: AWS Glue Crawlers lập chỉ mục dữ liệu; ETL jobs chuyển đổi để phân tích.  
-- *Giao diện web*: AWS Amplify lưu trữ ứng dụng Next.js cho bảng điều khiển và phân tích thời gian thực.  
-- *Quản lý người dùng*: Amazon Cognito giới hạn 5 tài khoản hoạt động.  
+- Giảm thời gian triển khai từ hàng giờ (thủ công) xuống còn vài phút (tự động).
+- Phát hiện sớm lỗ hổng bảo mật ngay trong quá trình CI, trước khi code được đưa vào production.
+- Ngăn chặn trôi lệch cấu hình nhờ GitOps, mọi thay đổi hạ tầng đều được kiểm soát qua Git.
+- Cung cấp khả năng quan sát toàn diện để phát hiện và xử lý sự cố nhanh chóng.
+- Tạo nền tảng tái sử dụng cho các dự án phần mềm tương lai trong tổ chức.
 
-### 4. Triển khai kỹ thuật  
-*Các giai đoạn triển khai*  
-Dự án gồm 2 phần — thiết lập trạm thời tiết biên và xây dựng nền tảng thời tiết — mỗi phần trải qua 4 giai đoạn:  
-1. *Nghiên cứu và vẽ kiến trúc*: Nghiên cứu Raspberry Pi với cảm biến ESP32 và thiết kế kiến trúc AWS Serverless (1 tháng trước kỳ thực tập).  
-2. *Tính toán chi phí và kiểm tra tính khả thi*: Sử dụng AWS Pricing Calculator để ước tính và điều chỉnh (Tháng 1).  
-3. *Điều chỉnh kiến trúc để tối ưu chi phí/giải pháp*: Tinh chỉnh (ví dụ tối ưu Lambda với Next.js) để đảm bảo hiệu quả (Tháng 2).  
-4. *Phát triển, kiểm thử, triển khai*: Lập trình Raspberry Pi, AWS services với CDK/SDK và ứng dụng Next.js, sau đó kiểm thử và đưa vào vận hành (Tháng 2–3).  
+### 3. Kiến trúc giải pháp
 
-*Yêu cầu kỹ thuật*  
-- *Trạm thời tiết biên*: Cảm biến (nhiệt độ, độ ẩm, lượng mưa, tốc độ gió), vi điều khiển ESP32, Raspberry Pi làm thiết bị biên. Raspberry Pi chạy Raspbian, sử dụng Docker để lọc dữ liệu và gửi 1 MB/ngày/trạm qua MQTT qua Wi-Fi.  
-- *Nền tảng thời tiết*: Kiến thức thực tế về AWS Amplify (lưu trữ Next.js), Lambda (giảm thiểu do Next.js xử lý), AWS Glue (ETL), S3 (2 bucket), IoT Core (gateway và rules), và Cognito (5 người dùng). Sử dụng AWS CDK/SDK để lập trình (ví dụ IoT Core rules tới S3). Next.js giúp giảm tải Lambda cho ứng dụng web fullstack.  
+Hệ thống được thiết kế theo mô hình kiến trúc microservices trên Kubernetes, sử dụng Kustomize để quản lý cấu hình cho nhiều môi trường (staging/production). Luồng hoạt động end-to-end như sau:
 
-### 5. Lộ trình & Mốc triển khai  
-- *Trước thực tập (Tháng 0)*: 1 tháng lên kế hoạch và đánh giá trạm cũ.  
-- *Thực tập (Tháng 1–3)*:  
-    - Tháng 1: Học AWS và nâng cấp phần cứng.  
-    - Tháng 2: Thiết kế và điều chỉnh kiến trúc.  
-    - Tháng 3: Triển khai, kiểm thử, đưa vào sử dụng.  
-- *Sau triển khai*: Nghiên cứu thêm trong vòng 1 năm.  
+```text
+React App → Docker Image → Jenkins Security Gates → Amazon ECR → Argo CD → Amazon EKS → CloudWatch
+```
 
-### 6. Ước tính ngân sách  
-Có thể xem chi phí trên [AWS Pricing Calculator](https://calculator.aws/#/estimate?id=621f38b12a1ef026842ba2ddfe46ff936ed4ab01)  
-Hoặc tải [tệp ước tính ngân sách](../attachments/budget_estimation.pdf).  
+```text
+Developer push code lên GitHub
+    ↓
+GitHub webhook → Jenkins pipeline
+    ↓
+Jenkins Jenkinsfile 12 stages:
+  ① Secrets scan        (Gitleaks)
+  ② Build + unit tests  (npm build)
+  ③ SCA                 (Trivy filesystem)
+  ④ SAST                (SonarQube)
+  ⑤ Docker build        (multi-stage Dockerfile)
+  ⑥ Container scan      (Trivy image)
+  ⑦ IaC scan            (Checkov)
+  ⑧ Push image → Amazon ECR
+  ⑨ Update image tag → Argo CD auto-sync staging
+  ⑩ DAST                (OWASP ZAP vs staging URL)
+  ⑪ Manual approval gate
+  ⑫ Promote → production
+    ↓
+CloudWatch Container Insights (logs, metrics, alarms)
+```
 
-*Chi phí hạ tầng*  
-- AWS Lambda: 0,00 USD/tháng (1.000 request, 512 MB lưu trữ).  
-- S3 Standard: 0,15 USD/tháng (6 GB, 2.100 request, 1 GB quét).  
-- Truyền dữ liệu: 0,02 USD/tháng (1 GB vào, 1 GB ra).  
-- AWS Amplify: 0,35 USD/tháng (256 MB, request 500 ms).  
-- Amazon API Gateway: 0,01 USD/tháng (2.000 request).  
-- AWS Glue ETL Jobs: 0,02 USD/tháng (2 DPU).  
-- AWS Glue Crawlers: 0,07 USD/tháng (1 crawler).  
-- MQTT (IoT Core): 0,08 USD/tháng (5 thiết bị, 45.000 tin nhắn).  
+![Kiến trúc DevSecOps CI/CD Pipeline trên AWS](/images/2-Proposal/devsecops_pipeline_architecture.png)
 
-*Tổng*: 0,7 USD/tháng, 8,40 USD/12 tháng  
-- *Phần cứng*: 265 USD một lần (Raspberry Pi 5 và cảm biến).  
+*Dịch vụ AWS sử dụng*
 
-### 7. Đánh giá rủi ro  
-*Ma trận rủi ro*  
-- Mất mạng: Ảnh hưởng trung bình, xác suất trung bình.  
-- Hỏng cảm biến: Ảnh hưởng cao, xác suất thấp.  
-- Vượt ngân sách: Ảnh hưởng trung bình, xác suất thấp.  
+| Dịch vụ AWS | Vai trò trong hệ thống |
+|---|---|
+| **Amazon EKS** | Điều phối container Kubernetes cho ứng dụng web, quản lý Node Group với instance type `t3.small`, hỗ trợ multi-namespace (staging/production). |
+| **Amazon ECR** | Lưu trữ Docker image bảo mật với tính năng Scan on Push, quản lý image tag theo Git Commit SHA. |
+| **Amazon CloudWatch** | Giám sát tập trung: Container Insights thu thập metrics Node/Pod, Logs Insights truy vấn log ứng dụng, Budget Alerts cảnh báo chi phí. |
+| **AWS IAM** | Phân quyền hạt mịn theo nguyên tắc Least Privilege; IRSA (IAM Roles for Service Accounts) cho các workload trên EKS. |
+| **AWS Load Balancer Controller** | Tự động tạo Application Load Balancer (ALB) từ cấu hình Ingress trên Kubernetes, định tuyến Layer 7. |
 
-*Chiến lược giảm thiểu*  
-- Mạng: Lưu trữ cục bộ trên Raspberry Pi với Docker.  
-- Cảm biến: Kiểm tra định kỳ, dự phòng linh kiện.  
-- Chi phí: Cảnh báo ngân sách AWS, tối ưu dịch vụ.  
+*Công cụ DevOps bổ trợ*
 
-*Kế hoạch dự phòng*  
-- Quay lại thu thập thủ công nếu AWS gặp sự cố.  
-- Sử dụng CloudFormation để khôi phục cấu hình liên quan đến chi phí.  
+| Công cụ | Vai trò |
+|---|---|
+| **Jenkins** | CI engine điều phối pipeline 12 bước; Configuration as Code (CasC). |
+| **Argo CD** | GitOps CD engine, pull-based deployment, auto-sync staging, manual approval production. |
+| **Docker** | Đóng gói ứng dụng React thành container image multi-stage, non-root runtime (Nginx Unprivileged). |
+| **Kustomize** | Quản lý cấu hình Kubernetes base/overlays cho staging và production. |
+| **k3d** | Kubernetes cluster local để phát triển và kiểm thử offline trước khi lên cloud. |
 
-### 8. Kết quả kỳ vọng  
-*Cải tiến kỹ thuật*: Dữ liệu và phân tích thời gian thực thay thế quy trình thủ công. Có thể mở rộng tới 10–15 trạm.  
-*Giá trị dài hạn*: Nền tảng dữ liệu 1 năm cho nghiên cứu AI, có thể tái sử dụng cho các dự án tương lai.
+*Công cụ bảo mật (Security Gates)*
+
+| Gate | Công cụ | Mục đích |
+|---|---|---|
+| Secrets Scan | Gitleaks | Phát hiện khóa bí mật, token, password bị commit vào source code. |
+| SCA | Trivy Filesystem | Quét lỗ hổng CVE trong dependency (npm packages). |
+| SAST | SonarQube | Phân tích tĩnh mã nguồn phát hiện code injection, bugs, code smells. |
+| IaC Scan | Checkov | Kiểm tra cấu hình Kubernetes manifests và Dockerfile theo chuẩn bảo mật. |
+| Container Scan | Trivy Image | Quét lỗ hổng CVE trong base image và các layer của Docker image. |
+| DAST | OWASP ZAP | Quét bảo mật ứng dụng web đang chạy trên staging (security headers, XSS, injection). |
+
+*Thiết kế thành phần*
+
+- **Ứng dụng (Application Layer):** Ứng dụng web Tetris viết bằng React, đóng gói bằng Dockerfile multi-stage (Node 16 build → Nginx Unprivileged runtime), expose port 8080 với health check endpoint `/`.
+- **CI Pipeline (Jenkins):** Jenkinsfile khai báo 12 stages tuần tự, biến môi trường chuẩn hóa (`AWS_REGION`, `REGISTRY`, `IMAGE_TAG`), archive security reports dưới dạng artifacts.
+- **CD GitOps (Argo CD):** Application CRD cho staging (auto-sync) và production (manual sync), theo dõi thay đổi image tag trong file `kustomization.yaml`.
+- **Hạ tầng Kubernetes (EKS):** Deployment với Liveness/Readiness Probes, SecurityContext (runAsNonRoot, drop ALL capabilities, readOnlyRootFilesystem), Service và Ingress ALB.
+- **Giám sát (Observability):** CloudWatch Container Insights với DaemonSet agent, Fluent Bit thu thập logs, CloudWatch Logs Insights truy vấn, AWS Budget cảnh báo chi phí.
+
+### 4. Triển khai kỹ thuật
+
+*Các giai đoạn triển khai*
+
+Dự án được chia thành 9 tuần thực tập (15/06/2026 – 14/08/2026), triển khai theo 3 giai đoạn chính:
+
+1. **Giai đoạn 1 — Nền tảng và phân tích (Tuần 1–3, 15/06 – 05/07):** Tìm hiểu kiến thức AWS cơ bản (VPC, IAM, EC2, EKS), phân tích hệ thống hiện tại, tạo outline báo cáo và xác định phạm vi dự án. Thử nghiệm build ứng dụng React, Dockerfile và Kubernetes manifests trên local.
+
+2. **Giai đoạn 2 — Xây dựng pipeline, Security Gates & Triển khai (Tuần 4–6, 06/07 – 26/07):** Chuẩn hóa Jenkins pipeline, tích hợp 6 security scan scripts, tạo ECR repository, push image với tag theo commit SHA, cài đặt EKS cluster, cài AWS Load Balancer Controller, deploy ứng dụng qua Argo CD, hoàn thiện luồng GitOps staging/production.
+
+3. **Giai đoạn 3 — Monitoring, tài liệu, nghiệm thu & nộp bài (Tuần 7–9, 27/07 – 14/08):** Bật CloudWatch Container Insights, tổng hợp security findings, thiết kế slide báo cáo, dựng workshop website Hugo song ngữ, viết hướng dẫn thực hành Lab step-by-step, viết 3 blog posts, thu thập events/self-evaluation/feedback, rà soát chất lượng song ngữ, đối chiếu tiêu chí chấm điểm, nộp báo cáo cuối khóa và dọn dẹp tài nguyên AWS.
+
+*Yêu cầu kỹ thuật*
+
+- **Hạ tầng AWS:** Tài khoản AWS với quyền tạo EKS, ECR, IAM, CloudWatch; region `ap-southeast-1`; AWS Budget cảnh báo chi phí.
+- **CI/CD:** Jenkins (Docker Compose local hoặc EC2), Docker, Argo CD cài trên EKS qua Helm.
+- **Bảo mật:** Gitleaks, Trivy, SonarQube (Docker Compose), Checkov, OWASP ZAP.
+- **Kubernetes:** kubectl, Kustomize, k3d (local), Helm (AWS Load Balancer Controller, Argo CD).
+- **Tài liệu:** Hugo (workshop website), Markdown, Git (quản lý source code và nội dung).
+
+*Phân công nhóm*
+
+| Thành viên | Vai trò chính | Trọng tâm | Email |
+|---|---|---|---|
+| Vũ Hải An | AWS Infrastructure & Kubernetes Platform | AWS account, IAM, EKS, networking, ECR, nền tảng triển khai. | 23520035@gm.uit.edu.vn |
+| Huỳnh Nhật Linh | CI/CD & GitOps | Jenkinsfile, pipeline, push image, Argo CD, promotion staging/production. | linh.huynhnhat@hcmut.edu.vn |
+| Bùi Hữu Lợi | DevSecOps Security | Secrets scan, SCA, SAST, IaC scan, container scan, DAST, policy bảo mật. | loi.bui2311972@hcmut.edu.vn |
+| Nguyễn Văn Hào | Application, Docker & K8s Manifests | React app, Dockerfile, health check, Kubernetes base/overlays. | 23520448@gm.uit.edu.vn |
+| Nguyễn Chu Hải Nam | Observability, QA, Documentation & Demo | CloudWatch, kiểm thử, workshop website. | nam.nguyennamcris7@hcmut.edu.vn |
+
+### 5. Lộ trình & Mốc triển khai
+
+| Giai đoạn | Thời gian | Công việc chính | Kết quả bàn giao |
+|---|---|---|---|
+| Nền tảng & Phân tích | Tuần 1–3 (15/06 – 05/07) | Học AWS, phân tích hệ thống, build app/Docker local, implement secrets scan, tạo outline báo cáo. | App build được, Dockerfile chạy local, pipeline draft, dàn ý báo cáo. |
+| Pipeline, Security & Triển khai | Tuần 4–6 (06/07 – 26/07) | Tạo ECR, push image, tạo EKS cluster, cài ALB Controller, hoàn thiện 6 security gates, deploy staging/production qua Argo CD. | Pipeline end-to-end, ECR có image, EKS nodes Ready, Argo CD Synced & Healthy. |
+| Monitoring, Tài liệu & Nghiệm thu | Tuần 7–9 (27/07 – 14/08) | Bật CloudWatch, tổng hợp findings, thiết kế slide, dựng Hugo website, viết workshop lab, viết 3 blogs, thu thập events/evaluation, rà soát song ngữ, nộp sản phẩm cuối, cleanup AWS. | Dashboard CloudWatch, slide báo cáo, workshop website hoàn chỉnh, 3 blogs đăng, sản phẩm nộp, AWS đã dọn dẹp. |
+
+### 6. Ước tính ngân sách
+
+*Chi phí hạ tầng AWS (ước tính hàng tháng)*
+
+| Dịch vụ | Chi phí ước tính | Ghi chú |
+|---|---|---|
+| Amazon EKS (Control Plane) | ~73,00 USD/tháng | 1 cluster. |
+| EC2 Managed Node Group (t3.small × 2) | ~30,00 USD/tháng | 2 nodes, On-Demand pricing. |
+| Amazon ECR | ~1,00 USD/tháng | Lưu trữ < 5 GB image. |
+| Amazon CloudWatch | ~5,00 USD/tháng | Container Insights + Logs Insights. |
+| Elastic Load Balancer (ALB) | ~20,00 USD/tháng | 1 ALB cho staging + production. |
+| Data Transfer | ~2,00 USD/tháng | Outbound traffic. |
+| **Tổng ước tính** | **~131 USD/tháng** | |
+
+> **Lưu ý:** Chi phí chính đến từ EKS Control Plane và EC2 nodes. Để giảm chi phí trong quá trình phát triển, nhóm áp dụng chiến lược **Local-first** với k3d — chỉ tạo EKS cluster trên AWS khi cần demo thực tế, và cleanup ngay sau khi hoàn thành. Dự kiến tổng chi phí AWS thực tế cho cả dự án khoảng **150–250 USD** (do chỉ chạy cloud 1–2 tuần).
+
+*Chiến lược tối ưu chi phí*
+
+- Phát triển và kiểm thử trên k3d local (miễn phí), chỉ chuyển sang EKS khi cần.
+- Sử dụng AWS Budget alerts ở mức 50%, 80%, 100% để cảnh báo sớm.
+- Dọn dẹp triệt để tài nguyên (EKS, ALB, ECR, CloudWatch) ngay sau khi kết thúc demo.
+- Sử dụng instance type tiết kiệm (`t3.small`) và giữ số lượng nodes tối thiểu.
+
+### 7. Đánh giá rủi ro
+
+*Ma trận rủi ro*
+
+| Rủi ro | Mức ảnh hưởng | Xác suất xảy ra | Chiến lược giảm thiểu |
+|---|---|---|---|
+| Vượt ngân sách AWS | Cao | Trung bình | AWS Budget alerts; chiến lược Local-first; cleanup ngay sau demo; dùng t3.small instance. |
+| EKS cluster lỗi khi demo | Cao | Thấp | Chuẩn bị bộ slide demo tĩnh (ảnh chụp backup); test kỹ trước ngày bảo vệ; có local k3d làm phương án dự phòng. |
+| Security scan block pipeline | Trung bình | Trung bình | Giai đoạn đầu dùng `--soft-fail`; bật `--exit-code 1` khi demo để thể hiện security gate hoạt động thật. |
+| Xung đột merge code giữa các thành viên | Trung bình | Trung bình | Mỗi người làm việc trên branch riêng; Pull Request phải có review; sử dụng CODEOWNERS. |
+| Mất kết nối mạng khi demo live | Trung bình | Thấp | Demo offline trên k3d local; ảnh chụp backup cho từng bước pipeline. |
+| Dependency cũ gây lỗi build ứng dụng | Thấp | Trung bình | Ghi lại dependency issues trong `VULNERABILITIES.md`; chấp nhận một số warning cho mục đích demo security scan. |
+
+*Kế hoạch dự phòng*
+
+- Nếu EKS không hoạt động: Chuyển sang demo trên k3d local cluster với local Docker registry.
+- Nếu Jenkins gặp lỗi: Trình bày qua slide demo tĩnh với ảnh chụp log pipeline thành công.
+- Nếu vượt ngân sách: Dừng EKS cluster ngay, quay lại local-only; sử dụng CloudFormation/Terraform để cleanup tự động.
+
+### 8. Kết quả kỳ vọng
+
+*Cải tiến kỹ thuật*
+- Xây dựng thành công pipeline CI/CD DevSecOps end-to-end trong 9 tuần, chạy hoàn chỉnh từ code push đến deploy production.
+- Tích hợp 6 cổng kiểm tra bảo mật tự động, phát hiện và báo cáo lỗ hổng trước khi code lên production.
+- Triển khai GitOps với Argo CD, tự động đồng bộ staging và kiểm soát production qua manual approval.
+- Giám sát toàn diện qua CloudWatch Container Insights với dashboard, log query và cảnh báo chi phí.
+
+*Sản phẩm bàn giao*
+- Workshop website song ngữ (Việt – Anh) theo chuẩn FCAJ template, có hướng dẫn thực hành Lab step-by-step.
+- Source code dự án trên GitHub với cấu trúc rõ ràng, tài liệu đầy đủ.
+- 3 bài blog đăng trên AWS Study Group.
+- Slide báo cáo đồ án và bộ ảnh minh chứng hoạt động.
+- Bảng tổng hợp security findings và đề xuất remediation.
+- Checklist cleanup AWS để tránh phát sinh chi phí sau dự án.
+
+*Giá trị dài hạn*
+- Mô hình pipeline có thể tái sử dụng cho các dự án phần mềm khác trong tổ chức.
+- Workshop website trở thành tài liệu tham khảo cho các khóa thực tập tiếp theo.
+- Kinh nghiệm thực tế về DevSecOps, Kubernetes, GitOps và AWS services cho toàn bộ thành viên nhóm.
