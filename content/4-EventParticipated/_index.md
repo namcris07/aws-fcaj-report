@@ -31,8 +31,8 @@ During my internship, I participated in three events. Each one was a memorable e
 
 &emsp;**Main Content & Activities:**  
 * **Cloud & AI Market Trends:** Analyzed job market shifts, system complexity challenges, and technical debt in enterprise environments.  
-* **Voice AI Architectures:** Explored the 3-component Voice AI model (STT $\rightarrow$ LLM $\rightarrow$ TTS) for handling complex Vietnamese context in banking applications.  
-* **DevOps AI Agent Mechanics:** Studied DevOps Agent operations based on Agent Space topology maps and the 4-step automated incident management workflow (Triage $\rightarrow$ Investigation $\rightarrow$ Mitigation $\rightarrow$ Improvement).  
+* **Voice AI Architectures:** Explored the 3-component Voice AI model (STT → LLM → TTS) for handling complex Vietnamese context in banking applications.  
+* **DevOps AI Agent Mechanics:** Studied DevOps Agent operations based on Agent Space topology maps and the 4-step automated incident management workflow (Triage → Investigation → Mitigation → Improvement).  
 * **HR Governance & GenAI Security:** Investigated multi-platform Amazon Q integrations for HR automation, private VPC architecture (MCP Server, Route 53 Resolver, AWS Secrets Manager), and Zero Trust networking.  
 * **Live Demo Sessions:** Attended live demonstrations featuring an Apple product Voice Agent, mock DDoS incident investigation via DevOps Agent, and automated CV talent screening with Amazon Q.  
 
@@ -54,9 +54,9 @@ During my internship, I participated in three events. Each one was a memorable e
 &emsp;**Main Content & Activities:**  
 * **Vietnamese Cloud Market Overview:** Analyzed 20x Cloud growth over 6 years, corporate "Cloud-First" strategies, and 6 core industry verticals (Fintech, Retail, Manufacturing, Logistics, Media, Healthcare).  
 * **Early Talent Hiring Standards:** Evaluated hiring challenges for interns/freshers, emphasizing core requirements like Kubernetes (K8s) and Cloud-Native engineering skills.  
-* **Data Engineering Deep-Dive:** Explored the DNA model of Data Platforms (Ingestion $\rightarrow$ Processing $\rightarrow$ Storage $\rightarrow$ Governance $\rightarrow$ Catalog $\rightarrow$ Analytics) and the 90% iceberg of production operations.  
+* **Data Engineering Deep-Dive:** Explored the DNA model of Data Platforms (Ingestion → Processing → Storage → Governance → Catalog → Analytics) and the 90% iceberg of production operations.  
 * **AI & Self-Positioning:** Positioned AI as a performance amplifier while highlighting 4 core human values AI cannot replace (Architecture Thinking, Business Understanding, Communication, Trade-off decision-making).  
-* **Career Growth Formula:** Adopted the career formula $Result = Capability \times Visibility \times Consistency$, Blue Ocean positioning strategies, and approaches to tapping into the Hidden Job Market.  
+* **Career Growth Formula:** Adopted the career formula Result = Capability × Visibility × Consistency, Blue Ocean positioning strategies, and approaches to tapping into the Hidden Job Market.  
 
 &emsp;**Outcomes & Values Gained:**  
 * Shifted learning mindset from superficial academic compliance to mastering foundational architectural principles and business-first engineering.  
@@ -74,7 +74,7 @@ During my internship, I participated in three events. Each one was a memorable e
 &emsp;**Role:** Attendee  
 
 &emsp;**Main Content & Activities:**  
-* **SLA & Monitoring Session:** Addressed "Healthy Infrastructure $\neq$ Healthy User Experience", user-centric monitoring frameworks, and automated alerting via CloudWatch Alarms & SNS Topics.  
+* **SLA & Monitoring Session:** Addressed "Healthy Infrastructure ≠ Healthy User Experience", user-centric monitoring frameworks, and automated alerting via CloudWatch Alarms & SNS Topics.  
 * **AWS Certified Cloud Practitioner (CLF-C02):** Deconstructed the 4 exam domains, the Shared Responsibility Model, and keyword mapping techniques for certification success.  
 * **AWS Security Agent (Frontier Agent):** Explored automated penetration testing powered by Amazon Bedrock, automated security scans on GitHub/GitLab PRs (Design/Code Review), and auto-PR vulnerability fixes.  
 * **Live Demo Case Study:** Witnessed live demonstrations showing system dashboards passing health checks (CPU 18%, Healthcheck 200 OK) while real users experienced database connection failures.  

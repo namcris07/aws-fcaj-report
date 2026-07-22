@@ -1,6 +1,6 @@
 baseURL = "https://namcris07.github.io/aws-fcaj-report/"
-relativeURLs = true
-canonifyURLs = true
+relativeURLs = false
+canonifyURLs = false
 defaultContentLanguage = "en"
 buildFuture = true
 

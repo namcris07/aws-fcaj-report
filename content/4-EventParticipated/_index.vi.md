@@ -33,8 +33,8 @@ Trong quá trình thực tập, em đã tham gia 3 events, với mỗi event là
 
 &emsp;**Nội dung & Hoạt động chính:**
 * **Xu hướng thị trường Cloud/AI:** Phân tích sự chuyển dịch của thị trường tuyển dụng công nghệ, bài toán quản trị độ phức tạp hệ thống (Complexity) và nợ công nghệ (Technical Debts) trong môi trường doanh nghiệp lớn.
-* **Kiến trúc Voice AI:** Phân tích mô hình Voice AI 3 thành phần (STT $\rightarrow$ LLM $\rightarrow$ TTS) phục vụ xử lý ngữ cảnh tiếng Việt phức tạp trong lĩnh vực tài chính - ngân hàng.
-* **DevOps AI Agent:** Nghiên cứu cơ chế hoạt động của DevOps Agent dựa trên Agent Space và sơ đồ Topology tài nguyên; quy trình 4 bước tự động xử lý sự cố (Triage $\rightarrow$ Investigation $\rightarrow$ Mitigation $\rightarrow$ Improvement).
+* **Kiến trúc Voice AI:** Phân tích mô hình Voice AI 3 thành phần (STT → LLM → TTS) phục vụ xử lý ngữ cảnh tiếng Việt phức tạp trong lĩnh vực tài chính - ngân hàng.
+* **DevOps AI Agent:** Nghiên cứu cơ chế hoạt động của DevOps Agent dựa trên Agent Space và sơ đồ Topology tài nguyên; quy trình 4 bước tự động xử lý sự cố (Triage → Investigation → Mitigation → Improvement).
 * **Quản trị HR & An ninh mạng GenAI:** Tích hợp Amazon Q kết nối đa nền tảng trong quản trị nhân sự; thiết lập kiến trúc kết nối an toàn qua Private VPC Connection (MCP Server, Route 53 Resolver, AWS Secrets Manager).
 * **Trải nghiệm Live Demos:** Xem trình diễn trực tiếp Voice Agent tra cứu sản phẩm Apple, điều tra sự cố DDoS bằng DevOps Agent và tự động hóa sàng lọc CV tuyển dụng bằng Amazon Q.
 
@@ -56,9 +56,9 @@ Trong quá trình thực tập, em đã tham gia 3 events, với mỗi event là
 &emsp;**Nội dung & Hoạt động chính:**
 * **Tổng quan thị trường Cloud tại Việt Nam:** Phân tích sự tăng trưởng 20 lần của Cloud trong 6 năm, chiến lược "Cloud first" của doanh nghiệp và 6 nhóm ngành công nghiệp lớn (Fintech, Retail, Manufacturing, Logistics, Media, Healthcare).
 * **Yêu cầu đối với nhân sự trẻ (Early Talent):** Đánh giá thách thức tuyển dụng thực tập sinh, yêu cầu ứng viên phải nắm vững các công nghệ hiện đại như Kubernetes (K8s) và Cloud Native.
-* **Chuyên sâu Data Engineering:** Phân tích mô hình DNA của một Data Platform (Ingestion $\rightarrow$ Processing $\rightarrow$ Storage $\rightarrow$ Governance $\rightarrow$ Catalog $\rightarrow$ Analytics) và 90% phần chìm của bài toán vận hành Production thực tế.
+* **Chuyên sâu Data Engineering:** Phân tích mô hình DNA của một Data Platform (Ingestion → Processing → Storage → Governance → Catalog → Analytics) và 90% phần chìm của bài toán vận hành Production thực tế.
 * **AI & Định vị bản thân:** Xác định AI là đòn bẩy hiệu suất (Amplify); nhận diện 4 giá trị cốt lõi của con người mà AI không thể thay thế (Architecture Thinking, Business Understanding, Communication, Trade-off decision-making).
-* **Công thức phát triển sự nghiệp:** Tiếp cận công thức $Result = Capability \times Visibility \times Consistency$, chiến lược "Đại dương xanh" và phương pháp tiếp cận thị trường việc làm ẩn (Hidden Job Market).
+* **Công thức phát triển sự nghiệp:** Tiếp cận công thức Result = Capability × Visibility × Consistency, chiến lược "Đại dương xanh" và phương pháp tiếp cận thị trường việc làm ẩn (Hidden Job Market).
 
 &emsp;**Kết quả & Giá trị đạt được:**
 * Thay đổi tư duy học tập từ đối phó sang nắm vững bản chất kiến trúc cốt lõi; rèn luyện tư duy hướng kết quả kinh doanh (Business-first approach).
@@ -76,7 +76,7 @@ Trong quá trình thực tập, em đã tham gia 3 events, với mỗi event là
 &emsp;**Vai trò trong sự kiện:** Người tham dự 
 
 &emsp;**Nội dung & Hoạt động chính:**
-* **SLA & Monitoring:** Phân tích thực trạng "Healthy Infrastructure $\neq$ Healthy User Experience", xây dựng quy trình giám sát hướng về người dùng (User-centric) và luồng cảnh báo tự động qua Custom Metrics, CloudWatch Alarms & SNS Topics.
+* **SLA & Monitoring:** Phân tích thực trạng "Healthy Infrastructure ≠ Healthy User Experience", xây dựng quy trình giám sát hướng về người dùng (User-centric) và luồng cảnh báo tự động qua Custom Metrics, CloudWatch Alarms & SNS Topics.
 * **Chứng chỉ AWS Certified Cloud Practitioner (CLF-C02):** Phân tích 4 miền kiến thức (Domains), Mô hình trách nhiệm chung (Shared Responsibility Model) và kỹ thuật tư duy Map Keyword trong bài thi.
 * **AWS Security Agent (Frontier Agent):** Khám phá giải pháp kiểm thử xâm nhập (Pentest) tự động vận hành bởi Amazon Bedrock; tích hợp quét bảo mật tự động trên GitHub/GitLab PRs (Design Review, Code Review) và tự tạo bản vá code (Auto-PR Fixes).
 * **Trải nghiệm Live Demo:** Quan sát minh chứng hệ thống báo xanh (CPU 18%, Healthcheck 200 OK) nhưng người dùng thực tế bị gãy kết nối CSDL RDS.

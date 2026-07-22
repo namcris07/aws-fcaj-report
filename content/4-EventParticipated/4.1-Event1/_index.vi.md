@@ -29,7 +29,7 @@ pre: " <b> 4.1. </b> "
 ### Phân cấp kiến trúc Voice AI và Thách thức ngôn ngữ
 - **Kiến trúc hệ thống:** Diễn giả phân tích hai mô hình Voice AI chính:
   - **Speech-to-Speech (S2S):** Mô hình nhận âm thanh trực tiếp, xử lý và phản hồi bằng âm thanh (hiện tại chủ yếu tối ưu cho tiếng Anh).
-  - **Mô hình 3 thành phần (STT -> LLM -> TTS):** Nhận âm thanh đầu vào $\rightarrow$ Chuyển thành văn bản (Speech-to-Text) $\rightarrow$ Đưa dữ liệu văn bản vào mô hình ngôn ngữ lớn (LLM) để xử lý ngữ cảnh và xuất văn bản phản hồi $\rightarrow$ Chuyển văn bản thành giọng nói (Text-to-Speech) trả về cho người dùng.
+  - **Mô hình 3 thành phần (STT → LLM → TTS):** Nhận âm thanh đầu vào → Chuyển thành văn bản (Speech-to-Text) → Đưa dữ liệu văn bản vào mô hình ngôn ngữ lớn (LLM) để xử lý ngữ cảnh và xuất văn bản phản hồi → Chuyển văn bản thành giọng nói (Text-to-Speech) trả về cho người dùng.
 - **Xử lý tiếng Việt (Low-resource language):** Tiếng Việt thiếu hụt tập dữ liệu lớn. Để triển khai thực tế cho các ngân hàng lớn (như VPBank, VIP), hệ thống phải sử dụng mô hình 3 thành phần để xử lý tốt ngữ cảnh tiếng Việt qua Prompt.
 - **Kỹ thuật nâng cao:** Hệ thống cần được train các mô hình phụ trợ để thực hiện:
   - **Detect giới tính:** Phục vụ xưng hô "anh/chị" tự nhiên trong tiếng Việt.

@@ -31,7 +31,7 @@ pre: " <b> 4.1. </b> "
 ### Voice AI Architecture Classification and Language Challenges
 - **System Architecture:** The speakers analyzed two main Voice AI models:
   - **Speech-to-Speech (S2S):** A model that receives audio directly, processes it, and responds with audio (currently optimized mainly for English).
-  - **Three-Component Model (STT -> LLM -> TTS):** Receives audio input $\rightarrow$ Converts it to text (Speech-to-Text) $\rightarrow$ Feeds text data into a Large Language Model (LLM) to process context and generate text response $\rightarrow$ Converts the response text to speech (Text-to-Speech) to return to the user.
+  - **Three-Component Model (STT → LLM → TTS):** Receives audio input → Converts it to text (Speech-to-Text) → Feeds text data into a Large Language Model (LLM) to process context and generate text response → Converts the response text to speech (Text-to-Speech) to return to the user.
 - **Vietnamese Language Processing (Low-resource language):** Vietnamese lacks large datasets. For real-world deployment at major banks (such as VPBank, VIP), the system must use the three-component model to handle the context of the Vietnamese language effectively via prompting.
 - **Advanced Techniques:** The system needs to train auxiliary models to perform:
   - **Gender Detection:** To enable natural "anh/chị" (brother/sister) address forms in Vietnamese.
