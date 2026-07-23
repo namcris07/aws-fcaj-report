@@ -19,11 +19,13 @@ chapter: false
 
 &emsp; **Major:** Computer Science
 
+&emsp; **Class:** MT23KHM3
+
 &emsp; **Internship Company:** Amazon Web Services Viet Nam Company Limited
 
-&emsp; **Internship Position:** Workforce Bootcamp - First Cloud AI Journey
+&emsp; **Internship Position:** FCAJ Fullstack Intern
 
-&emsp; **Internship Duration:** From 15/06/2026 to 15/08/2026
+&emsp; **Internship Duration:** From 15/06/2026 to 14/08/2026
 
 ![Profile Picture](images/3-4.jpg)
 
@@ -31,7 +33,7 @@ chapter: false
 
 1.  [Worklog](1-Worklog/)
 2.  [Proposal](2-Proposal/)
-3.  [BlogsPosted](3-BlogsPosted/)
+3.  [Translated Blogs](3-BlogsPosted/)
 4.  [Events Participated](4-EventParticipated/)
 5.  [Workshop](5-Workshop/)
 6.  [Self-evaluation](6-Self-evaluation/)

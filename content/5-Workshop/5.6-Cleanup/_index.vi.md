@@ -1,37 +1,95 @@
 ---
 title : "Dọn dẹp tài nguyên"
-date : 2024-01-01
+date : 2026-07-06 
 weight : 6
 chapter : false
 pre : " <b> 5.6. </b> "
 ---
 
-#### Dọn dẹp tài nguyên
+#### Dọn dẹp tài nguyên (Clean-up)
 
-Xin chúc mừng bạn đã hoàn thành xong lab này!
-Trong lab này, bạn đã học về các mô hình kiến trúc để truy cập Amazon S3 mà không sử dụng Public Internet.
+Sau khi hoàn tất việc kiểm thử và báo cáo workshop, bạn cần thực hiện dọn dẹp các tài nguyên đã tạo trên AWS nhằm tránh phát sinh chi phí ngoài ý muốn.
 
-+ Bằng cách tạo Gateway endpoint, bạn đã cho phép giao tiếp trực tiếp giữa các tài nguyên EC2 và Amazon S3, mà không đi qua Internet Gateway.
-Bằng cách tạo Interface endpoint, bạn đã mở rộng kết nối S3 đến các tài nguyên chạy trên trung tâm dữ liệu trên chỗ của bạn thông qua AWS Site-to-Site VPN hoặc Direct Connect.
+---
 
-#### Dọn dẹp
-1. Điều hướng đến Hosted Zones trên phía trái của bảng điều khiển Route 53. Nhấp vào tên của  s3.us-east-1.amazonaws.com zone. Nhấp vào Delete và xác nhận việc xóa bằng cách nhập từ khóa "delete".
+#### 1. Scale số lượng ECS Fargate Tasks về 0 (Tạm dừng container)
 
-![hosted zone](/images/5-Workshop/5.6-Cleanup/delete-zone.png)
+Để ngắt ngay lập tức chi phí tính toán Fargate mà không mất cấu hình dịch vụ, hãy giảm `desired-count` về 0 cho cả 2 môi trường Staging và Production:
 
-2. Disassociate Route 53 Resolver Rule - myS3Rule from "VPC Onprem" and Delete it. 
+```bash
+# 1. Scale Staging Service về 0
+aws ecs update-service \
+    --cluster devsecops-cluster \
+    --service devsecops-staging-service \
+    --desired-count 0 \
+    --region ap-southeast-1
 
-![hosted zone](/images/5-Workshop/5.6-Cleanup/vpc.png)
+# 2. Scale Production Service về 0
+aws ecs update-service \
+    --cluster devsecops-cluster \
+    --service devsecops-prod-service \
+    --desired-count 0 \
+    --region ap-southeast-1
+```
 
-4.Mở console của CloudFormation và xóa hai stack CloudFormation mà bạn đã tạo cho bài thực hành này:
-+ PLOnpremSetup
-+ PLCloudSetup
+---
 
-![delete stack](/images/5-Workshop/5.6-Cleanup/delete-stack.png)
+#### 2. Xóa ECS Services & Cluster (Nếu hủy hoàn toàn)
 
-5. Xóa các S3 bucket
+Nếu không còn nhu cầu sử dụng lại workshop:
 
-+ Mở bảng điều khiển S3
-+ Chọn bucket chúng ta đã tạo cho lab, nhấp chuột và xác nhận là empty. Nhấp Delete và xác nhận delete.
-+ 
-![delete s3](/images/5-Workshop/5.6-Cleanup/delete-s3.png)
+```bash
+# Xóa Services
+aws ecs delete-service --cluster devsecops-cluster --service devsecops-staging-service --force
+aws ecs delete-service --cluster devsecops-cluster --service devsecops-prod-service --force
+
+# Xóa Cluster
+aws ecs delete-cluster --cluster devsecops-cluster
+```
+
+---
+
+#### 3. Dọn dẹp Amazon ECR Repository
+
+Xóa toàn bộ Docker images và repository trên ECR:
+
+```bash
+aws ecr delete-repository \
+    --repository-name devsecops-react-app \
+    --force \
+    --region ap-southeast-1
+```
+
+---
+
+#### 4. Dọn dẹp Amazon S3 Report Bucket
+
+Xóa toàn bộ các tệp báo cáo bảo mật và bucket S3:
+
+```bash
+ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+BUCKET_NAME="devsecops-reports-bucket-${ACCOUNT_ID}"
+
+# Xóa toàn bộ objects trong bucket
+aws s3 rm s3://${BUCKET_NAME} --recursive
+
+# Xóa S3 Bucket
+aws s3api delete-bucket --bucket ${BUCKET_NAME} --region ap-southeast-1
+```
+
+---
+
+#### 5. Xóa AWS Lambda Function & CloudWatch Log Groups
+
+Dọn dẹp Lambda function tổng hợp báo cáo và các nhóm log:
+
+```bash
+# Xóa Lambda Aggregator Function
+aws lambda delete-function --function-name devsecops-report-aggregator
+
+# Xóa CloudWatch Log Groups
+aws logs delete-log-group --log-group-name /ecs/devsecops-react-app
+aws logs delete-log-group --log-group-name /aws/lambda/devsecops-report-aggregator
+```
+
+> **Lưu ý:** Việc thực hiện đầy đủ các bước trên sẽ đảm bảo tài khoản AWS của bạn trở về trạng thái an toàn và chi phí phát sinh là **$0.00 USD**.

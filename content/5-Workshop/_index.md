@@ -1,28 +1,29 @@
 ---
 title: "Workshop"
-date: 2024-01-01
+date: 2026-07-06
 weight: 5
 chapter: false
 pre: " <b> 5. </b> "
 ---
 
-# Secure Hybrid Access to S3 using VPC Endpoints
+# DevSecOps Factory on AWS: Technical Project & Hands-on Lab Guide
+
+#### 🔗 Workshop Source Code (GitHub Repository)
+The complete hands-on codebase, infrastructure manifests, and pipeline scripts for this Workshop are archived at:
+👉 **[loi-bui0703/CICD-DevSecOps-using-AWS-services](https://github.com/loi-bui0703/CICD-DevSecOps-using-AWS-services.git)**
+
+---
 
 #### Overview
 
-**AWS PrivateLink** provides private connectivity to AWS services from VPCs and your on-premises networks, without exposing your traffic to the Public Internet.
+The **DevSecOps Factory** represents the core technical project designed to embed security automation across all stages of the software development lifecycle (Shift-Left Security). This section is structured strictly according to the **FCAJ / AWS Workshop Evaluation Criteria**, covering Context & Objectives, Architecture & AWS Service Selection, Step-by-Step Lab Guide, Security Analysis, End-to-End Validation Testing, Resource Clean-up, and References.
 
-In this lab, you will learn how to create, configure, and test VPC endpoints that enable your workloads to reach AWS services without traversing the Public Internet.
+#### Table of Contents
 
-You will create two types of endpoints to access Amazon S3: a Gateway VPC endpoint, and an Interface VPC endpoint. These two types of VPC endpoints offer different benefits depending on if you are accessing Amazon S3 from the cloud or your on-premises location
-+ **Gateway** - Create a gateway endpoint to send traffic to Amazon S3 or DynamoDB using private IP addresses.You route traffic from your VPC to the gateway endpoint using route tables.
-+ **Interface** - Create an interface endpoint to send traffic to endpoint services that use a Network Load Balancer to distribute traffic. Traffic destined for the endpoint service is resolved using DNS.
-
-#### Content
-
-1. [Workshop overview](5.1-Workshop-overview)
-2. [Prerequiste](5.2-Prerequiste/)
-3. [Access S3 from VPC](5.3-S3-vpc/)
-4. [Access S3 from On-premises](5.4-S3-onprem/)
-5. [VPC Endpoint Policies (Bonus)](5.5-Policy/)
-6. [Clean up](5.6-Cleanup/)
+1. [5.1. Idea, Objectives & Technical Architecture](5.1-Workshop-overview/)
+2. [5.2. Prerequisites & IAM Setup](5.2-Prerequiste/)
+3. [5.3. Step-by-Step Lab Guide](5.3-Step-by-Step/)
+4. [5.4. Security Analysis & Controls](5.4-Security/)
+5. [5.5. Comprehensive DevSecOps Security Testing](5.5-Testing/)
+6. [5.6. Resource Clean-up](5.6-Cleanup/)
+7. [5.7. References](5.7-References/)

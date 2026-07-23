@@ -19,9 +19,11 @@ chapter: false
 
 &emsp; **Ngành:** Khoa học máy tính
 
-&emsp; **Công ty thực tập:** Công ty TNHH Amazon Web Services Viet Nam
+&emsp; **Lớp:** MT23KHM3
 
-&emsp; **Vị trí thực tập:** Workforce Bootcamp - First Cloud AI Journey
+&emsp; **Công ty thực tập:** Công ty TNHH Amazon Web Services Việt Nam
+
+&emsp; **Vị trí thực tập:** FCAJ Fullstack Intern
 
 &emsp; **Thời gian thực tập:** Từ ngày 15/06/2026 đến ngày 14/08/2026
 
@@ -31,7 +33,7 @@ chapter: false
 
 1.  [Worklog](1-Worklog/)
 2.  [Proposal](2-Proposal/)
-3.  [Các bài blogs đã đăng](3-BlogsPosted/)
+3.  [Các bài blogs đã dịch](3-BlogsPosted/)
 4.  [Các events đã tham gia](4-EventParticipated/)
 5.  [Workshop](5-Workshop/)
 6.  [Tự đánh giá](6-Self-evaluation/)
