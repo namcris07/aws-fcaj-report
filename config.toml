@@ -30,12 +30,6 @@ languageName = "English"
 label = "English"
 
 [[Languages.en.menu.shortcuts]]
-name = "<i class='fab fa-github'></i> Workshop Repository"
-identifier = "Workshop GitHub"
-url = "https://github.com/loi-bui0703/CICD-DevSecOps-using-AWS-services.git"
-weight = 10
-
-[[Languages.en.menu.shortcuts]]
 name = "<i class='fab fa-aws'></i> AWS Study Group - Blog"
 identifier = "AWS Study Group"
 url = "https://awsstudygroup.com"
