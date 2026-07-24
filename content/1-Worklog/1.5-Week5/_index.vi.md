@@ -8,26 +8,25 @@ pre: " <b> 1.5. </b> "
 
 ### Mục tiêu tuần 5:
 
-* Tìm hiểu về triển khai ứng dụng trên Kubernetes/EKS.
-* Xây dựng bộ test case kiểm thử quy trình deploy ứng dụng (Pod status, Ingress routing).
-* Thu thập tài liệu cấu hình hạ tầng EKS từ Thành viên 1.
+* Khởi tạo hạ tầng Serverless Container **Amazon ECS Fargate** (thay thế EKS để tối ưu chi phí ~$72/tháng) và cấu hình 2 ECS Services (`tetris-staging` và `tetris-production`).
+* Tạo **Amazon S3 Report Bucket** cấu hình mã hóa SSE-S3 & Versioning lưu kết quả scan an ninh tập trung (`reports/secrets/`, `reports/sca/`, `reports/sast/`, `reports/container/`, `reports/dast/`).
+* Triển khai hàm **AWS Lambda Aggregator** tự động đọc và phân tích file JSON report khi S3 nhận được file mới.
 
 ### Các công việc cần triển khai trong tuần này:
 | Thứ | Công việc | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu |
 | --- | --- | --- | --- | --- |
-| 2 | - **Nghiên cứu EKS & ALB Controller:** <br>&emsp; + Tìm hiểu kiến trúc dịch vụ Amazon Elastic Kubernetes Service (EKS) điều phối container. <br>&emsp; + Nghiên cứu cơ chế OIDC Provider cho EKS Service Account. <br>&emsp; + Tìm hiểu cơ chế hoạt động của AWS Load Balancer Controller kết hợp với ALB (Application Load Balancer) để tự động tạo Ingress định tuyến Layer 7 cho các namespace. | 13/07/2026 | 13/07/2026 | [EKS & K8s](https://000062.awsstudygroup.com/) |
-| 3 | - **Thiết kế kiểm thử deploy EKS:** <br>&emsp; + Thiết kế tài liệu test case chi tiết cho việc deploy ứng dụng web lên Kubernetes/EKS. <br>&emsp; + Lập danh sách các trường hợp kiểm thử (test scenarios) trạng thái Pod (Running, Ready, CrashLoopBackOff), tính năng tự phục hồi (Liveness/Readiness Probes), khả năng giao tiếp nội bộ qua Service, và định tuyến Ingress routing. | 14/07/2026 | 14/07/2026 | [EKS Module](https://github.com/namcris07/aws-fcaj-learning/blob/main/Worklogs/Tu%E1%BA%A7n-05-Amazon-EKS.md) |
-| 4 | - **Phối hợp hạ tầng EKS:** <br>&emsp; + Phối hợp với Thành viên 1 ghi nhận thông tin cấu hình EKS node group (instance type, scaling limits), VPC subnets cho cluster, và phân quyền IAM role. <br>&emsp; + Tài liệu hóa cấu hình hạ tầng EKS vào báo cáo chung để đảm bảo tài liệu phản ánh chính xác hạ tầng thật được tạo từ Terraform/AWS CLI. | 15/07/2026 | 15/07/2026 | [EKS Configuration](file:///d:/AWS%20FCAJ/CICD-DevSecOps-using-AWS-services/tasks.md) |
-| 5 | - **Thu thập minh chứng deploy:** <br>&emsp; + Chụp ảnh minh chứng Ingress ALB và service hoạt động thực tế trên EKS. <br>&emsp; + Chụp lại kết quả chạy lệnh `kubectl get nodes`, `kubectl get pods -A` trên terminal. <br>&emsp; + Tổng hợp các lỗi phát sinh trong quá trình deploy các manifest staging như lệch container port, lỗi pull image hoặc thiếu annotations cho ALB Ingress. | 16/07/2026 | 16/07/2026 | [EKS Deployment](file:///d:/AWS%20FCAJ/CICD-DevSecOps-using-AWS-services/README.md) |
-| 6 | - **Hoàn thiện kết quả kiểm thử:** <br>&emsp; + Hoàn thiện checklist và kết quả kiểm thử deploy ứng dụng trên môi trường EKS staging. <br>&emsp; + Kiểm tra đối chiếu port của ứng dụng và port khai báo trong Service/Ingress (8080 vs 80). <br>&emsp; + Đánh giá tổng kết tuần 5. | 17/07/2026 | 17/07/2026 | [Test Case Templates](file:///d:/AWS%20FCAJ/CICD-DevSecOps-using-AWS-services/tasks.md) |
+| 2 | - **Nghiên cứu Amazon ECS Fargate Architecture:** <br>&emsp; + Tìm hiểu mô hình tính toán Serverless Container Amazon ECS Fargate (chạy container không cần quản lý máy chủ EC2 hay EKS Control Plane). <br>&emsp; + Phân tích lý do lựa chọn ECS Fargate giúp tối ưu hoàn toàn chi phí cố định EKS cluster (~$72/tháng) cho đồ án sinh viên. <br>&emsp; + Nghiên cứu cơ chế phân quyền Task Execution Role và Task Role cho container. | 13/07/2026 | 13/07/2026 | [ECS Fargate Tasks](file:///d:/AWS%20FCAJ/CICD-DevSecOps-using-AWS-services/tasks.md) |
+| 3 | - **Khởi tạo Amazon ECS Cluster & Services:** <br>&emsp; + Khởi tạo ECS Cluster với Fargate Capacity Provider. <br>&emsp; + Cấu hình 2 ECS Services: `tetris-staging` và `tetris-production`. <br>&emsp; + Đính kèm Application Load Balancer (ALB) định tuyến cổng HTTP 8080 của ứng dụng Web React Nginx. | 14/07/2026 | 14/07/2026 | [ECS Module](https://github.com/namcris07/aws-fcaj-learning/blob/main/Worklogs/Tu%E1%BA%A7n-05-Amazon-ECS-Fargate.md) |
+| 4 | - **Tạo S3 Security Report Bucket:** <br>&emsp; + Tạo S3 bucket lưu kết quả quét an ninh tập trung từ pipeline Jenkins. <br>&emsp; + Phân chia thư mục prefix: `reports/secrets/`, `reports/sca/`, `reports/sast/`, `reports/container/`, `reports/dast/`. <br>&emsp; + Bật mã hóa SSE-S3, Versioning và Lifecycle Policy tự dọn dẹp report sau 30 ngày. | 15/07/2026 | 15/07/2026 | [S3 Reports Config](file:///d:/AWS%20FCAJ/CICD-DevSecOps-using-AWS-services/tasks.md) |
+| 5 | - **Phát triển AWS Lambda Aggregator Function:** <br>&emsp; + Viết script xử lý tự động chạy trên AWS Lambda (Python runtime). <br>&emsp; + Cấu hình S3 Event Notification trigger Lambda khi có file JSON report mới upload lên bucket. <br>&emsp; + Parse dữ liệu báo cáo lỗ hổng High/Critical và đẩy log phân tích về AWS CloudWatch Logs. | 16/07/2026 | 16/07/2026 | [Lambda Security Aggregator](file:///d:/AWS%20FCAJ/CICD-DevSecOps-using-AWS-services/README.md) |
+| 6 | - **Kiểm thử Triển khai & Ghi nhận Quy trình Scaling:** <br>&emsp; + Kiểm thử deploy ECS Task thành công trên môi trường staging qua ALB URL. <br>&emsp; + Ghi nhận quy trình scale ECS Fargate service về `0` (`desired-count 0`) sau khi kết thúc demo để chấm dứt hoàn toàn chi phí. <br>&emsp; + Đánh giá tổng kết tuần 5. | 17/07/2026 | 17/07/2026 | [ECS Teardown Guide](file:///d:/AWS%20FCAJ/CICD-DevSecOps-using-AWS-services/tasks.md) |
 
 ### Kết quả đạt được tuần 5:
 
-* **Nắm vững kiến thức vận hành Kubernetes trên EKS:**
-  * Hiểu rõ cách thức hoạt động của EKS cluster, node groups và sự bổ trợ của OIDC Provider trong việc phân quyền hạt mịn (IAM Roles for Service Accounts - IRSA).
-  * Nắm chắc cơ chế Ingress Controller và cách AWS Load Balancer Controller lắng nghe các cấu hình ingress trong Kubernetes để sinh Application Load Balancer thực tế trên AWS.
+* **Làm chủ hạ tầng Serverless Container Amazon ECS Fargate:**
+  * Triển khai thành công cụm ECS Fargate Cluster và 2 dịch vụ `tetris-staging`, `tetris-production` đi kèm Application Load Balancer (ALB).
+  * Giải quyết hoàn hảo bài toán tối ưu ngân sách sinh viên nhờ thay thế EKS Control Plane tốn phí cố định bằng mô hình ECS Fargate Serverless.
 
-* **Xây dựng hệ thống kiểm thử triển khai hạ tầng:**
-  * Hoàn thành bộ test case kiểm thử toàn diện quy trình triển khai ứng dụng trên EKS.
-  * Phối hợp thành công cùng nhóm ghi nhận và sửa đổi các lỗi liên quan đến cổng container (container port) lệch nhau giữa Nginx serve (8080) và K8s service (80).
-  * Chụp ảnh minh chứng hoạt động của EKS Nodes ở trạng thái Ready và Ingress ALB tạo thành công trên AWS Console.
+* **Xây dựng giải pháp lưu trữ & xử lý báo cáo an ninh tập trung:**
+  * Khởi tạo S3 Security Report Bucket phân chia thư mục chuẩn hóa cho 6 lớp kiểm thử an toàn thông tin.
+  * Xây dựng và kích hoạt thành công hàm AWS Lambda Aggregator tự động phân tích lỗ hổng an ninh từ S3 và xuất nhật ký kiểm toán về CloudWatch Logs.
