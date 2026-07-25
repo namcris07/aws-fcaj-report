@@ -18,7 +18,7 @@ pre: " <b> 4. </b> "
 > * Outcomes or value gained (lessons learned, new skills, contribution to the team/project)
 > * This listing helps demonstrate your actual participation as well as the soft skills and experience you have gained from each event.
 
-During my internship, I participated in three events. Each one was a memorable experience that provided new, interesting, and useful knowledge, along with gifts and wonderful moments.
+During my internship, I participated in four events. Each one was a memorable experience that provided new, interesting, and useful knowledge, along with gifts and wonderful moments.
 
 ### [Event 1](4.1-Event1/)  
 &emsp;**Event Name:** FCAJ Community Day – June 2026  
@@ -82,3 +82,27 @@ During my internship, I participated in three events. Each one was a memorable e
 &emsp;**Outcomes & Values Gained:**  
 * Internalized Dr. Werner Vogels' operational law: *"Everything fails all the time, so plan for failure and nothing fails"*.  
 * Mastered Shift-Left DevSecOps automation strategies and effective AWS certification preparation techniques.  
+
+---
+
+### [Event 4](4.4-Event4/)  
+&emsp;**Event Name:** FCAJ x Agentic AI Build Week – "Show Up. Build. Pitch. WIN!"  
+
+&emsp;**Date & Time:** July 25, 2026  
+
+&emsp;**Location:** 26th Floor, Bitexco Tower, 02 Hai Trieu Street, Saigon Ward, Ho Chi Minh City  
+
+&emsp;**Role:** Attendee  
+
+&emsp;**Main Content & Activities:**  
+* **Opening Keynote – AI Agent Era Mindset (Joseph Marazota, AWS):** Analyzed the Release Velocity shift from quarterly release cycles down to minutes; emphasized the Human-in-the-Loop principle where engineers evaluate and approve AI Agent recommendations rather than allowing autonomous actions.  
+* **KFC Agent – AI Conversational Ordering (One Team – 1st Place):** Ordering solution integrated into Zalo/WhatsApp using Amazon Bedrock Agent Core for session memory; operating cost of only $0.006/order — a 75% reduction over traditional models.  
+* **Signal Scout – Multi-Agent Competitor Intelligence (Signal Scout – 2nd Place):** A2A architecture (Supervisor → Crawler → Analysis + Validation Loop) for automated market signal collection and ROI forecasting; cost optimized from $94/month to $35/month using Native AWS Tools.  
+* **AI Architecture Generator (Plan B Team):** Application that converts natural language requirements into Draw.io diagrams → Cost Estimation → Terraform code → automated AWS deployment.  
+* **Sheper – Crowd Flow Monitoring (3K Team):** Real-time pedestrian flow analysis via Kinesis Video Streams + YOLOv8/ByteTrack + Bedrock Agent to support proactive staff deployment at airports and shopping centers.  
+* **Adaptive Workflow Engine – AML Detection (Six Pillars):** 3-layer anti-money laundering architecture (XGBoost → Step Functions/RAG → Double LLM + Bedrock Guardrails) reducing 90–95% of False Positive alerts in the financial sector.  
+
+&emsp;**Outcomes & Values Gained:**  
+* Mastered Multi-Agent Systems architecture (A2A – Agent to Agent) and Validation Loop mechanisms combined with Human-in-the-Loop controls to prevent hallucination in production AI systems.  
+* Deeply internalized the Business-First mindset: every technical solution must originate from solving a real pain point — not showcasing architectural complexity; gained lasting lessons in Teamwork & Low Ego through candid, hands-on sharing from Hackathon teams.  
+

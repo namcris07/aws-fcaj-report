@@ -20,7 +20,7 @@ pre: " <b> 4. </b> "
 > * Việc liệt kê này giúp thể hiện rõ sự tham gia thực tế của bạn, cũng như các kỹ năng mềm và kinh nghiệm bạn đã tích lũy qua từng sự kiện.
 
 
-Trong quá trình thực tập, em đã tham gia 3 events, với mỗi event là một trải nghiệm đáng nhớ với những kiến thức mới, hay và bổ ích, cùng với đó là những món quà và những khoảnh khắc rất tuyệt vời.
+Trong quá trình thực tập, em đã tham gia 4 events, với mỗi event là một trải nghiệm đáng nhớ với những kiến thức mới, hay và bổ ích, cùng với đó là những món quà và những khoảnh khắc rất tuyệt vời.
 
 ### [Event 1](4.1-Event1/)
 &emsp;**Tên sự kiện:** FCAJ Community Day – June 2026
@@ -84,3 +84,27 @@ Trong quá trình thực tập, em đã tham gia 3 events, với mỗi event là
 &emsp;**Kết quả & Giá trị đạt được:**
 * Khắc ghi triết lý vận hành hệ thống của Dr. Werner Vogels: *"Everything fails all the time, so plan for failure and nothing fails"*.
 * Nắm vững phương pháp tích hợp bảo mật DevSecOps tự động từ sớm (Shift-Left Security) và chiến thuật làm bài thi chứng chỉ quốc tế AWS hiệu quả.
+
+---
+
+### [Event 4](4.4-Event4/)
+&emsp;**Tên sự kiện:** FCAJ x Agentic AI Build Week – "Show Up. Build. Pitch. WIN!"
+
+&emsp;**Thời gian:** 25/07/2026
+
+&emsp;**Địa điểm:** Tầng 26, tòa nhà Bitexco, số 02 đường Hải Triều, phường Sài Gòn, thành phố Hồ Chí Minh
+
+&emsp;**Vai trò trong sự kiện:** Người tham dự
+
+&emsp;**Nội dung & Hoạt động chính:**
+* **Khai mạc & Định hướng tư duy AI Agent (Joseph Marazota – AWS):** Phân tích sự dịch chuyển Release Velocity từ chu kỳ phát hành theo quý xuống từng phút; nhấn mạnh vai trò Human-in-the-Loop khi kỹ sư ra quyết định dựa trên đề xuất của AI Agent, không để AI tự ý hành động.
+* **KFC Agent – AI Conversational Ordering (One Team – Giải Nhất):** Giải pháp đặt hàng KFC qua Zalo/WhatsApp tích hợp Amazon Bedrock Agent Core (session memory); chi phí chỉ $0.006/đơn, tiết kiệm 75% so với mô hình truyền thống.
+* **Signal Scout – Multi-Agent Competitor Intelligence (Signal Scout – Giải Nhì):** Kiến trúc A2A (Supervisor → Crawler → Analysis + Validation Loop) tự động thu thập, xâu chuỗi tín hiệu thị trường và dự báo ROI; tối ưu chi phí từ $94/tháng xuống $35/tháng bằng Native AWS Tools.
+* **AI Architecture Generator (Plan B Team):** Ứng dụng tự động chuyển đổi yêu cầu ngôn ngữ tự nhiên thành diagram Draw.io → Cost Estimation → mã Terraform → tự động deploy lên AWS.
+* **Sheper – Crowd Flow Monitoring (3K Team):** Hệ thống phân tích luồng người qua Kinesis Video Streams + YOLOv8/ByteTrack + Bedrock Agent, hỗ trợ điều phối nhân sự theo thời gian thực tại sân bay, siêu thị.
+* **Adaptive Workflow Engine – AML Detection (Six Pillars):** Kiến trúc 3 tầng phòng chống rửa tiền (XGBoost → Step Functions/RAG → Double LLM + Bedrock Guardrails) giảm 90–95% cảnh báo sai (False Positive) trong ngành tài chính.
+
+&emsp;**Kết quả & Giá trị đạt được:**
+* Nắm vững kiến trúc Multi-Agent Systems (A2A – Agent to Agent) và cơ chế Validation Loop kết hợp Human-in-the-Loop để kiểm soát hallucination trong các hệ thống AI sản xuất.
+* Thấm nhuần tư duy Business-first: mọi giải pháp kỹ thuật phải xuất phát từ việc giải quyết đúng pain-point thực tế, không chỉ thể hiện sự phức tạp công nghệ; đồng thời học được bài học Teamwork & Low Ego qua những chia sẻ thực chiến từ các đội thi Hackathon.
+
