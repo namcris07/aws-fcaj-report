@@ -1,30 +1,30 @@
 ---
-title : "Tài liệu tham khảo (References)"
-date : 2026-07-06 
-weight : 7
-chapter : false
-pre : " <b> 5.7. </b> "
+title: "References"
+date: 2026-07-06
+weight: 8
+chapter: false
+pre: " <b> 8. </b> "
 ---
 
-# 5.7 Tài liệu tham khảo (References)
-
----
-
-### 1. Mã nguồn & Kho lưu trữ dự án (Source Code & Repositories)
-
-- **Mã nguồn Dự án DevSecOps Factory (GitHub):** [loi-bui0703/CICD-DevSecOps-using-AWS-services](https://github.com/loi-bui0703/CICD-DevSecOps-using-AWS-services.git)
-- **Ứng dụng kiểm thử lỗ hổng (Test Target App):** `tetris-app` (ReactJS + Nginx multi-stage build).
+# 8. References
 
 ---
 
-### 2. Video Demo & Báo cáo Trực quan (Video Demo & Showcases)
+### 1. Source Code & Repositories
 
-- **Video Demo Quy trình CI/CD DevSecOps:** *(Bổ sung đường dẫn Video Demo tại đây nếu có)*
-- **Bảng điều khiển kết quả rà quét:** Jenkins Pipeline Console Logs, SonarQube Dashboard, CloudWatch Container Insights logs.
+- **DevSecOps Factory GitHub Repository:** [loi-bui0703/CICD-DevSecOps-using-AWS-services](https://github.com/loi-bui0703/CICD-DevSecOps-using-AWS-services.git)
+- **Vulnerable Test Target App:** `tetris-app` (ReactJS + Nginx multi-stage build).
 
 ---
 
-### 3. Tài liệu Chính thức từ AWS (AWS Official Documentation)
+### 2. Video Demo & Visual Showcases
+
+- **DevSecOps CI/CD Pipeline Video Demo:** *(Add Video Demo URL here if available)*
+- **Security Scan Dashboards:** Jenkins Pipeline Console Logs, SonarQube Dashboard, CloudWatch Container Insights logs.
+
+---
+
+### 3. AWS Official Documentation
 
 - **Amazon ECS Fargate Developer Guide:** [https://docs.aws.amazon.com/ecs/](https://docs.aws.amazon.com/ecs/)
 - **Amazon ECR User Guide:** [https://docs.aws.amazon.com/AmazonECR/latest/userguide/](https://docs.aws.amazon.com/AmazonECR/latest/userguide/)
@@ -33,7 +33,7 @@ pre : " <b> 5.7. </b> "
 
 ---
 
-### 4. Tài liệu Công cụ Bảo mật (Security Tools References)
+### 4. Security Tools References
 
 - **Gitleaks (Secrets Scanner):** [https://github.com/gitleaks/gitleaks](https://github.com/gitleaks/gitleaks)
 - **Trivy (SCA & Container Scanner):** [https://aquasecurity.github.io/trivy/](https://aquasecurity.github.io/trivy/)
