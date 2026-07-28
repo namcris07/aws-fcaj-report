@@ -22,3 +22,44 @@
   ga("create", "UA-158079754-2", "auto");
   ga("send", "pageview");
 </script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    function isExternal(urlStr) {
+      if (!urlStr) return false;
+      if (urlStr.startsWith("http://") || urlStr.startsWith("https://")) {
+        try {
+          var url = new URL(urlStr, window.location.origin);
+          return url.hostname !== window.location.hostname;
+        } catch (e) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    function applyNewTabToExternalLinks() {
+      var links = document.querySelectorAll("#body-inner a");
+      links.forEach(function (link) {
+        var href = link.getAttribute("href");
+        if (isExternal(href)) {
+          link.setAttribute("target", "_blank");
+          link.setAttribute("rel", "noopener noreferrer");
+        }
+      });
+    }
+
+    applyNewTabToExternalLinks();
+
+    document.addEventListener("click", function (e) {
+      var link = e.target.closest("#body-inner a");
+      if (link) {
+        var href = link.getAttribute("href");
+        if (isExternal(href)) {
+          link.setAttribute("target", "_blank");
+          link.setAttribute("rel", "noopener noreferrer");
+        }
+      }
+    }, true);
+  });
+</script>

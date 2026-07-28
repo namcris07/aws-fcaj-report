@@ -1,19 +1,23 @@
 ---
-title : "References"
-date : 2026-07-06 
-weight : 7
-chapter : false
-pre : " <b> 5.7. </b> "
+title: "References"
+date: 2026-07-06
+weight: 8
+chapter: false
+pre: " <b> 8. </b> "
 ---
 
-# 5.7 References
+# 8. Reference Materials
 
 ---
 
 ### 1. Source Code & Repositories
 
-- **DevSecOps Factory GitHub Repository:** [loi-bui0703/CICD-DevSecOps-using-AWS-services](https://github.com/loi-bui0703/CICD-DevSecOps-using-AWS-services.git)
-- **Vulnerable Test Target App:** `tetris-app` (ReactJS + Nginx multi-stage build).
+- **DevSecOps Factory GitHub Repository:**  
+  👉 **[loi-bui0703/CICD-DevSecOps-using-AWS-services](https://github.com/loi-bui0703/CICD-DevSecOps-using-AWS-services.git)**
+- **Internship Learning Repository:**  
+  👉 **[namcris07/aws-fcaj-learning](https://github.com/namcris07/aws-fcaj-learning.git)**
+- **Vulnerable Test Target App:**  
+  `tetris-app` (ReactJS + Nginx multi-stage build).
 
 ---
 
@@ -24,7 +28,16 @@ pre : " <b> 5.7. </b> "
 
 ---
 
-### 3. AWS Official Documentation
+### 3. Shared Blog Posts on Facebook Group (AWS Study Group FCJ)
+
+- **Blog 1: Building a serverless Jenkins environment on AWS Fargate**  
+  👉 **[Post on Facebook Group](https://www.facebook.com/groups/awsstudygroupfcj/posts/2221881141910179)**
+- **Blog 2: Building an end-to-end Kubernetes-based DevSecOps software factory on AWS**  
+  👉 **[Post on Facebook Group](https://www.facebook.com/groups/awsstudygroupfcj/posts/2225170508247909)**
+
+---
+
+### 4. AWS Official Documentation
 
 - **Amazon ECS Fargate Developer Guide:** [https://docs.aws.amazon.com/ecs/](https://docs.aws.amazon.com/ecs/)
 - **Amazon ECR User Guide:** [https://docs.aws.amazon.com/AmazonECR/latest/userguide/](https://docs.aws.amazon.com/AmazonECR/latest/userguide/)
@@ -33,7 +46,7 @@ pre : " <b> 5.7. </b> "
 
 ---
 
-### 4. Security Tools References
+### 5. Security Tools References
 
 - **Gitleaks (Secrets Scanner):** [https://github.com/gitleaks/gitleaks](https://github.com/gitleaks/gitleaks)
 - **Trivy (SCA & Container Scanner):** [https://aquasecurity.github.io/trivy/](https://aquasecurity.github.io/trivy/)
