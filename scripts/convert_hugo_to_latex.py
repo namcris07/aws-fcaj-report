@@ -3,6 +3,7 @@ import re
 import subprocess
 import sys
 import tempfile
+import unicodedata
 import yaml
 
 CONTENT_DIR = "content"
@@ -46,6 +47,18 @@ LATEX_SPECIALS = {
     "~": r"\textasciitilde{}",
     "^": r"\textasciicircum{}",
 }
+
+BOX_DRAWING_TO_ASCII = str.maketrans(
+    {
+        "│": "|",
+        "├": "|",
+        "└": "`",
+        "─": "-",
+        "┬": "+",
+        "┴": "+",
+        "┼": "+",
+    }
+)
 
 
 # ---------------------------------------------------------------------------
@@ -582,6 +595,34 @@ def preprocess_markdown(content, meta=None):
     content = re.sub(r"⚠\ufe0f?", "!", content)
     content = content.replace("\u26a0", "!")
     content = content.replace("\u2192", r"$\rightarrow$")
+
+    lines = content.splitlines(keepends=True)
+    in_fence = False
+    fence_marker = None
+    normalized = []
+
+    for line in lines:
+        stripped = line.lstrip()
+
+        if not in_fence and (stripped.startswith("```") or stripped.startswith("~~~")):
+            fence_marker = stripped[:3]
+            in_fence = True
+            normalized.append(line)
+            continue
+
+        if in_fence and stripped.startswith(fence_marker):
+            in_fence = False
+            fence_marker = None
+            normalized.append(line)
+            continue
+
+        if in_fence:
+            line = line.translate(BOX_DRAWING_TO_ASCII)
+            line = unicodedata.normalize("NFKD", line).encode("ascii", "ignore").decode("ascii")
+
+        normalized.append(line)
+
+    content = "".join(normalized)
 
     return content
 
