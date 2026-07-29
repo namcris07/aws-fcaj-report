@@ -17,7 +17,7 @@ The FCAJ environment is highly dynamic, welcoming, and open. Speakers, mentors, 
 The mentorship team provided exceptionally dedicated guidance, focusing on imparting Architecture Thinking rather than just handing out answers. Mentors consistently encouraged students to practice hands-on, study official AWS documentation, and troubleshoot real issues independently (such as container port misconfigurations, ECR login token expiry, or pipeline breakages). Admins provided prompt assistance with resources, communication channels, and weekly progress tracking.
 
 **3. Relevance to Academic Background**  
-The real-world project **"DevSecOps CI/CD Factory on AWS EKS"** aligned perfectly with modern cloud engineering trends. The knowledge gained at FCAJ not only reinforced foundational networking and OS concepts from university coursework but also expanded into cutting-edge Cloud-Native, DevSecOps (Trivy, SonarQube, OWASP), GitOps (Argo CD), and Observability (CloudWatch) domains.
+The real-world project **"DevSecOps CI/CD Factory on Amazon ECS Fargate"** aligned perfectly with modern cloud engineering trends. The knowledge gained at FCAJ not only reinforced foundational networking and OS concepts from university coursework but also expanded into cutting-edge Cloud-Native, DevSecOps (Trivy, SonarQube, OWASP), GitOps (Argo CD), and Observability (CloudWatch) domains.
 
 **4. Skill Development & Growth Opportunities**  
 Throughout the 9 weeks, I matured not only in cloud technical skills but also in essential soft skills: root cause analysis for system failures, Agile/Scrum teamwork, professional slide deck presentations, and outcome-oriented engineering mindsets.

@@ -17,7 +17,7 @@ Môi trường tại FCAJ vô cùng năng động, thân thiện và cởi mở.
 Đội ngũ Mentor hướng dẫn vô cùng tận tâm, truyền đạt tư duy kiến trúc (Architecture Thinking) thay vì chỉ đưa ra đáp án có sẵn. Mentor luôn khuyến khích sinh viên tự tay thực hành (Hands-on), tự đọc tài liệu official và thử nghiệm xử lý các sự cố thực tế (như lỗi lệch cổng container, lỗi xác thực token ECR hay đứt gãy pipeline). Team Admin hỗ trợ nhanh chóng về tài liệu, kênh trao đổi Discord/Slack và theo sát tiến độ từng tuần của từng nhóm.
 
 **3. Sự phù hợp giữa dự án và chuyên ngành học**  
-Đồ án thực tế **DevSecOps CI/CD Factory trên AWS EKS** rất sát với định hướng công nghệ hiện đại. Những kiến thức học được tại FCAJ không chỉ củng cố nền tảng mạng và hệ điều hành từ nhà trường mà còn mở rộng vượt bậc sang các lĩnh vực Cloud-Native, DevSecOps (Trivy, SonarQube, OWASP), GitOps (Argo CD) và Observability (CloudWatch).
+Đồ án thực tế **DevSecOps CI/CD Factory trên Amazon ECS Fargate** rất sát với định hướng công nghệ hiện đại. Những kiến thức học được tại FCAJ không chỉ củng cố nền tảng mạng và hệ điều hành từ nhà trường mà còn mở rộng vượt bậc sang các lĩnh vực Cloud-Native, DevSecOps (Trivy, SonarQube, OWASP), GitOps (Argo CD) và Observability (CloudWatch).
 
 **4. Cơ hội học tập & phát triển kỹ năng**  
 Qua 9 tuần đồng hành, em không chỉ trưởng thành về mặt tư duy kỹ thuật đám mây mà còn rèn luyện được các kỹ năng mềm quan trọng: tư duy phân tích sự cố (Root Cause Analysis), kỹ năng làm việc nhóm theo mô hình Agile/Scrum, kỹ năng thuyết trình bằng slide chuyên nghiệp và tư duy làm việc hướng kết quả (Outcome-oriented).

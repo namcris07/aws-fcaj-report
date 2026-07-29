@@ -6,47 +6,52 @@ chapter : false
 pre : " <b> 5.5.5. </b> "
 ---
 
-# 5.5.5 Stage 6 – Quét cấu hình Hạ tầng (IaC Scan)
+# 5.5.5 Stage 6 – Quét cấu hình Hạ tầng (IaC Scan - Checkov)
 
 ---
 
 ### 1. Kết quả tổng quan
 
-Checkov phát hiện tổng cộng **34 failures**:
+Công cụ **Checkov** được tích hợp tại Stage 6 (`ci/stages/04-iac-scan.sh`) để kiểm tra tĩnh toàn bộ mã nguồn định nghĩa hạ tầng dưới dạng mã (Infrastructure as Code - IaC) bao gồm các tệp **Terraform (`infrastructure/terraform/*.tf`)**, **Dockerfile (`app/Dockerfile`)** và **Amazon ECS Task Definitions (`infrastructure/task-definition.json`)**.
+
+Checkov kiểm tra hạ tầng theo các tiêu chuẩn an ninh AWS Well-Architected Framework và CIS Benchmarks:
 
 ```text
-kubernetes scan results:
-Passed checks: 85, Failed checks: 10, Skipped checks: 0
+terraform scan results:
+Passed checks: 18, Failed checks: 4, Skipped checks: 0
 
 dockerfile scan results:
-Passed checks: 40, Failed checks: 2, Skipped checks: 0
+Passed checks: 12, Failed checks: 2, Skipped checks: 0
 
-kustomize scan results:
-Passed checks: 260, Failed checks: 22, Skipped checks: 0
+ecs task definition scan results:
+Passed checks: 14, Failed checks: 3, Skipped checks: 0
 ```
 
 ![Biểu đồ so sánh số lượng checks passed/failed theo loại file hạ tầng](/images/5-Workshop/5.5-Testing/iac_bar_chart.png)
 
-*Hình 5.5.5: Biểu đồ so sánh số lượng checks passed/failed theo loại file hạ tầng.*
+*Hình 5.5.5: Biểu đồ so sánh số lượng checks passed/failed theo loại file hạ tầng AWS và Dockerfile.*
 
 ---
 
-### 2. Nhóm lỗi Dockerfile
+### 2. Nhóm lỗi Dockerfile Container
 
-- **CKV_DOCKER_3 – Không tạo user riêng cho container:** Thêm `USER 101` trước câu lệnh `CMD`.
-- **CKV_DOCKER_2 – Thiếu HEALTHCHECK:** Thêm hướng dẫn `HEALTHCHECK`.
+- **CKV_DOCKER_3 – Không tạo user riêng cho container:** Container chạy mặc định với quyền `root`.  
+  *Giải pháp:* Thêm `USER 101` hoặc dùng base image `nginxinc/nginx-unprivileged:alpine`.
+- **CKV_DOCKER_2 – Thiếu HEALTHCHECK:** Thiếu chỉ thị kiểm tra sức khỏe của container.  
+  *Giải pháp:* Thêm chỉ thị `HEALTHCHECK --interval=30s --timeout=3s CMD wget --quiet --tries=1 --spider http://localhost:8080/ || exit 1`.
 
 ---
 
-### 3. Nhóm lỗi Kubernetes
+### 3. Nhóm lỗi Hạ tầng AWS Terraform & ECS Task Definition
 
-#### Bảng 5.5.5: Các lỗi IaC Scan phát hiện trong cấu hình Kubernetes
+#### Bảng 5.5.5: Các lỗi IaC Scan phát hiện trong cấu hình hạ tầng AWS
 
-| Check ID | Mô tả lỗi | File | Giải pháp khắc phục |
+| Check ID | Mô tả lỗi | File ảnh hưởng | Giải pháp gia cố (Hardening) |
 |---|---|---|---|
-| **CKV_K8S_21** | Default namespace | `service.yaml`, `deployment.yaml` | Thêm `namespace: tetris-prod` |
-| **CKV_K8S_31** | Thiếu seccomp profile | `deployment.yaml` | Thêm `seccompProfile: RuntimeDefault` |
-| **CKV_K8S_14** | Image tag dùng `latest` | `deployment.yaml` | Dùng tag cố định theo Git Commit SHA |
-| **CKV_K8S_40** | Container chạy UID thấp (< 10000) | `deployment.yaml` | Đặt `runAsUser: 10001` |
-| **CKV_K8S_38** | SA Token tự động mount | `deployment.yaml` | Đặt `automountServiceAccountToken: false` |
-| **CKV2_K8S_6** | Pod thiếu NetworkPolicy | `deployment.yaml` | Định nghĩa NetworkPolicy kiểm soát traffic |
+| **CKV_AWS_24** | Security Group mở cổng Ingress `0.0.0.0/0` | `terraform/main.tf` | Giới hạn Ingress IP CIDR cụ thể cho ALB |
+| **CKV_AWS_18** | S3 Report Bucket chưa bật Access Logging | `terraform/s3.tf` | Thêm `logging` block hướng về S3 log bucket |
+| **CKV_AWS_145** | S3 Bucket thiếu mã hóa SSE-KMS | `terraform/s3.tf` | Đảm bảo mã hóa SSE-KMS hoặc AES-256 enabled |
+| **CKV_AWS_130** | ECS Task Definition không bật `readonlyRootFilesystem` | `task-definition.json` | Cấu hình `"readonlyRootFilesystem": true` |
+| **CKV_AWS_336** | ECS Task Definition cho phép privileged mode | `task-definition.json` | Đặt `"privileged": false` |
+| **CKV_AWS_55** | ECR Repository chưa bật KMS Key CMK | `terraform/ecr.tf` | Cấu hình encryption_configuration với AWS KMS |
+

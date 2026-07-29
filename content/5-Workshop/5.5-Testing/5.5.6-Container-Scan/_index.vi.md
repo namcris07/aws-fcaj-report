@@ -26,7 +26,7 @@ pre : " <b> 5.5.6. </b> "
 Khi sử dụng `nginxinc/nginx-unprivileged:alpine`:
 
 ```text
-Target: localhost:5001/devsecops/tetris:build-30
+Target: 123456789012.dkr.ecr.ap-southeast-1.amazonaws.com/devsecops/tetris:build-30
 Type: alpine (alpine 3.23.4)
 Vulnerabilities: 0
 Status: Clean (no security findings detected)

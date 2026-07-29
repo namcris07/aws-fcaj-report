@@ -13,13 +13,13 @@ pre: " <b> 8. </b> "
 - **Tài liệu đã học trong quá trình thực tập:**  
   👉 **[namcris07/aws-fcaj-learning](https://github.com/namcris07/aws-fcaj-learning.git)**
 - **Ứng dụng kiểm thử lỗ hổng (Test Target App):**  
-  `tetris-app` (ReactJS + Nginx multi-stage build).
+  👉 **[lamelihuynh/tetris-app](https://github.com/lamelihuynh/tetris-app.git)** (`tetris-app` - ReactJS + Nginx multi-stage build).
 
 ---
 
 ### 2. Video Demo & Báo cáo Trực quan
 
-- **Video Demo Quy trình CI/CD DevSecOps:** *(Cập nhật đường dẫn Video Demo tại đây)*
+- **Video Demo Quy trình CI/CD DevSecOps:** _(Cập nhật đường dẫn Video Demo tại đây)_
 - **Bảng điều khiển kết quả rà quét:** Jenkins Pipeline Console Logs, SonarQube Dashboard, CloudWatch Container Insights logs.
 
 ---
@@ -30,15 +30,19 @@ pre: " <b> 8. </b> "
   👉 **[Bài viết chia sẻ trên Facebook Group](https://www.facebook.com/groups/awsstudygroupfcj/posts/2221881141910179)**
 - **Blog 2: Xây dựng nhà máy phần mềm DevSecOps end-to-end dựa trên Kubernetes trên AWS**  
   👉 **[Bài viết chia sẻ trên Facebook Group](https://www.facebook.com/groups/awsstudygroupfcj/posts/2225170508247909)**
+- **Blog 3: Giám sát và mở rộng quy mô ứng dụng Amazon ECS trên AWS Fargate bằng chỉ số Prometheus**  
+  👉 **[Nội dung dịch chi tiết trên Site](../3-blogsposted/3.3-blog3/)**
 
 ---
 
-### 4. Tài liệu Chính thức từ AWS
+### 4. Tài liệu Chính thức từ AWS & Nền tảng
 
 - **Amazon ECS Fargate Developer Guide:** [https://docs.aws.amazon.com/ecs/](https://docs.aws.amazon.com/ecs/)
 - **Amazon ECR User Guide:** [https://docs.aws.amazon.com/AmazonECR/latest/userguide/](https://docs.aws.amazon.com/AmazonECR/latest/userguide/)
 - **AWS Security Pillar - Well-Architected Framework:** [https://aws.amazon.com/architecture/well-architected/](https://aws.amazon.com/architecture/well-architected/)
 - **Amazon CloudWatch Container Insights:** [https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContainerInsights.html](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContainerInsights.html)
+- **AWS Study Group EKS Workshop:** [https://000062.awsstudygroup.com/](https://000062.awsstudygroup.com/)
+- **Argo CD - Declarative GitOps for Kubernetes:** [https://argoproj.github.io/cd/](https://argoproj.github.io/cd/)
 
 ---
 
