@@ -78,3 +78,19 @@ CMD ["nginx", "-g", "daemon off;"]
 # [LỖI CKV_DOCKER_3]: Thiếu USER -> chạy với quyền root
 # [LỖI CKV_DOCKER_2]: Thiếu HEALTHCHECK
 ```
+
+---
+
+### Ảnh minh chứng kiểm thử App & Docker build
+
+![Build React App](/images/5-Workshop/5.3-Step-by-Step/app-01-run_build_app.jpg)
+*Hình 5.5.1b: Biên dịch ứng dụng web React Tetris (`npm run build`).*
+
+![Build Docker Image](/images/5-Workshop/5.3-Step-by-Step/app-02-build_docker.jpg)
+*Hình 5.5.1c: Đóng gói Multi-stage Docker image cho ứng dụng.*
+
+![Giao diện App local](/images/5-Workshop/5.3-Step-by-Step/app-02-docker_app.jpg)
+*Hình 5.5.1d: Giao diện game Tetris chạy kiểm thử local qua Docker container.*
+
+![AWS CloudWatch Logs Insights](/images/5-Workshop/5.3-Step-by-Step/aws_cloudwatch_insights.png)
+*Hình 5.5.1e: Màn hình truy vấn nhật ký ứng dụng thực tế trên AWS CloudWatch Logs Insights (`/ecs/devsecops-factory`).*

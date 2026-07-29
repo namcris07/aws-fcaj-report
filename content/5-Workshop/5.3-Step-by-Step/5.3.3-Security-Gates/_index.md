@@ -10,70 +10,99 @@ pre : " <b> 5.3.3. </b> "
 
 ---
 
-Integrate 6 security inspection gates into `Jenkinsfile`:
+Integrate 6 Security Gates and ECS deployment pipeline stages into `ci/Jenkinsfile`:
 
 ```groovy
 pipeline {
     agent any
     environment {
-        AWS_REGION     = 'ap-southeast-1'
-        ECR_REGISTRY   = '123456789012.dkr.ecr.ap-southeast-1.amazonaws.com'
-        REPO_NAME      = 'devsecops-react-app'
-        S3_BUCKET      = 'devsecops-reports-bucket-123456789012'
-        IMAGE_TAG      = "${GIT_COMMIT}"
+        AWS_REGION      = 'ap-southeast-1'
+        REGISTRY_TARGET = 'ecr'
+        IMAGE_NAME      = 'devsecops/tetris'
+        SECURITY_MODE   = 'enforce'
+        ENABLE_ECS_DEPLOY = 'true'
+        ENABLE_DAST     = 'true'
+        ENABLE_S3_UPLOAD = 'true'
     }
     stages {
-        stage('Checkout Code') {
-            steps {
-                checkout scm
-            }
+        stage('Checkout Source') {
+            steps { checkout scm }
         }
         stage('Gate 1: Secrets Scan') {
             steps {
-                sh 'gitleaks detect --source=. --report-path=reports/gitleaks.json --exit-code=0'
+                sh './ci/stages/01-secrets-scan.sh'
             }
         }
-        stage('Build React App') {
+        stage('Gate 2: SCA Dependency Scan') {
             steps {
-                sh 'npm install && npm run build'
+                sh './ci/stages/02-sca-scan.sh'
             }
         }
-        stage('Gate 2: SCA Scan') {
+        stage('Gate 3: SAST Code Analysis') {
             steps {
-                sh 'trivy fs --format json --output reports/trivy-sca.json .'
+                sh './ci/stages/03-sast-scan.sh'
             }
         }
-        stage('Gate 3: SAST Scan') {
+        stage('Gate 4: IaC Scan') {
             steps {
-                sh 'sonar-scanner -Dsonar.projectKey=react-app -Dsonar.sources=src'
+                sh './ci/stages/04-iac-scan.sh'
             }
         }
         stage('Docker Build') {
             steps {
-                sh 'docker build -t ${ECR_REGISTRY}/${REPO_NAME}:${IMAGE_TAG} .'
+                sh 'docker build -t ${ECR_REGISTRY}/${IMAGE_NAME}:${COMMIT_SHA} app/'
             }
         }
-        stage('Gate 4: Container Scan') {
+        stage('Gate 5: Container Image Scan') {
             steps {
-                sh 'trivy image --format json --output reports/trivy-image.json ${ECR_REGISTRY}/${REPO_NAME}:${IMAGE_TAG}'
+                sh './ci/stages/05-container-scan.sh'
             }
         }
-        stage('Gate 5: IaC Scan') {
-            steps {
-                sh 'checkov -d . --output json > reports/checkov.json || true'
-            }
-        }
-        stage('Push Image to ECR') {
+        stage('Push Image to Amazon ECR') {
             steps {
                 sh 'aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}'
-                sh 'docker push ${ECR_REGISTRY}/${REPO_NAME}:${IMAGE_TAG}'
+                sh 'docker push ${ECR_REGISTRY}/${IMAGE_NAME}:${COMMIT_SHA}'
             }
         }
-        stage('Upload Reports to S3') {
+        stage('Deploy to ECS Staging') {
             steps {
-                sh 'aws s3 cp reports/ s3://${S3_BUCKET}/reports/${IMAGE_TAG}/ --recursive'
+                sh 'aws ecs update-service --cluster devsecops-factory-cluster --service devsecops-factory-staging --force-new-deployment'
+            }
+        }
+        stage('Gate 6: OWASP ZAP DAST Scan') {
+            steps {
+                sh './ci/stages/06-dast-scan.sh'
+            }
+        }
+        stage('Normalize Reports & Upload to S3') {
+            steps {
+                sh 'python3 ci/stages/normalize-reports.py'
+                sh 'aws s3 cp results/ s3://${S3_BUCKET}/reports/${COMMIT_SHA}/ --recursive'
+            }
+        }
+        stage('Production Approval Gate') {
+            steps {
+                input message: 'Approve deployment to ECS Production?'
+            }
+        }
+        stage('Deploy to ECS Production') {
+            steps {
+                sh 'aws ecs update-service --cluster devsecops-factory-cluster --service devsecops-factory-prod --force-new-deployment'
             }
         }
     }
 }
 ```
+
+---
+
+### Screenshots: Jenkins Pipeline & Security Artifacts
+
+![Jenkins Stages](/images/5-Workshop/5.3-Step-by-Step/task2-01-jenkins-stages.png)
+*Figure 5.3.3a: Sequential stage execution output in Jenkins Pipeline.*
+
+![Jenkins Build & Push ECR](/images/5-Workshop/5.3-Step-by-Step/task2-01b-jenkins-build-push-stages.png)
+*Figure 5.3.3b: Docker Image Build and Amazon ECR Push stages.*
+
+![Security Report Artifacts](/images/5-Workshop/5.3-Step-by-Step/task2-02-security-artifacts.png)
+*Figure 5.3.3c: Archived Security Inspection Report Artifacts.*

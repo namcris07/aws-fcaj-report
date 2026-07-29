@@ -16,6 +16,31 @@ The `devsecops-factory` system is designed following the **"Shift Left Security"
 
 *Figure 5.5.1: Full DevSecOps 11-stage pipeline architecture running on Jenkins.*
 
+# STAGE 2: Deploy (Serve static files via Nginx)
+# FROM nginxinc/nginx-unprivileged:alpine <- USED TO PASS container scan
+FROM nginx:1.18.0    # <- CURRENTLY USED - Triggers CRITICAL CVEs
+COPY --from=builder /app/build /usr/share/nginx/html
+EXPOSE 8080
+CMD ["nginx", "-g", "daemon off;"]
+# [CKV_DOCKER_3]: Missing USER -> runs as root
+# [CKV_DOCKER_2]: Missing HEALTHCHECK
+
+---
+
+### App & Docker Build Verification Screenshots
+
+![Build React App](/images/5-Workshop/5.3-Step-by-Step/app-01-run_build_app.jpg)
+*Figure 5.5.1b: React Tetris web application build compilation (`npm run build`).*
+
+![Build Docker Image](/images/5-Workshop/5.3-Step-by-Step/app-02-build_docker.jpg)
+*Figure 5.5.1c: Packaging application into Multi-stage Docker image.*
+
+![Local App GUI](/images/5-Workshop/5.3-Step-by-Step/app-02-docker_app.jpg)
+*Figure 5.5.1d: Tetris web game GUI running locally via Docker container.*
+
+![AWS CloudWatch Logs Insights](/images/5-Workshop/5.3-Step-by-Step/aws_cloudwatch_insights.png)
+*Figure 5.5.1e: Real-time container log analysis using AWS CloudWatch Logs Insights (`/ecs/devsecops-factory`).*
+
 #### Table 5.5.1: Security Pipeline Testing Summary
 
 | Stage | Scan Type | Tool | Findings | Severity | Result |

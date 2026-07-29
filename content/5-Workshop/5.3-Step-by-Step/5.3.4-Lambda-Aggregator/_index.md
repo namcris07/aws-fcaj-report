@@ -10,38 +10,75 @@ pre : " <b> 5.3.4. </b> "
 
 ---
 
-### 1. Create Lambda Function (Python 3.11)
+### 1. Lambda Function (`devsecops-factory-securityhub-importer`)
+
+Create Lambda function `devsecops-factory-securityhub-importer` (Python 3.12) to automatically parse ASFF security reports from S3 and import findings directly into **AWS Security Hub** via `batch_import_findings`:
 
 ```python
 import json
+import logging
+import os
+import urllib.parse
 import boto3
 
-s3_client = boto3.client('s3')
+LOG = logging.getLogger()
+LOG.setLevel(logging.INFO)
+
+S3 = boto3.client("s3")
+SECURITYHUB = boto3.client("securityhub", region_name=os.getenv("SECURITYHUB_REGION", "ap-southeast-1"))
+ASFF_SUFFIX = os.getenv("ASFF_SUFFIX", "securityhub-asff.json")
+
+def chunks(items, size):
+    return [items[i : i + size] for i in range(0, len(items), size)]
+
+def load_findings(bucket, key):
+    response = S3.get_object(Bucket=bucket, Key=key)
+    payload = json.loads(response["Body"].read())
+    if isinstance(payload, list):
+        return payload
+    if isinstance(payload, dict):
+        return payload.get("findings", [])
+    return []
+
+def import_findings(findings):
+    imported = 0
+    failed = 0
+    for batch in chunks(findings, 100):
+        result = SECURITYHUB.batch_import_findings(Findings=batch)
+        imported += len(batch) - int(result.get("FailedCount", 0))
+        failed += int(result.get("FailedCount", 0))
+    return {"imported": imported, "failed": failed}
 
 def lambda_handler(event, context):
-    bucket = event['Records'][0]['s3']['bucket']['name']
-    key = event['Records'][0]['s3']['object']['key']
-    
-    response = s3_client.get_object(Bucket=bucket, Key=key)
-    report_data = json.loads(response['Body'].read().decode('utf-8'))
-    
-    critical_vulnerabilities = 0
-    if 'Vulnerabilities' in report_data:
-        for item in report_data['Vulnerabilities']:
-            if item.get('Severity') == 'CRITICAL':
-                critical_vulnerabilities += 1
-                
-    result = {
-        "file": key,
-        "critical_count": critical_vulnerabilities,
-        "status": "REJECTED" if critical_vulnerabilities > 0 else "APPROVED"
-    }
-    
-    print(f"Report Evaluation Result: {json.dumps(result)}")
-    return {"statusCode": 200, "body": json.dumps(result)}
+    imported = 0
+    for record in event.get("Records", []):
+        bucket = record["s3"]["bucket"]["name"]
+        key = urllib.parse.unquote_plus(record["s3"]["object"]["key"])
+        if not key.endswith(ASFF_SUFFIX):
+            continue
+        findings = load_findings(bucket, key)
+        result = import_findings(findings)
+        imported += result["imported"]
+    return {"importedFindings": imported}
 ```
 
 ---
 
 ### 2. Configure S3 Event Notification Trigger
-Link S3 Bucket uploads to Lambda function execution.
+
+Set up S3 Bucket Notifications on `devsecops-reports-*` for `s3:ObjectCreated:*` events under `reports/asff/` matching `securityhub-asff.json`:
+
+- **Event Type:** `s3:ObjectCreated:*`
+- **Filter Prefix:** `reports/asff/`
+- **Filter Suffix:** `securityhub-asff.json`
+- **Target:** Lambda `devsecops-factory-securityhub-importer`
+
+---
+
+### Genuine Screenshots: AWS Lambda Function & Security Hub Findings
+
+![AWS Lambda Function](/images/5-Workshop/5.3-Step-by-Step/aws_lambda_function.png)
+*Figure 5.3.4a: AWS Lambda Function (`devsecops-securityhub-importer`) linked to S3 Event Notification trigger.*
+
+![AWS Security Hub Findings](/images/5-Workshop/5.3-Step-by-Step/aws_security_hub_findings.png)
+*Figure 5.3.4b: AWS Security Hub CSPM Findings dashboard recording automated ASFF security findings.*

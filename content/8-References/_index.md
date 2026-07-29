@@ -28,7 +28,7 @@ pre: " <b> 8. </b> "
 
 ---
 
-### 3. Shared Blog Posts on Facebook Group (AWS Study Group FCJ)
+### 3. Shared Blog Posts on Facebook Group 
 
 - **Blog 1: Building a serverless Jenkins environment on AWS Fargate**  
   👉 **[Post on Facebook Group](https://www.facebook.com/groups/awsstudygroupfcj/posts/2221881141910179)**

@@ -6,87 +6,74 @@ chapter : false
 pre : " <b> 5.6. </b> "
 ---
 
-#### Resource Clean-up
-
-After completing all workshop verification tasks and report documentation, perform the following steps to clean up all AWS resources and prevent unintended cloud charges.
+# 5.6 Resource Clean-up
 
 ---
 
-#### 1. Scale ECS Fargate Tasks to 0 (Pause Running Containers)
+After completing all workshop verification tasks and report documentation, perform resource clean-up to prevent unintended cloud charges. The repository provides 2 distinct clean-up tiers:
 
-To immediately stop Fargate compute charges while preserving service definitions, reduce the `desired-count` to 0 for both Staging and Production environments:
+---
+
+### Tier 1: Temporary Pause (Demo Reset)
+
+To immediately stop Fargate compute charges **without destroying** Terraform infrastructure definitions (ideal when preparing for another demo):
 
 ```bash
-# 1. Scale Staging Service to 0
-aws ecs update-service \
-    --cluster devsecops-cluster \
-    --service devsecops-staging-service \
-    --desired-count 0 \
-    --region ap-southeast-1
+# Option 1: Using make command
+AWS_PROFILE_NAME=devsecops-factory make demo-reset
 
-# 2. Scale Production Service to 0
-aws ecs update-service \
-    --cluster devsecops-cluster \
-    --service devsecops-prod-service \
-    --desired-count 0 \
-    --region ap-southeast-1
+# Option 2: Using scale-ecs.sh script
+scripts/scale-ecs.sh down
 ```
 
+The command above sets the `desired-count` to `0` for both `devsecops-factory-staging` and `devsecops-factory-prod` ECS services.
+
 ---
 
-#### 2. Delete ECS Services & Cluster
+### Tier 2: Complete Infrastructure Destruction (`cleanup-aws.sh`)
 
-If you do not plan to reuse the workshop environment:
+This method destroys all AWS cloud resources including VPC, ALBs, ECR repositories, S3 report buckets, CloudWatch log groups, IAM users, and Terraform state.
 
 ```bash
-# Delete Services
-aws ecs delete-service --cluster devsecops-cluster --service devsecops-staging-service --force
-aws ecs delete-service --cluster devsecops-cluster --service devsecops-prod-service --force
+# 1. Login and verify expected AWS Account ID (Account: 585572506644)
+aws sts get-caller-identity --profile devsecops-factory
 
-# Delete Cluster
-aws ecs delete-cluster --cluster devsecops-cluster
+# 2. Execute automated teardown script
+AWS_PROFILE=devsecops-factory \
+EXPECTED_AWS_ACCOUNT_ID=585572506644 \
+CONFIRM_AWS_CLEANUP=devsecops-factory \
+DESTROY_TERRAFORM=true \
+./scripts/cleanup-aws.sh
 ```
 
----
-
-#### 3. Delete Amazon ECR Repository
-
-Remove all Docker images and the ECR repository:
-
-```bash
-aws ecr delete-repository \
-    --repository-name devsecops-react-app \
-    --force \
-    --region ap-southeast-1
-```
+**Automated Workflow of `cleanup-aws.sh`:**
+1. **Account Verification:** Confirms active Account ID matches target to avoid destroying unintended environments.
+2. **ECS Scaling:** Scales desired count for all ECS services to `0`.
+3. **Terraform Destroy:** Executes `terraform destroy` to tear down VPC, Subnets, ALBs, Target Groups, Security Groups, IAM Roles, S3 Buckets (`force_destroy = true`), and ECR Repositories (`force_delete = true`).
+4. **Deregister Task Definitions:** Deregisters all active revisions of `tetris-app` Task Definition.
+5. **State File Reset:** Confirms Terraform state file is emptied.
 
 ---
 
-#### 4. Clean up Amazon S3 Report Bucket
+### Genuine Screenshot: Complete AWS Resource Cleanup (`terraform destroy`)
 
-Purge all stored security reports and remove the S3 bucket:
-
-```bash
-ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
-BUCKET_NAME="devsecops-reports-bucket-${ACCOUNT_ID}"
-
-aws s3 rm s3://${BUCKET_NAME} --recursive
-aws s3api delete-bucket --bucket ${BUCKET_NAME} --region ap-southeast-1
-```
+![Terraform Destroy Complete](/images/5-Workshop/5.6-Cleanup/destroy_complete.png)
+*Figure 5.6: Terminal execution output confirming all 42 AWS resources destroyed successfully (`Destroy complete! Resources: 42 destroyed`).*
 
 ---
 
-#### 5. Delete AWS Lambda Function & CloudWatch Log Groups
+### 3. Stop Local Stack Containers
 
-Clean up the aggregator function and log resources:
+Tear down local development services (Jenkins, SonarQube, Prometheus, Grafana, Argo CD):
 
 ```bash
-# Delete Lambda Function
-aws lambda delete-function --function-name devsecops-report-aggregator
+docker compose -f docker-compose.infra.yml down --remove-orphans
+docker compose -f docker-compose.security.yml down --remove-orphans
+docker compose -f docker-compose.obs.yml down --remove-orphans
+docker compose down --remove-orphans
 
-# Delete CloudWatch Log Groups
-aws logs delete-log-group --log-group-name /ecs/devsecops-react-app
-aws logs delete-log-group --log-group-name /aws/lambda/devsecops-report-aggregator
+# Delete local k3d Kubernetes cluster (if created)
+make k3d-delete
 ```
 
 > **Note:** Completing all steps above ensures your AWS account incurs **$0.00 USD** ongoing operational costs.

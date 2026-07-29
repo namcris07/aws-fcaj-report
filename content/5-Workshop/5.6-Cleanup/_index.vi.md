@@ -6,90 +6,74 @@ chapter : false
 pre : " <b> 5.6. </b> "
 ---
 
-#### Dọn dẹp tài nguyên (Clean-up)
-
-Sau khi hoàn tất việc kiểm thử và báo cáo workshop, bạn cần thực hiện dọn dẹp các tài nguyên đã tạo trên AWS nhằm tránh phát sinh chi phí ngoài ý muốn.
+# 5.6 Dọn dẹp tài nguyên (Clean-up)
 
 ---
 
-#### 1. Scale số lượng ECS Fargate Tasks về 0 (Tạm dừng container)
-
-Để ngắt ngay lập tức chi phí tính toán Fargate mà không mất cấu hình dịch vụ, hãy giảm `desired-count` về 0 cho cả 2 môi trường Staging và Production:
-
-```bash
-# 1. Scale Staging Service về 0
-aws ecs update-service \
-    --cluster devsecops-cluster \
-    --service devsecops-staging-service \
-    --desired-count 0 \
-    --region ap-southeast-1
-
-# 2. Scale Production Service về 0
-aws ecs update-service \
-    --cluster devsecops-cluster \
-    --service devsecops-prod-service \
-    --desired-count 0 \
-    --region ap-southeast-1
-```
+Sau khi hoàn tất việc kiểm thử và báo cáo workshop, bạn cần thực hiện dọn dẹp các tài nguyên đã tạo trên AWS nhằm tránh phát sinh chi phí ngoài ý muốn. Dự án cung cấp 2 mức độ dọn dẹp riêng biệt:
 
 ---
 
-#### 2. Xóa ECS Services & Cluster (Nếu hủy hoàn toàn)
+### Mức độ 1: Tạm dừng để tiết kiệm chi phí (Demo Reset)
 
-Nếu không còn nhu cầu sử dụng lại workshop:
+Phương pháp này giúp ngắt ngay lập tức chi phí tính toán Fargate mà **không xóa** cấu hình hạ tầng Terraform (phù hợp khi chuẩn bị demo lại):
 
 ```bash
-# Xóa Services
-aws ecs delete-service --cluster devsecops-cluster --service devsecops-staging-service --force
-aws ecs delete-service --cluster devsecops-cluster --service devsecops-prod-service --force
+# Lựa chọn 1: Dùng make command
+AWS_PROFILE_NAME=devsecops-factory make demo-reset
 
-# Xóa Cluster
-aws ecs delete-cluster --cluster devsecops-cluster
+# Lựa chọn 2: Dùng script scale-ecs.sh
+scripts/scale-ecs.sh down
 ```
+
+Lệnh trên sẽ đưa `desired-count` về `0` cho cả 2 dịch vụ ECS `devsecops-factory-staging` và `devsecops-factory-prod`.
 
 ---
 
-#### 3. Dọn dẹp Amazon ECR Repository
+### Mức độ 2: Xóa triệt để toàn bộ hạ tầng AWS (`cleanup-aws.sh`)
 
-Xóa toàn bộ Docker images và repository trên ECR:
+Phương pháp này hủy hoàn toàn các tài nguyên trên AWS bao gồm VPC, ALB, ECR repository, S3 report bucket, CloudWatch log groups, IAM user và Terraform state.
 
 ```bash
-aws ecr delete-repository \
-    --repository-name devsecops-react-app \
-    --force \
-    --region ap-southeast-1
+# 1. Đăng nhập và xác minh đúng AWS Account ID (Account: 585572506644)
+aws sts get-caller-identity --profile devsecops-factory
+
+# 2. Khởi chạy script dọn dẹp tự động
+AWS_PROFILE=devsecops-factory \
+EXPECTED_AWS_ACCOUNT_ID=585572506644 \
+CONFIRM_AWS_CLEANUP=devsecops-factory \
+DESTROY_TERRAFORM=true \
+./scripts/cleanup-aws.sh
 ```
+
+**Quy trình dọn dẹp tự động của `cleanup-aws.sh`:**
+1. **Xác minh tài khoản:** Kiểm tra Account ID khớp với giá trị kỳ vọng để tránh xóa nhầm môi trường khác.
+2. **Scale ECS:** Đưa desired count của các dịch vụ ECS về `0`.
+3. **Terraform Destroy:** Tự động thực thi `terraform destroy` xóa VPC, Subnets, ALB, Target Groups, Security Groups, IAM Roles, S3 Bucket (`force_destroy = true`), ECR Repository (`force_delete = true`).
+4. **Deregister Task Definitions:** Tự động hủy đăng ký toàn bộ các revision active của Task Definition `tetris-app`.
+5. **Kiểm tra trạng thái State:** Xác nhận file Terraform state đã trở về trạng thái rỗng.
 
 ---
 
-#### 4. Dọn dẹp Amazon S3 Report Bucket
+### Ảnh chụp màn hình thực tế: Kết quả dọn dẹp triệt để hạ tầng AWS (`terraform destroy`)
 
-Xóa toàn bộ các tệp báo cáo bảo mật và bucket S3:
-
-```bash
-ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
-BUCKET_NAME="devsecops-reports-bucket-${ACCOUNT_ID}"
-
-# Xóa toàn bộ objects trong bucket
-aws s3 rm s3://${BUCKET_NAME} --recursive
-
-# Xóa S3 Bucket
-aws s3api delete-bucket --bucket ${BUCKET_NAME} --region ap-southeast-1
-```
+![Terraform Destroy Complete](/images/5-Workshop/5.6-Cleanup/destroy_complete.png)
+*Hình 5.6: Kết quả dọn dẹp triệt để toàn bộ 42 tài nguyên AWS trên Terminal (`Destroy complete! Resources: 42 destroyed`).*
 
 ---
 
-#### 5. Xóa AWS Lambda Function & CloudWatch Log Groups
+### 3. Tắt các container local stack
 
-Dọn dẹp Lambda function tổng hợp báo cáo và các nhóm log:
+Tắt toàn bộ các dịch vụ bổ trợ chạy local (Jenkins, SonarQube, Prometheus, Grafana, Argo CD):
 
 ```bash
-# Xóa Lambda Aggregator Function
-aws lambda delete-function --function-name devsecops-report-aggregator
+docker compose -f docker-compose.infra.yml down --remove-orphans
+docker compose -f docker-compose.security.yml down --remove-orphans
+docker compose -f docker-compose.obs.yml down --remove-orphans
+docker compose down --remove-orphans
 
-# Xóa CloudWatch Log Groups
-aws logs delete-log-group --log-group-name /ecs/devsecops-react-app
-aws logs delete-log-group --log-group-name /aws/lambda/devsecops-report-aggregator
+# Xóa cụm Kubernetes local k3d (nếu có)
+make k3d-delete
 ```
 
-> **Lưu ý:** Việc thực hiện đầy đủ các bước trên sẽ đảm bảo tài khoản AWS của bạn trở về trạng thái an toàn và chi phí phát sinh là **$0.00 USD**.
+> **Lưu ý:** Sau khi hoàn tất đầy đủ các bước trên, tài khoản AWS của bạn sẽ hoàn toàn trở về trạng thái rỗng và không còn bất kỳ chi phí phát sinh nào từ các tài nguyên của dự án.

@@ -15,6 +15,8 @@ Clone the official team repository `CICD-DevSecOps-using-AWS-services`:
 ```bash
 git clone https://github.com/loi-bui0703/CICD-DevSecOps-using-AWS-services.git
 cd CICD-DevSecOps-using-AWS-services
+make setup-env
+# Edit .env file and change default secret values
 ```
 
 ---
@@ -24,6 +26,7 @@ cd CICD-DevSecOps-using-AWS-services
 Ensure the following tools are installed on your build machine / Jenkins Agent:
 
 - **AWS CLI v2:** Configured with IAM credentials (`aws configure`).
+- **Terraform (v1.0+):** Used for automated AWS infrastructure provisioning.
 - **Docker Engine & Docker Compose:** Used to build images and execute security scanners.
 - **Node.js (v16+) & npm:** Used for local React Web testing.
 - **Git & GitHub Account:** Source code repository and Jenkins Webhook integration.
@@ -33,63 +36,72 @@ Ensure the following tools are installed on your build machine / Jenkins Agent:
 
 #### 2. Configure IAM Policy for Pipeline
 
-Attach `DevSecOpsPipelinePolicy` to your execution IAM Role/User:
+Attach `devsecops-factory-jenkins-ci` policy to your execution IAM Role/User:
 
 ```json
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "ECRManagement",
-            "Effect": "Allow",
-            "Action": [
-                "ecr:GetAuthorizationToken",
-                "ecr:BatchCheckLayerAvailability",
-                "ecr:GetDownloadUrlForLayer",
-                "ecr:PutImage",
-                "ecr:InitiateLayerUpload",
-                "ecr:UploadLayerPart",
-                "ecr:CompleteLayerUpload"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Sid": "S3ReportStorage",
-            "Effect": "Allow",
-            "Action": [
-                "s3:PutObject",
-                "s3:GetObject",
-                "s3:ListBucket"
-            ],
-            "Resource": [
-                "arn:aws:s3:::devsecops-reports-bucket-*",
-                "arn:aws:s3:::devsecops-reports-bucket-*/*"
-            ]
-        },
-        {
-            "Sid": "ECSFargateDeployment",
-            "Effect": "Allow",
-            "Action": [
-                "ecs:UpdateService",
-                "ecs:DescribeServices",
-                "ecs:RegisterTaskDefinition",
-                "ecs:RunTask"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Sid": "CloudWatchLogs",
-            "Effect": "Allow",
-            "Action": [
-                "logs:CreateLogGroup",
-                "logs:CreateLogStream",
-                "logs:PutLogEvents"
-            ],
-            "Resource": "*"
-        }
-    ]
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "EcrLogin",
+      "Effect": "Allow",
+      "Action": [
+        "ecr:GetAuthorizationToken"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "EcrPush",
+      "Effect": "Allow",
+      "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:CompleteLayerUpload",
+        "ecr:InitiateLayerUpload",
+        "ecr:PutImage",
+        "ecr:UploadLayerPart"
+      ],
+      "Resource": "arn:aws:ecr:ap-southeast-1:*:repository/devsecops/tetris"
+    },
+    {
+      "Sid": "EcsDeploy",
+      "Effect": "Allow",
+      "Action": [
+        "ecs:DescribeServices",
+        "ecs:DescribeTaskDefinition",
+        "ecs:RegisterTaskDefinition",
+        "ecs:UpdateService"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "PassEcsRoles",
+      "Effect": "Allow",
+      "Action": [
+        "iam:PassRole"
+      ],
+      "Resource": [
+        "arn:aws:iam::*:role/devsecops-factory-ecs-execution-role",
+        "arn:aws:iam::*:role/devsecops-factory-ecs-task-role"
+      ]
+    },
+    {
+      "Sid": "UploadReports",
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject"
+      ],
+      "Resource": "arn:aws:s3:::devsecops-reports-*/reports/*"
+    }
+  ]
 }
 ```
+
+---
+
+### Genuine Screenshot: AWS Budgets Overview
+
+![AWS Budgets](/images/5-Workshop/5.2-Prerequisite/aws_budgets.png)
+*Figure 5.2: AWS Budgets management console (`devsecops-factory-monthly-budget`) controlling monthly project spending.*
 
 ---
 
@@ -97,7 +109,7 @@ Attach `DevSecOpsPipelinePolicy` to your execution IAM Role/User:
 
 ```bash
 aws ecr create-repository \
-    --repository-name devsecops-react-app \
+    --repository-name devsecops/tetris \
     --image-scanning-configuration scanOnPush=true \
     --region ap-southeast-1
 ```
@@ -108,7 +120,7 @@ aws ecr create-repository \
 
 ```bash
 ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
-BUCKET_NAME="devsecops-reports-bucket-${ACCOUNT_ID}"
+BUCKET_NAME="devsecops-reports-${ACCOUNT_ID}"
 
 aws s3api create-bucket \
     --bucket ${BUCKET_NAME} \
