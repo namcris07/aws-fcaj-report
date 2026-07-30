@@ -6,25 +6,47 @@ chapter : false
 pre : " <b> 5.5. </b> "
 ---
 
-# 5.5 Comprehensive DevSecOps Security Testing on AWS
+# 5.5 End-to-End DevSecOps Security Testing & Verification on AWS
 
 ---
 
 ## Overview
 
-To verify the accuracy and effectiveness of the `devsecops-factory` pipeline, the team designed **[tetris-app](https://github.com/lamelihuynh/tetris-app.git)** (ReactJS + Nginx multi-stage build) as an intentional vulnerability target. The test target features multi-layered security vulnerabilities across source code, third-party libraries, container images, and AWS infrastructure configurations (Terraform, ECS Task Definitions).
+To validate the security posture and detection capabilities of the `devsecops-factory` system, the team engineered the **tetris-app** (React + Nginx multi-stage build under `app/`) as an **intentional security test target**. The application incorporates seeded vulnerabilities across multiple layers:
+- **Source Code:** Hardcoded credentials (`app/src/config.js`), XSS vulnerability (`dangerouslySetInnerHTML`)
+- **Software Dependencies:** Legacy npm packages carrying known CVEs (`react-scripts 4.0.3`, `nth-check 1.0.2`, `serialize-javascript 2.1.1`)
+- **Container Base Image:** Base image `nginx:1.18.0` (Debian) harboring 40+ CVEs instead of `nginxinc/nginx-unprivileged:alpine`
+- **Infrastructure Code:** Dockerfile and Kubernetes manifests lacking hardening (missing `USER` instruction, `HEALTHCHECK`)
 
-This section documents detailed testing results across **6 Security Gates** in the automated 22-stage Jenkins CI/CD pipeline, centralized security report storage on **Amazon S3**, ASFF standardization and automated ingestion via **AWS Lambda** into **AWS Security Hub**, and production-ready deployment on **Amazon ECS Fargate** monitored by **AWS CloudWatch Container Insights**.
+This section analyzes detailed verification findings across **6 Security Gates** within the **22-stage** Jenkins pipeline, centralized report archival on **Amazon S3**, ASFF normalization and automated ingestion via **AWS Lambda** into **AWS Security Hub**, and secure application deployment to **Amazon ECS Fargate** integrated with **AWS CloudWatch Container Insights**.
 
 ---
 
-## Table of Contents
+## Summary Table of End-to-End Verification Results
 
-1. [5.5.1 Testing Strategy Overview](5.5.1-Overview/)
-2. [5.5.2 Stage 3 – Hardcoded Secrets Scanning (Gitleaks)](5.5.2-Secrets-Scan/)
-3. [5.5.3 Stage 4 – Dependency Vulnerability Audit (SCA Scan)](5.5.3-SCA-Scan/)
-4. [5.5.4 Stage 5 – Static Code Analysis (SAST Scan)](5.5.4-SAST-Scan/)
-5. [5.5.5 Stage 6 – Infrastructure as Code Scan (IaC Scan - Checkov)](5.5.5-IaC-Scan/)
-6. [5.5.6 Stage 8 – Container Image Scan on Amazon ECR (Trivy Image)](5.5.6-Container-Scan/)
-7. [5.5.7 Comprehensive Pipeline Verification & AWS ECS Fargate Deployment](5.5.7-Summary/)
+| Stage | Security Gate | Tool | Verification Findings | Severity | Gate Status |
+|---|---|---|---|---|---|
+| **Stage 4** | Secrets Scan | Gitleaks | 2 secrets (GitHub PAT + AWS Access Key) | HIGH | **FAIL** |
+| **Stage 5** | SCA Scan | Trivy FS | 4 CVEs (`nth-check`, `serialize-javascript`) | HIGH | **FAIL** |
+| **Stage 6** | SAST Scan | SonarQube | 2 Vulnerabilities + 2 Security Hotspots | MEDIUM–HIGH | **FAIL** |
+| **Stage 7** | IaC Scan | Checkov | 34 failures (Dockerfile + K8s + Terraform) | MEDIUM–HIGH | **SOFT-FAIL** |
+| **Stage 9** | Container Scan | Trivy Image | 40+ CVEs (15 CRITICAL, 25 HIGH) on `nginx:1.18.0` | CRITICAL | **FAIL** |
+| **Stage 15** | DAST | OWASP ZAP | Missing security headers (0 FAIL alerts) | MEDIUM | **report-only** |
 
+**Overall Verification Summary:**
+- ✓ Accurately detected 5 out of 6 vulnerability categories in `enforce` mode
+- ✓ Pipeline aborted at exact target stage (Stage 9 — CRITICAL CVEs)
+- ✓ Security reports archived centrally on Amazon S3
+- ✓ AWS Security Hub ingested ASFF findings via Lambda within 60 seconds
+
+---
+
+## Verification Test Sections
+
+1. [5.5.1 Testing Overview & Pipeline Architecture](5.5.1-Overview/)
+2. [5.5.2 Stage 4 — Hardcoded Secrets Scan (Gitleaks)](5.5.2-Secrets-Scan/)
+3. [5.5.3 Stage 5 — Software Composition Analysis (Trivy FS)](5.5.3-SCA-Scan/)
+4. [5.5.4 Stage 6 — Static Application Security Testing (SonarQube)](5.5.4-SAST-Scan/)
+5. [5.5.5 Stage 7 — Infrastructure as Code Security Scan (Checkov)](5.5.5-IaC-Scan/)
+6. [5.5.6 Stage 9 — Container Image Security Scan (Trivy Image)](5.5.6-Container-Scan/)
+7. [5.5.7 Summary Findings & ECS Fargate Deployment](5.5.7-Summary/)

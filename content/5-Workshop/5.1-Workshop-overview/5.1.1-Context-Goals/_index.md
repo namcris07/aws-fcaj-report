@@ -1,39 +1,39 @@
 ---
-title : "Problem Statement & Goals"
+title : "Context & Goals"
 date : 2026-07-06 
 weight : 1
 chapter : false
 pre : " <b> 5.1.1. </b> "
 ---
 
-# 5.1.1 Problem Statement & Project Objectives
+# 5.1.1 Context, Problem Statement & Project Objectives
 
 ---
 
-### 1. Context & Background
-In modern software development, Continuous Integration and Continuous Deployment (CI/CD) pipelines execute at rapid speed. However, security checks are often deferred to late-stage manual audits prior to production release. This causes delayed vulnerability discovery, ballooning remediation costs, and elevated risk of production data breaches.
+### 1. Project Background
+In modern software engineering organizations, continuous integration and deployment (CI/CD) pipelines operate at unprecedented velocity. However, security verification is frequently deprioritized or performed manually near the end of release cycles (Late-stage Security Gate). This causes delayed vulnerability discovery, astronomical remediation costs, and elevated risks of production data breaches.
 
-### 2. Target Audience
-- Software Developers, Security Engineers, and DevOps/SRE teams.
-- Small and Medium Enterprises (SMEs) seeking an automated, cost-efficient cloud DevSecOps pipeline on AWS.
+### 2. Target Audience & Stakeholders
+- Software Engineers (Developers), Cloud Security Engineers, and DevOps/SRE Operations Teams.
+- Small and Medium Enterprises (SMEs) seeking an automated, cost-optimized DevSecOps CI/CD workflow on AWS cloud infrastructure.
 
-### 3. Key Challenges Solved
-- **Manual & Inconsistent Deployments:** Lack of automated container build and environment synchronization.
-- **Credential Leakage:** Inadvertent hardcoding of AWS Access Keys or API credentials into Git repositories.
-- **Vulnerable Dependencies & Base Images:** Integration of open-source packages and Docker base images with unpatched CVEs.
-- **High Cloud Infrastructure Costs:** Maintenance of static Kubernetes control planes (EKS) incurring fixed costs (~$72/month).
-
----
-
-### 4. Deliverables & Outputs
-- **22-Stage CI/CD Pipeline:** Automated security auditing across 6 Security Gates (Gitleaks, Trivy SCA, SonarQube, Checkov, Trivy Image, OWASP ZAP) with ASFF standardization and AWS Security Hub ingestion.
-- **Centralized Security Report Aggregation:** JSON/HTML report archiving on **Amazon S3** and automated parsing via **AWS Lambda Aggregator**.
-- **Serverless Container Runtime:** Automated Staging deployment on **Amazon ECS Fargate** with Manual Approval gates for Production.
-- **Centralized Observability:** Operational telemetry via **Amazon CloudWatch Container Insights** and AWS Budget Alarms.
+### 3. Problem Statement
+- **Manual Deployments & Inconsistency:** Lack of automated container packaging and environment synchronization.
+- **Hardcoded Credential Leaks:** Engineers accidentally committing AWS Access Keys, API Tokens, or database credentials into Git repositories.
+- **Vulnerable Dependencies & Base Images:** Ingesting unvetted open-source packages and bloated container base images harboring known CVEs.
+- **Excessive Infrastructure Baseline Costs:** Maintaining static Kubernetes control planes (EKS) incurring heavy fixed costs (~$72/month for control plane alone).
 
 ---
 
-### 5. Success Evaluation Criteria
-- 100% automated security scan coverage before application deployment.
-- Instant pipeline failure (FAIL-FAST) upon detection of hardcoded secrets or Critical/High CVEs.
-- Total monthly AWS infrastructure cost kept under **$20.50 USD/month** (> 85% savings over EKS).
+### 4. Project Objectives & Target Deliverables
+- **22-Stage CI/CD Pipeline:** Automated verification across 6 Security Gates (Gitleaks, Trivy SCA, SonarQube, Checkov, Trivy Image, OWASP ZAP), converting findings to ASFF for direct ingestion into AWS Security Hub.
+- **Centralized Security Report Aggregation:** Archiving JSON/HTML scan artifacts on **Amazon S3** and automated parsing via an **AWS Lambda Aggregator**.
+- **Serverless Container Deployment:** Automated deployment to **Amazon ECS Fargate** for Staging and interactive Manual Approval Gate enforcement for Production.
+- **Centralized Observability:** Real-time log and metrics visualization via **Amazon CloudWatch Container Insights** paired with cost guardrail alerts.
+
+---
+
+### 5. Key Performance Indicators (KPIs) & Success Criteria
+- 100% of source code commits and container images automatically verified prior to cloud deployment.
+- Enforce FAIL-FAST pipeline aborts upon discovering hardcoded secrets or Critical/High CVEs.
+- Optimize monthly AWS cloud infrastructure baseline costs to **< $20.50 USD/month** (> 85% cost savings compared to EKS).

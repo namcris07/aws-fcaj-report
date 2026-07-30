@@ -6,40 +6,40 @@ chapter: false
 pre: " <b> 8. </b> "
 ---
 
-# 8. Reference Materials
+# 8. References & Project Resources
 
 ---
 
 ### 1. Source Code & Repositories
 
-- **DevSecOps Factory GitHub Repository:**  
+- **DevSecOps Factory Official Source Repository (GitHub):**  
   👉 **[loi-bui0703/CICD-DevSecOps-using-AWS-services](https://github.com/loi-bui0703/CICD-DevSecOps-using-AWS-services.git)**
-- **Internship Learning Repository:**  
+- **AWS FCAJ Internship Study Repository:**  
   👉 **[namcris07/aws-fcaj-learning](https://github.com/namcris07/aws-fcaj-learning.git)**
-- **Vulnerable Test Target App:**  
-  👉 **[lamelihuynh/tetris-app](https://github.com/lamelihuynh/tetris-app.git)** (`tetris-app` - ReactJS + Nginx multi-stage build).
+- **Target Vulnerability Test Application (Test Target App):**  
+  👉 **[lamelihuynh/tetris-app](https://github.com/lamelihuynh/tetris-app.git)** (`tetris-app` - ReactJS + Nginx multi-stage container build).
 
 ---
 
-### 2. Video Demo & Visual Showcases
+### 2. Video Demo & Verification Dashboards
 
-- **DevSecOps CI/CD Pipeline Video Demo:** _(Add Video Demo URL here if available)_
-- **Security Scan Dashboards:** Jenkins Pipeline Console Logs, SonarQube Dashboard, CloudWatch Container Insights logs.
-
----
-
-### 3. Shared Blog Posts on Facebook Group
-
-- **Blog 1: Building a serverless Jenkins environment on AWS Fargate**  
-  👉 **[Post on Facebook Group](https://www.facebook.com/groups/awsstudygroupfcj/posts/2221881141910179)**
-- **Blog 2: Building an end-to-end Kubernetes-based DevSecOps software factory on AWS**  
-  👉 **[Post on Facebook Group](https://www.facebook.com/groups/awsstudygroupfcj/posts/2225170508247909)**
-- **Blog 3: Monitoring and Autoscaling Amazon ECS on AWS Fargate using Prometheus Metrics**  
-  👉 **[Post on Facebook Group](https://www.facebook.com/groups/awsstudygroupfcj/posts/2227911197973840)**
+- **DevSecOps CI/CD Pipeline Demo Video:** *(Demo video link updated here)*
+- **Security Scan Results & Logs:** Jenkins Pipeline Console Logs, SonarQube Dashboard, CloudWatch Container Insights logs.
 
 ---
 
-### 4. AWS & Platform Documentation
+### 3. Technical Articles Published on AWS Study Group
+
+- **Blog 1: Building a Serverless Jenkins Environment on AWS Fargate**  
+  👉 **[Facebook Group Article Link](https://www.facebook.com/groups/awsstudygroupfcj/posts/2221881141910179)**
+- **Blog 2: Building an End-to-End Kubernetes-based DevSecOps Software Factory on AWS**  
+  👉 **[Facebook Group Article Link](https://www.facebook.com/groups/awsstudygroupfcj/posts/2225170508247909)**
+- **Blog 3: Monitoring and Auto-scaling Amazon ECS Applications on AWS Fargate with Custom Prometheus Metrics**  
+  👉 **[Facebook Group Article Link](https://www.facebook.com/groups/awsstudygroupfcj/posts/2227911197973840)**
+
+---
+
+### 4. Official AWS & Infrastructure Documentation
 
 - **Amazon ECS Fargate Developer Guide:** [https://docs.aws.amazon.com/ecs/](https://docs.aws.amazon.com/ecs/)
 - **Amazon ECR User Guide:** [https://docs.aws.amazon.com/AmazonECR/latest/userguide/](https://docs.aws.amazon.com/AmazonECR/latest/userguide/)
@@ -50,7 +50,7 @@ pre: " <b> 8. </b> "
 
 ---
 
-### 5. Security Tools References
+### 5. Security Scanner Tooling Documentation
 
 - **Gitleaks (Secrets Scanner):** [https://github.com/gitleaks/gitleaks](https://github.com/gitleaks/gitleaks)
 - **Trivy (SCA & Container Scanner):** [https://aquasecurity.github.io/trivy/](https://aquasecurity.github.io/trivy/)

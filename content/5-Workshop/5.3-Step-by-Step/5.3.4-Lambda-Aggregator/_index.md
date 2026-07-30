@@ -10,75 +10,134 @@ pre : " <b> 5.3.4. </b> "
 
 ---
 
-### 1. Lambda Function (`devsecops-factory-securityhub-importer`)
+The AWS Lambda function `devsecops-factory-securityhub-importer` (Python 3.12) automatically reads normalized ASFF security reports from the Amazon S3 bucket and imports findings into **AWS Security Hub** via the `batch_import_findings` API. Managed entirely via Terraform and triggered via S3 Event Notifications.
 
-Create Lambda function `devsecops-factory-securityhub-importer` (Python 3.12) to automatically parse ASFF security reports from S3 and import findings directly into **AWS Security Hub** via `batch_import_findings`:
+---
 
-```python
-import json
-import logging
-import os
-import urllib.parse
-import boto3
+### 1. Event-Driven Security Hub Integration Workflow
 
-LOG = logging.getLogger()
-LOG.setLevel(logging.INFO)
-
-S3 = boto3.client("s3")
-SECURITYHUB = boto3.client("securityhub", region_name=os.getenv("SECURITYHUB_REGION", "ap-southeast-1"))
-ASFF_SUFFIX = os.getenv("ASFF_SUFFIX", "securityhub-asff.json")
-
-def chunks(items, size):
-    return [items[i : i + size] for i in range(0, len(items), size)]
-
-def load_findings(bucket, key):
-    response = S3.get_object(Bucket=bucket, Key=key)
-    payload = json.loads(response["Body"].read())
-    if isinstance(payload, list):
-        return payload
-    if isinstance(payload, dict):
-        return payload.get("findings", [])
-    return []
-
-def import_findings(findings):
-    imported = 0
-    failed = 0
-    for batch in chunks(findings, 100):
-        result = SECURITYHUB.batch_import_findings(Findings=batch)
-        imported += len(batch) - int(result.get("FailedCount", 0))
-        failed += int(result.get("FailedCount", 0))
-    return {"imported": imported, "failed": failed}
-
-def lambda_handler(event, context):
-    imported = 0
-    for record in event.get("Records", []):
-        bucket = record["s3"]["bucket"]["name"]
-        key = urllib.parse.unquote_plus(record["s3"]["object"]["key"])
-        if not key.endswith(ASFF_SUFFIX):
-            continue
-        findings = load_findings(bucket, key)
-        result = import_findings(findings)
-        imported += result["imported"]
-    return {"importedFindings": imported}
+```text
+Jenkins Stage 17: generate-asff.py
+     ↓
+Jenkins Stage 18: aws s3 cp securityhub-asff.json → s3://bucket/reports/asff/
+     ↓
+S3 Event Notification (ObjectCreated) → prefix: reports/asff/ | suffix: securityhub-asff.json
+     ↓
+Lambda: devsecops-factory-securityhub-importer
+     ↓
+SECURITYHUB.batch_import_findings() (batched at 100 findings/call)
+     ↓
+AWS Security Hub Dashboard
 ```
 
 ---
 
-### 2. Configure S3 Event Notification Trigger
+### 2. Terraform Configuration for Lambda & S3 Event Trigger
 
-Set up S3 Bucket Notifications on `devsecops-reports-*` for `s3:ObjectCreated:*` events under `reports/asff/` matching `securityhub-asff.json`:
+```hcl
+# infrastructure/terraform/main.tf
 
-- **Event Type:** `s3:ObjectCreated:*`
-- **Filter Prefix:** `reports/asff/`
-- **Filter Suffix:** `securityhub-asff.json`
-- **Target:** Lambda `devsecops-factory-securityhub-importer`
+# S3 Event Notification triggering Lambda upon ASFF report upload
+resource "aws_s3_bucket_notification" "securityhub_importer" {
+  bucket = aws_s3_bucket.security_reports.id
+
+  dynamic "lambda_function" {
+    for_each = var.enable_security_hub_importer ? [1] : []
+    content {
+      lambda_function_arn = aws_lambda_function.securityhub_importer[0].arn
+      events              = ["s3:ObjectCreated:*"]
+      filter_prefix       = "reports/asff/"           # Filter target prefix
+      filter_suffix       = "securityhub-asff.json"   # Filter target suffix
+    }
+  }
+  depends_on = [aws_lambda_permission.allow_s3]
+}
+```
+
+> **Activation Flag:** Set `enable_security_hub_importer = true` in `terraform.tfvars` before executing `terraform apply`.
 
 ---
 
-### Genuine Screenshots: AWS Lambda Function & Security Hub Findings
+### 3. Lambda Security Hub Importer Code (Python 3.12)
 
-![AWS Lambda Function](/images/5-Workshop/5.3-Step-by-Step/aws_lambda_function.png)
-*Figure 5.3.4a: AWS Lambda Function (`devsecops-securityhub-importer`) linked to S3 Event Notification trigger.*
+```python
+# infrastructure/lambda/securityhub_importer.py
+import json, logging, os, urllib.parse, boto3
 
-![AWS Security Hub Findings](/images/5-Workshop/5.3-Step-by-Step/aws_security_hub_findings.png)
-*Figure 5.3.4b: AWS Security Hub CSPM Findings dashboard recording automated ASFF security findings.*
+S3 = boto3.client("s3")
+SECURITYHUB = boto3.client("securityhub",
+    region_name=os.getenv("SECURITYHUB_REGION", "ap-southeast-1"))
+ASFF_SUFFIX = os.getenv("ASFF_SUFFIX", "securityhub-asff.json")
+
+def lambda_handler(event, context):
+    imported = failed = skipped = 0
+
+    for record in event.get("Records", []):
+        bucket = record["s3"]["bucket"]["name"]
+        key    = urllib.parse.unquote_plus(record["s3"]["object"]["key"])
+
+        # Skip object if not matching ASFF suffix
+        if not key.endswith(ASFF_SUFFIX):
+            skipped += 1; continue
+
+        # Fetch findings JSON from S3
+        response = S3.get_object(Bucket=bucket, Key=key)
+        findings = json.loads(response["Body"].read())
+
+        # Batch import to Security Hub (max 100 findings per API call)
+        for batch in [findings[i:i+100] for i in range(0, len(findings), 100)]:
+            result = SECURITYHUB.batch_import_findings(Findings=batch)
+            imported += len(batch) - result.get("FailedCount", 0)
+            failed   += result.get("FailedCount", 0)
+
+    return {
+        "importedFindings": imported,
+        "failedFindings":   failed,
+        "skippedObjects":   skipped
+    }
+```
+
+---
+
+### 4. S3 Event Notification Trigger Specification
+
+| Attribute | Value |
+|---|---|
+| **Event Type** | `s3:ObjectCreated:*` |
+| **Filter Prefix** | `reports/asff/` |
+| **Filter Suffix** | `securityhub-asff.json` |
+| **Target Function** | Lambda `devsecops-factory-securityhub-importer` |
+| **Runtime** | Python 3.12 |
+| **Allocated Memory** | 128 MB |
+| **Timeout Limit** | 60 seconds |
+
+---
+
+### 5. Generate ASFF from Normalized Findings (Stage 17)
+
+Jenkins runs a Python script to convert raw scan findings into AWS Security Finding Format (ASFF) prior to S3 upload:
+
+```bash
+# Stage 17: Generate ASFF for Security Hub
+mkdir -p "${SCAN_REPORT_DIR}/asff"
+AWS_ACCOUNT_ID="$(aws sts get-caller-identity --query Account --output text)"
+
+python3 ci/stages/generate-asff.py \
+  --input  "${SCAN_REPORT_DIR}/normalized/findings.json" \
+  --out    "${SCAN_REPORT_DIR}/asff/securityhub-asff.json" \
+  --region "${AWS_REGION}" \
+  --account-id "${AWS_ACCOUNT_ID}"
+```
+
+---
+
+### Actual Screenshots: Lambda & Security Hub Integration
+
+![AWS Lambda CloudWatch Logs](/images/5-Workshop/5.3-Step-by-Step/lambda_logs.png)
+*Figure 5.3.4a: CloudWatch Logs for Lambda function `devsecops-factory-securityhub-importer` displaying successful batch finding ingestion.*
+
+![AWS Security Hub Findings](/images/5-Workshop/5.3-Step-by-Step/securityhub_findings.png)
+*Figure 5.3.4b: AWS Security Hub Findings Dashboard logging imported vulnerabilities automatically delivered by Lambda.*
+
+![AWS Security Hub Dashboard](/images/5-Workshop/5.3-Step-by-Step/securityhub_dashboard.png)
+*Figure 5.3.4c: AWS Security Hub overview aggregating findings categorized by severity level (Critical, High, Medium, Low).*

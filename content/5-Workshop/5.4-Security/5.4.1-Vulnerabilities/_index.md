@@ -1,83 +1,86 @@
 ---
-title : "Common Security Vulnerabilities"
+title : "6 Vulnerability Categories & Threat Modeling"
 date : 2026-07-06 
 weight : 1
 chapter : false
 pre : " <b> 5.4.1. </b> "
 ---
 
-# 5.4.1 Common Security Vulnerabilities
+# 5.4.1 Vulnerability Categories & Threat Modeling in the Project
 
 ---
 
-### 1. Sensitive Information Leakage - Hardcoded Secrets
-
-Rapid development cycles without automated security guardrails frequently lead developers to accidentally embed hardcoded credentials directly into source code repositories or configuration files. These secrets typically include database connection passwords, cloud service provider API keys (AWS, GCP, Azure), private encryption keys, or access tokens.
-
-- **Exploitation Mechanism:** Once source code is pushed to version control systems (such as GitHub, GitLab, or Bitbucket), malicious actors employ automated scanning bots to scrape repositories for secret patterns in real time.
-- **Consequences:** Attackers use exposed keys to gain unauthorized database access, steal customer data, or abuse cloud compute resources for cryptomining, leading to severe financial losses.
+Security is an essential requirement across all cloud-native architectures. The `devsecops-factory` framework and `tetris-app` demonstration application were deliberately designed with 6 distinct vulnerability categories to thoroughly test the defensive capabilities of the CI/CD pipeline.
 
 ---
 
-### 2. Broken Access Control
+### 1. Hardcoded Secrets Leakage
 
-Broken Access Control consistently ranks among the top OWASP vulnerabilities, occurring when applications fail to properly enforce authentication and authorization policies.
+Under development velocity pressure, engineers frequently commit credentials directly into source code: AWS Access Keys, API Tokens, Database Passwords, Private Keys, or GitHub Personal Access Tokens.
 
-- **Horizontal Privilege Escalation:** Attackers exploit Insecure Direct Object References (IDOR) to access, modify, or delete data belonging to peers at the same authorization tier (e.g., tampering with user IDs in URL parameters).
-- **Vertical Privilege Escalation:** Attackers bypass authorization checks to access administrative APIs or control panels, manipulating system data or application settings.
-
----
-
-### 3. Injection Flaws
-
-Injection flaws represent some of the most destructive web application vulnerabilities, occurring when untrusted user input is passed directly to command interpreters without proper validation or sanitization.
-
-![URL Attack Diagram](/images/5-Workshop/5.4-Security/url_attack_diagram.png)
-
-*Figure 5.4.1: Attack flow diagram illustrating unvalidated URL input leading to data exfiltration.*
-
-Key injection types include:
-- **SQL / NoSQL Injection:** Attackers inject malicious query parameters into login forms or URL strings, bypassing authentication, extracting database contents, or dropping tables.
-- **OS Command Injection:** Occurs when applications pass raw user input to underlying operating system shells, enabling Remote Code Execution (RCE).
-- **Server-Side Template Injection (SSTI):** Attackers exploit insecure template engines by embedding expressions that execute server-side code or read local configuration files.
-- **XML External Entity (XXE) Injection:** Attackers manipulate uploaded XML files to force server-side XML parsers to disclose local file system assets or perform internal port scanning.
-- **LDAP Injection:** Attackers tamper with directory queries to extract user permission structures or escalate privileges.
+- **Exploitation Mechanics:** Automated scanners continuously crawl public and misconfigured private repositories. Secret discovery occurs within seconds post-push.
+- **Business Impact:** Attackers leverage leaked AWS Access Keys to compromise AWS Accounts, spin up unauthorized GPU instances for cryptomining, incurring thousands of dollars in AWS bills within hours.
+- **Pipeline Test Target:** `app/src/config.js` is seeded with `AKIAIOSFODNN7EXAMPLEFAKE` and a GitHub PAT → **Gate 1 (Gitleaks)** detects the secrets and aborts the pipeline immediately.
 
 ---
 
-### 4. Vulnerable Dependencies
+### 2. Vulnerable Software Dependencies (SCA)
 
-Modern applications rely on thousands of open-source third-party dependencies managed via `npm`, `pip`, or `maven`. Key risks include:
-
-- **Supply Chain Risks:** Vulnerabilities in widespread third-party libraries (e.g., Log4Shell) expose every application consuming the package.
-- **Transitive Dependencies:** Direct dependencies drag in complex trees of nested sub-dependencies, making manual vulnerability audits impossible.
-- **Typosquatting & Dependency Confusion:** Attackers publish malicious packages with names visually similar to legitimate libraries, executing payload scripts during build execution.
-
----
-
-### 5. Security Misconfigurations
-
-Misconfigurations occur across web servers, application frameworks, databases, and cloud environments:
-
-- Leaving default vendor accounts and credentials active.
-- Exposing internal services (e.g., admin dashboards, Prometheus metrics endpoints) to the public internet without authentication.
-- Returning overly verbose stack traces on client interfaces, disclosing software versions and database schemas.
+Modern React applications rely on hundreds of third-party npm packages, forming a complex dependency graph:
+- **Direct Dependencies:** Declared explicitly in `package.json`.
+- **Transitive Dependencies:** Sub-packages imported by dependencies, difficult to monitor manually.
+- **Supply Chain Attacks:** Malicious actors publish typosquatted packages or compromise maintainer accounts to inject malware into popular libraries.
+- **Pipeline Test Target:** `package-lock.json` pins `react-scripts 4.0.3`, `nth-check 1.0.2` (ReDoS HIGH), and `serialize-javascript 4.0.0` (XSS HIGH) → **Gate 2 (Trivy FS)** flags 4 HIGH CVEs.
 
 ---
 
-### 6. Container Image Vulnerabilities
+### 3. Static Source Code Flaws (SAST & OWASP Code Vulnerabilities)
 
-Container technologies (such as Docker) are foundational to cloud-native architectures but introduce specific risks:
-
-- **Large Attack Surfaces:** Utilizing full-OS base images (such as Ubuntu or Debian) bloats images with unused OS utilities and unpatched CVEs.
-- **Root Privileges:** Containers running processes as `root` (UID 0) enable container breakout attacks if the application is compromised.
+Static application security testing (SAST) of React/JavaScript identifies:
+- **Security Hotspots:** Sensitive code patterns requiring manual review (usage of `eval()`, permissive CORS settings).
+- **Vulnerabilities:** Exploitable bugs such as Cross-Site Scripting (XSS), SQL Injection, and Insecure Deserialization.
+- **Pipeline Test Target:** `app/src/App.js` employs `dangerouslySetInnerHTML` without proper sanitization → **Gate 3 (SonarQube)** sets the Quality Gate status to FAILED.
 
 ---
 
-### 7. IaC & Kubernetes Misconfigurations
+### 4. Infrastructure-as-Code Misconfigurations (IaC)
 
-Infrastructure as Code (IaC) files defined in YAML require strict auditing to prevent cluster-level security exposures:
+The `tetris-app` manifests, Dockerfile, and Terraform files incorporate known configuration flaws:
+- **`[CKV_DOCKER_3]`:** Missing `USER` instruction in Dockerfile → container defaults to running as `root`.
+- **`[CKV_DOCKER_2]`:** Missing `HEALTHCHECK` directive in Dockerfile.
+- **`[CKV_K8S_8]`:** Missing `livenessProbe` in Kubernetes Deployment spec.
+- **`[CKV_K8S_15]`:** Container image tag uses `:latest` instead of pinning immutable digests.
+- **`[CKV_AWS_130]`:** Security Group permits unrestricted ingress `0.0.0.0/0`.
+- **Pipeline Test Target:** **Gate 4 (Checkov)** discovers 34 configuration violations with Soft-fail handling.
 
-- **Overpermissive RBAC:** Granting excessive API permissions to ServiceAccounts allows a compromised Pod to control cluster resources.
-- **Missing Network Policies:** Unrestricted pod-to-pod communications allow lateral movement across worker nodes.
-- **Missing Resource Limits:** Failing to enforce CPU/Memory limits exposes nodes to Denial of Service (DoS) resource exhaustion.
+---
+
+### 5. Container Image Vulnerabilities (OS Base Image CVEs)
+
+Utilizing bloated base images like `nginx:1.18.0` (Debian Buster) inherits dozens of OS-level CVEs:
+
+```bash
+# nginx:1.18.0 (Debian) - contains numerous CRITICAL CVEs
+$ trivy image nginx:1.18.0 --severity CRITICAL,HIGH
+Total: 40+ CVEs (CRITICAL: 15, HIGH: 25+)
+
+# nginxinc/nginx-unprivileged:alpine - minimal and hardened
+$ trivy image nginxinc/nginx-unprivileged:alpine
+Total: 0 CVEs (CRITICAL: 0, HIGH: 0)
+```
+
+- **Pipeline Test Target:** **Gate 5 (Trivy Image)** scans the ECR image, flags 15 CRITICAL CVEs on `nginx:1.18.0`, and **FAILS immediately at Stage 9**, blocking vulnerable image deployment to Amazon ECR.
+
+---
+
+### 6. OWASP Top 10 Flaws & Dynamic Testing (DAST)
+
+OWASP ZAP dynamic application security testing evaluates the running Staging ALB endpoint to uncover runtime web application flaws:
+
+| OWASP ID | Vulnerability Category | Severity | Detection Scanner in Pipeline |
+|---|---|---|---|
+| **A01:2021** | Broken Access Control | Critical | DAST (OWASP ZAP) |
+| **A03:2021** | Injection (XSS, SQLi) | High | SAST (SonarQube) + DAST |
+| **A05:2021** | Security Misconfiguration | Medium | IaC (Checkov) + DAST |
+| **A06:2021** | Vulnerable Software Components | High | SCA (Trivy FS) + Container Scan |
+| **A09:2021** | Security Logging Failures | Medium | Manual Review + CloudWatch Insights |
