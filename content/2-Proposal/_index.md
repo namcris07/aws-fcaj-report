@@ -32,7 +32,7 @@ _The Solution_
 
 The project builds an end-to-end CI/CD DevSecOps pipeline on AWS featuring:
 
-- **Jenkins** orchestrates a 12-stage pipeline, automating builds, 6 security scans, Docker image packaging, Amazon ECR pushing, and report uploading to Amazon S3.
+- **Jenkins** orchestrates an automated 22-stage pipeline, automating preflight validation, 6 security scans, Docker image builds, ECR pushing, local registry mirroring, ECS Fargate staging deployment, DAST scanning, ASFF conversion & Security Hub ingestion, and interactive production approval.
 - **6 Security Gates** integrated directly into the pipeline: Gitleaks (secrets), Trivy (SCA + container scan), SonarQube (SAST), Checkov (IaC scan), OWASP ZAP (DAST).
 - **Amazon S3 & AWS Lambda Aggregator:** Centralized JSON/HTML scan report storage on S3 (`reports/secrets/`, `reports/sca/`, `reports/sast/`, `reports/container/`, `reports/dast/`); AWS Lambda automatically aggregates findings and manages risk thresholds.
 - **Amazon ECS Fargate:** Serverless Container Runtime for staging and production environments. Zero cluster management fees, easily scaling down to 0 (`desired-count 0`) after live demos to optimize budget.
@@ -60,19 +60,29 @@ Developer pushes code to GitHub
     ↓
 GitHub webhook → Jenkins pipeline
     ↓
-Jenkins Jenkinsfile 12 stages:
-  ① Secrets scan        (Gitleaks → S3)
-  ② Build + unit tests  (npm build)
-  ③ SCA                 (Trivy filesystem → S3)
-  ④ SAST                (SonarQube → S3)
-  ⑤ Docker build        (multi-stage Dockerfile)
-  ⑥ Container scan      (Trivy image → S3)
-  ⑦ IaC scan            (Checkov → S3)
-  ⑧ Push image → Amazon ECR
-  ⑨ Deploy Staging     (ECS Fargate / Argo CD auto-sync)
-  ⑩ DAST                (OWASP ZAP vs staging URL → S3)
-  ⑪ Lambda Aggregator   (Aggregate findings from S3)
-  ⑫ Manual approval gate → Promote Production (ECS Fargate)
+Jenkins Jenkinsfile 22 stages:
+  ① Environment Preflight & Checkout
+  ② Static Validation (scripts/validate.sh: shell, Python, Kustomize, Docker, Terraform)
+  ③ Secrets Scan (Gitleaks → gitleaks-report.json)
+  ④ SCA Scan (Trivy filesystem → trivy-sca-report.json/html)
+  ⑤ SAST Scan (SonarQube code analysis → sonar-issues.json)
+  ⑥ IaC Scan (Checkov → checkov_report.json)
+  ⑦ Application Build (React app npm build)
+  ⑧ Container Image Build (Multi-stage Dockerfile Node 16 → Nginx)
+  ⑨ Container Image Scan (Trivy image → container-scan-report.json)
+  ⑩ Push Image → Amazon ECR (tag commit SHA & latest)
+  ⑪ Local Registry Mirror (Registry localhost:5001)
+  ⑫ Deploy Local GitOps Staging (Argo CD auto-sync)
+  ⑬ Deploy AWS ECS Fargate Staging (tetris-staging service)
+  ⑭ DAST Scan (OWASP ZAP vs staging ALB URL)
+  ⑮ Normalize Reports & ASFF Conversion (securityhub-asff.json)
+  ⑯ Upload Security Reports → Amazon S3 (s3://bucket/reports/)
+  ⑰ AWS Lambda Importer → Ingest Findings → AWS Security Hub
+  ⑱ Observability Verification (CloudWatch Container Insights & Prometheus/Grafana)
+  ⑲ Production Manual Approval Gate (Interactive Jenkins proceed/abort)
+  ⑳ Deploy Local GitOps Production (Argo CD sync)
+  ㉑ Deploy AWS ECS Fargate Production (tetris-production service)
+  ㉒ Summary & Artifact Archiving (scan-reports/ & final evidence recording)
     ↓
 CloudWatch Container Insights & Logs (logs, metrics, alarms)
 ```
@@ -223,3 +233,24 @@ _Long-term Value_
 - Highly viable, cost-optimized Serverless DevSecOps architecture model suitable for SMB enterprises.
 - The workshop website serves as a premium reference resource for future internship cohorts.
 - Extensive hands-on experience across DevSecOps, ECS Fargate, S3/Lambda, GitOps, and CloudWatch for all team members.
+
+---
+
+### 9. References
+
+The project is built based on official cloud security standards from AWS, NIST, and OWASP:
+
+1. **Amazon Web Services (2024)**, *Amazon ECS Developer Guide*, [AWS Documentation](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/).
+2. **Amazon Web Services (2024)**, *Amazon ECR User Guide*, [AWS Documentation](https://docs.aws.amazon.com/AmazonECR/latest/userguide/).
+3. **Amazon Web Services (2024)**, *AWS Security Hub User Guide & Security Finding Format (ASFF)*, [AWS Documentation](https://docs.aws.amazon.com/securityhub/latest/userguide/).
+4. **HashiCorp (2024)**, *Terraform AWS Provider Documentation*, [Terraform Registry](https://registry.terraform.io/providers/hashicorp/aws/latest/docs).
+5. **NIST (2017)**, *Special Publication 800-190: Application Container Security Guide*, National Institute of Standards and Technology.
+6. **OWASP Foundation (2021)**, *OWASP Top Ten 2021 & OWASP ZAP Documentation*, [OWASP Official Site](https://owasp.org/www-project-top-ten/).
+7. **Aqua Security (2024)**, *Trivy -- Vulnerability Scanner for Containers*, [Aqua Security Site](https://aquasecurity.github.io/trivy/).
+8. **Zachary Rice (2024)**, *Gitleaks -- SAST Tool for Detecting Hardcoded Secrets*, [GitHub Repository](https://github.com/gitleaks/gitleaks).
+9. **SonarSource (2024)**, *SonarQube Documentation -- Code Quality and Security*, [SonarSource Site](https://docs.sonarsource.com/sonarqube/).
+10. **Bridgecrew / Palo Alto Networks (2024)**, *Checkov -- Infrastructure as Code Static Analysis*, [Checkov Site](https://www.checkov.io/).
+11. **Jenkins Project (2024)**, *Jenkins Declarative Pipeline Documentation*, [Jenkins Official Site](https://www.jenkins.io/doc/).
+12. **Argo Project (2024)**, *Argo CD -- Declarative GitOps CD for Kubernetes*, [Argo CD Documentation](https://argo-cd.readthedocs.io/).
+13. **Gene Kim, Jez Humble, Patrick Debois, John Willis (2016)**, *The DevOps Handbook*, IT Revolution Press.
+14. **Nicole Forsgren, Jez Humble, Gene Kim (2018)**, *Accelerate: The Science of Lean Software and DevOps*, IT Revolution Press.

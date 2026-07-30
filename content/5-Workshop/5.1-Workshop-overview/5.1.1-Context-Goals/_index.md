@@ -26,7 +26,7 @@ In modern software development, Continuous Integration and Continuous Deployment
 ---
 
 ### 4. Deliverables & Outputs
-- **12-Stage CI/CD Pipeline:** Automated security auditing across 6 Security Gates (Gitleaks, Trivy SCA, SonarQube, Checkov, Trivy Image, OWASP ZAP).
+- **22-Stage CI/CD Pipeline:** Automated security auditing across 6 Security Gates (Gitleaks, Trivy SCA, SonarQube, Checkov, Trivy Image, OWASP ZAP) with ASFF standardization and AWS Security Hub ingestion.
 - **Centralized Security Report Aggregation:** JSON/HTML report archiving on **Amazon S3** and automated parsing via **AWS Lambda Aggregator**.
 - **Serverless Container Runtime:** Automated Staging deployment on **Amazon ECS Fargate** with Manual Approval gates for Production.
 - **Centralized Observability:** Operational telemetry via **Amazon CloudWatch Container Insights** and AWS Budget Alarms.

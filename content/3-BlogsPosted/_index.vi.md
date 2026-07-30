@@ -27,6 +27,6 @@ Bài viết trình bày kiến trúc tham chiếu hoàn chỉnh xây dựng nhà
 ---
 
 ### 3. [Blog 3 - Giám sát và mở rộng quy mô ứng dụng Amazon ECS trên AWS Fargate bằng chỉ số Prometheus](3.3-Blog3/)
-**Tác giả:** Mike George | **Ngày đăng:** 05/02/2021
+**Tác giả:** Mike George | **Ngày đăng:** 05/02/2021 | 👉 **[Bài viết trên FB Group](https://www.facebook.com/groups/awsstudygroupfcj/posts/2227911197973840)**
 
 Bài viết hướng dẫn cách nâng cao khả năng quan sát (Observability) cho các ứng dụng Java/Tomcat chạy trên **Amazon ECS Fargate** bằng việc kết hợp **CloudWatch Container Insights** và **Prometheus Exporter**. Bằng cách thu thập các chỉ số ứng dụng chuyên sâu (*JVM memory, connection count, garbage collection*), bài viết hướng dẫn từng bước thiết lập **CloudWatch Alarms** và cấu hình **ECS Service Auto Scaling** để tự động mở rộng quy mô (scale-out / scale-in) linh hoạt theo nhu cầu thực tế của lưu lượng truy cập.

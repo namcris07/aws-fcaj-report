@@ -27,6 +27,6 @@ This article presents a comprehensive reference architecture for an end-to-end D
 ---
 
 ### 3. [Blog 3 - Monitoring and Auto Scaling Amazon ECS Applications on AWS Fargate Using Prometheus Metrics](3.3-Blog3/)
-**Author:** Mike George | **Date:** February 05, 2021
+**Author:** Mike George | **Date:** February 05, 2021 | 👉 **[Post on FB Group](https://www.facebook.com/groups/awsstudygroupfcj/posts/2227911197973840)**
 
 This article demonstrates how to enhance application observability for containerized Java/Tomcat applications running on **Amazon ECS Fargate** using **CloudWatch Container Insights** and **Prometheus Exporters**. By collecting deep application-level metrics (*JVM memory, active connection counts, garbage collection*), it walks through configuring **CloudWatch Alarms** and **ECS Service Auto Scaling** to automatically scale tasks in and out dynamically based on real-time traffic demand.

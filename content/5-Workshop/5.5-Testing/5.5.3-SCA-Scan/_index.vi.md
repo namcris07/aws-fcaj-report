@@ -1,12 +1,12 @@
 ---
-title : "Stage 4 – Quét thành phần phụ thuộc (SCA)"
+title : "Stage 5 – Quét thành phần phụ thuộc (SCA)"
 date : 2026-07-06 
 weight : 3
 chapter : false
 pre : " <b> 5.5.3. </b> "
 ---
 
-# 5.5.3 Stage 4 – Quét thành phần phụ thuộc (SCA Scan)
+# 5.5.3 Stage 5 — Quét thành phần phụ thuộc (SCA Scan — Trivy FS)
 
 ---
 
@@ -44,10 +44,20 @@ Trivy phát hiện **4 lỗ hổng mức HIGH** trong `app/package-lock.json`:
 
 ![Phân bố lỗ hổng SCA theo thư viện](/images/5-Workshop/5.5-Testing/sca_pie_chart.png)
 
-*Hình 5.5.3: Phân bố lỗ hổng SCA theo thư viện (tổng 4 lỗi HIGH).*
+*Hình 5.5.3a: Phân bố lỗ hổng SCA theo thư viện (tổng 4 lỗi HIGH).*
 
 ---
 
 ### 4. Cách khắc phục
 
 Thực hiện nâng cấp tự động qua lệnh `npm audit fix`.
+
+---
+
+### Ảnh minh chứng thực tế: OWASP ZAP DAST Report trên S3
+
+![ZAP HTML Report](/images/5-Workshop/5.5-Testing/zap_html_report.png)
+*Hình 5.5.3b: Báo cáo ZAP HTML được lưu trữ trong Jenkins Artifacts — hiển thị các WARN alerts về missing security headers.*
+
+![S3 DAST Reports](/images/5-Workshop/5.5-Testing/s3_dast_reports.png)
+*Hình 5.5.3c: AWS S3 Console hiển thị báo cáo ZAP được tự động tải lên vào prefix `reports/dast/`.*

@@ -8,7 +8,7 @@ pre: " <b> 3.3. </b> "
 
 # Monitor and scale your Amazon ECS on AWS Fargate application using Prometheus metrics
 
-**by Mike George on 05 FEB 2021 in [Advanced (300)](https://aws.amazon.com/blogs/mt/category/learning-levels/advanced-300/), [Amazon CloudWatch](https://aws.amazon.com/blogs/mt/category/management-tools/amazon-cloudwatch/), [Auto Scaling](https://aws.amazon.com/blogs/mt/category/compute/auto-scaling/), [AWS Fargate](https://aws.amazon.com/blogs/mt/category/compute/aws-fargate/), [Containers](https://aws.amazon.com/blogs/mt/category/compute/containers/), [Management Tools](https://aws.amazon.com/blogs/mt/category/management-tools/), Technical How-to**
+**by Mike George on 05 FEB 2021 in [Advanced (300)](https://aws.amazon.com/blogs/mt/category/learning-levels/advanced-300/), [Amazon CloudWatch](https://aws.amazon.com/blogs/mt/category/management-tools/amazon-cloudwatch/), [Auto Scaling](https://aws.amazon.com/blogs/mt/category/compute/auto-scaling/), [AWS Fargate](https://aws.amazon.com/blogs/mt/category/compute/aws-fargate/), [Containers](https://aws.amazon.com/blogs/mt/category/compute/containers/), [Management Tools](https://aws.amazon.com/blogs/mt/category/management-tools/), Technical How-to** | 👉 **[Post on FB Group](https://www.facebook.com/groups/awsstudygroupfcj/posts/2227911197973840)**
 
 ---
 

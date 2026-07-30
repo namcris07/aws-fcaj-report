@@ -26,7 +26,7 @@ Trong các tổ chức phát triển phần mềm hiện đại, quy trình phá
 ---
 
 ### 4. Mục tiêu dự án & Sản phẩm bàn giao
-- **Pipeline CI/CD 12 Stages:** Tự động hóa kiểm định qua 6 Security Gates (Gitleaks, Trivy SCA, SonarQube, Checkov, Trivy Image, OWASP ZAP).
+- **Pipeline CI/CD 22 Stages:** Tự động hóa kiểm định qua 6 Security Gates (Gitleaks, Trivy SCA, SonarQube, Checkov, Trivy Image, OWASP ZAP), chuẩn hóa ASFF đẩy trực tiếp vào AWS Security Hub.
 - **Hệ thống lưu trữ & Tổng hợp Báo cáo Bảo mật:** Lưu trữ tập trung báo cáo JSON/HTML trên **Amazon S3** và phân tích tự động qua **AWS Lambda Aggregator**.
 - **Môi trường Serverless Container:** Triển khai tự động lên **Amazon ECS Fargate** cho Staging và kiểm soát phê duyệt thủ công (Manual Approval) cho Production.
 - **Hệ thống Giám sát Tập trung:** Quan sát log/metrics qua **Amazon CloudWatch Container Insights** và thiết lập cảnh báo ngân sách.

@@ -14,7 +14,7 @@ pre : " <b> 5.5. </b> "
 
 To verify the accuracy and effectiveness of the `devsecops-factory` pipeline, the team designed **[tetris-app](https://github.com/lamelihuynh/tetris-app.git)** (ReactJS + Nginx multi-stage build) as an intentional vulnerability target. The test target features multi-layered security vulnerabilities across source code, third-party libraries, container images, and AWS infrastructure configurations (Terraform, ECS Task Definitions).
 
-This section documents detailed testing results across **6 Security Gates** in the 11-stage Jenkins CI/CD pipeline, centralized security report storage on **Amazon S3**, automated incident notification via **AWS Lambda**, and production-ready deployment on **Amazon ECS Fargate** monitored by **AWS CloudWatch Container Insights**.
+This section documents detailed testing results across **6 Security Gates** in the automated 22-stage Jenkins CI/CD pipeline, centralized security report storage on **Amazon S3**, ASFF standardization and automated ingestion via **AWS Lambda** into **AWS Security Hub**, and production-ready deployment on **Amazon ECS Fargate** monitored by **AWS CloudWatch Container Insights**.
 
 ---
 

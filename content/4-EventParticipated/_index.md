@@ -67,7 +67,7 @@ During my internship, I participated in four events. Each one was a memorable ex
 ### [Event 3](4.3-Event3/)  
 &emsp;**Event Name:** AWS Tech Meetup & Community Knowledge Sharing  
 
-&emsp;**Date & Time:** July 22, 2026  
+&emsp;**Date & Time:** July 11, 2026  
 
 &emsp;**Location:** 26th Floor, Bitexco Tower, 02 Hai Trieu Street, Saigon Ward, Ho Chi Minh City  
 

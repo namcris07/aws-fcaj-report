@@ -32,7 +32,7 @@ _Giải pháp_
 
 Dự án xây dựng một pipeline CI/CD DevSecOps end-to-end trên AWS với các thành phần chính:
 
-- **Jenkins** điều phối pipeline 12 bước (stage), tự động hóa từ build, 6 security scans, đóng gói Docker image, push lên Amazon ECR và đẩy báo cáo lên Amazon S3.
+- **Jenkins** điều phối pipeline 22 stages tự động hóa, từ build, 6 security scans, đóng gói Docker image, push lên Amazon ECR, mirror sang local registry, deploy ECS Fargate staging, DAST scan, chuẩn hóa ASFF đẩy S3/Lambda/Security Hub cho tới phê duyệt production.
 - **6 Security Gates** tích hợp trực tiếp vào pipeline: Gitleaks (secrets), Trivy (SCA + container scan), SonarQube (SAST), Checkov (IaC scan), OWASP ZAP (DAST).
 - **Amazon S3 & AWS Lambda Aggregator:** Lưu trữ toàn bộ kết quả scan định dạng JSON/HTML trên S3 (`reports/secrets/`, `reports/sca/`, `reports/sast/`, `reports/container/`, `reports/dast/`); AWS Lambda tự động tổng hợp findings và quản lý ngưỡng rủi ro.
 - **Amazon ECS Fargate:** Đóng vai trò Serverless Container Runtime cho staging và production. Không tốn phí cluster base, dễ dàng scale về 0 (`desired-count 0`) sau khi kết thúc demo để tối ưu ngân sách.
@@ -60,19 +60,29 @@ Developer push code lên GitHub
     ↓
 GitHub webhook → Jenkins pipeline
     ↓
-Jenkins Jenkinsfile 12 stages:
-  ① Secrets scan        (Gitleaks → S3)
-  ② Build + unit tests  (npm build)
-  ③ SCA                 (Trivy filesystem → S3)
-  ④ SAST                (SonarQube → S3)
-  ⑤ Docker build        (multi-stage Dockerfile)
-  ⑥ Container scan      (Trivy image → S3)
-  ⑦ IaC scan            (Checkov → S3)
-  ⑧ Push image → Amazon ECR
-  ⑨ Deploy Staging     (ECS Fargate / Argo CD auto-sync)
-  ⑩ DAST                (OWASP ZAP vs staging URL → S3)
-  ⑪ Lambda Aggregator   (Tổng hợp findings từ S3)
-  ⑫ Manual approval gate → Promote Production (ECS Fargate)
+Jenkins Jenkinsfile 22 stages:
+  ① Environment Preflight & Checkout
+  ② Static Validation (scripts/validate.sh: shell, Python, Kustomize, Docker, Terraform)
+  ③ Secrets Scan (Gitleaks → gitleaks-report.json)
+  ④ SCA Scan (Trivy filesystem → trivy-sca-report.json/html)
+  ⑤ SAST Scan (SonarQube code analysis → sonar-issues.json)
+  ⑥ IaC Scan (Checkov → checkov_report.json)
+  ⑦ Application Build (React app npm build)
+  ⑧ Container Image Build (Multi-stage Dockerfile Node 16 → Nginx)
+  ⑨ Container Image Scan (Trivy image → container-scan-report.json)
+  ⑩ Push Image → Amazon ECR (tag commit SHA & latest)
+  ⑪ Local Registry Mirror (Registry localhost:5001)
+  ⑫ Deploy Local GitOps Staging (Argo CD auto-sync)
+  ⑬ Deploy AWS ECS Fargate Staging (tetris-staging service)
+  ⑭ DAST Scan (OWASP ZAP vs staging ALB URL)
+  ⑮ Normalize Reports & ASFF Conversion (securityhub-asff.json)
+  ⑯ Upload Security Reports → Amazon S3 (s3://bucket/reports/)
+  ⑰ AWS Lambda Importer → Ingest Findings → AWS Security Hub
+  ⑱ Observability Verification (CloudWatch Container Insights & Prometheus/Grafana)
+  ⑲ Production Manual Approval Gate (Interactive Jenkins proceed/abort)
+  ⑳ Deploy Local GitOps Production (Argo CD sync)
+  ㉑ Deploy AWS ECS Fargate Production (tetris-production service)
+  ㉒ Summary & Artifact Archiving (scan-reports/ & final evidence recording)
     ↓
 CloudWatch Container Insights & Logs (logs, metrics, alarms)
 ```
@@ -95,7 +105,7 @@ _Công cụ DevOps bổ trợ_
 
 | Công cụ       | Vai trò                                                                                           |
 | ------------- | ------------------------------------------------------------------------------------------------- |
-| **Jenkins**   | CI engine điều phối pipeline 12 bước; Configuration as Code (CasC).                               |
+| **Jenkins**   | CI engine điều phối pipeline **22 stages**; Configuration as Code (CasC).                          |
 | **Argo CD**   | GitOps CD engine trên local k3d cluster, pull-based deployment, auto-sync staging.                |
 | **Docker**    | Đóng gói ứng dụng React thành container image multi-stage, non-root runtime (Nginx Unprivileged). |
 | **Kustomize** | Quản lý cấu hình base/overlays cho staging và production.                                         |
@@ -115,7 +125,7 @@ _Công cụ bảo mật (Security Gates)_
 _Thiết kế thành phần_
 
 - **Ứng dụng (Application Layer):** Ứng dụng web Tetris viết bằng React, đóng gói bằng Dockerfile multi-stage (Node 16 build → Nginx Unprivileged runtime), expose port 8080 với health check endpoint `/`.
-- **CI Pipeline (Jenkins):** Jenkinsfile khai báo 12 stages tuần tự, biến môi trường chuẩn hóa (`AWS_REGION`, `REGISTRY`, `IMAGE_TAG`, `SCAN_REPORT_DIR`), tự động đẩy báo cáo lên S3.
+- **CI Pipeline (Jenkins):** Jenkinsfile khai báo **22 stages** (3 presets: CUSTOM, FULL_AWS_DEMO, FULL_PROJECT_DEMO), biến môi trường chuẩn hóa (`AWS_REGION`, `REGISTRY`, `IMAGE_TAG`, `SCAN_REPORT_DIR`), tự động đẩy báo cáo lên S3.
 - **Security & Aggregation:** S3 Bucket lưu trữ dữ liệu scan tập trung; Lambda Aggregator tự động phân tích mức độ nghiêm trọng và quyết định duyệt hay chặn pipeline.
 - **CD & Runtime (ECS Fargate / Argo CD):** Staging tự động cập nhật image tag mới; Production yêu cầu Manual Approval Gate trước khi kích hoạt ECS Task mới.
 - **Giám sát (Observability):** CloudWatch Container Insights thu thập ECS metrics/logs, Prometheus/Grafana giám sát local, AWS Budget cảnh báo hạn mức chi phí.
@@ -212,9 +222,7 @@ _Cải tiến kỹ thuật_
 _Sản phẩm bàn giao_
 
 - Workshop website song ngữ (Việt – Anh) theo chuẩn FCAJ template, có hướng dẫn thực hành Lab step-by-step.
-- Source code dự án trên GitHub với cấu trúc branch chuẩn và tài liệu `tasks.md` chi tiết.
 - 3 bài blog đăng trên AWS Study Group.
-- Slide báo cáo đồ án và bộ ảnh minh chứng hoạt động.
 - Bảng tổng hợp security findings và đề xuất remediation.
 - Kịch bản dọn dẹp & scale to 0 tài nguyên AWS.
 
@@ -223,3 +231,24 @@ _Giá trị dài hạn_
 - Mô hình kiến trúc Serverless DevSecOps trên ECS Fargate có tính khả thi cao và tối ưu chi phí cho các doanh nghiệp vừa và nhỏ.
 - Workshop website trở thành tài liệu tham khảo chất lượng cho các khóa thực tập tiếp theo.
 - Trải nghiệm thực tế phong phú về DevSecOps, ECS Fargate, S3/Lambda, GitOps và CloudWatch cho toàn bộ thành viên nhóm.
+
+---
+
+### 9. Tài liệu tham khảo (References)
+
+Dự án được xây dựng dựa trên các tiêu chuẩn an ninh chính thức từ AWS, NIST và OWASP:
+
+1. **Amazon Web Services (2024)**, *Amazon ECS Developer Guide*, [AWS Documentation](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/).
+2. **Amazon Web Services (2024)**, *Amazon ECR User Guide*, [AWS Documentation](https://docs.aws.amazon.com/AmazonECR/latest/userguide/).
+3. **Amazon Web Services (2024)**, *AWS Security Hub User Guide & Security Finding Format (ASFF)*, [AWS Documentation](https://docs.aws.amazon.com/securityhub/latest/userguide/).
+4. **HashiCorp (2024)**, *Terraform AWS Provider Documentation*, [Terraform Registry](https://registry.terraform.io/providers/hashicorp/aws/latest/docs).
+5. **NIST (2017)**, *Special Publication 800-190: Application Container Security Guide*, National Institute of Standards and Technology.
+6. **OWASP Foundation (2021)**, *OWASP Top Ten 2021 & OWASP ZAP Documentation*, [OWASP Official Site](https://owasp.org/www-project-top-ten/).
+7. **Aqua Security (2024)**, *Trivy -- Vulnerability Scanner for Containers*, [Aqua Security Site](https://aquasecurity.github.io/trivy/).
+8. **Zachary Rice (2024)**, *Gitleaks -- SAST Tool for Detecting Hardcoded Secrets*, [GitHub Repository](https://github.com/gitleaks/gitleaks).
+9. **SonarSource (2024)**, *SonarQube Documentation -- Code Quality and Security*, [SonarSource Site](https://docs.sonarsource.com/sonarqube/).
+10. **Bridgecrew / Palo Alto Networks (2024)**, *Checkov -- Infrastructure as Code Static Analysis*, [Checkov Site](https://www.checkov.io/).
+11. **Jenkins Project (2024)**, *Jenkins Declarative Pipeline Documentation*, [Jenkins Official Site](https://www.jenkins.io/doc/).
+12. **Argo Project (2024)**, *Argo CD -- Declarative GitOps CD for Kubernetes*, [Argo CD Documentation](https://argo-cd.readthedocs.io/).
+13. **Gene Kim, Jez Humble, Patrick Debois, John Willis (2016)**, *The DevOps Handbook*, IT Revolution Press.
+14. **Nicole Forsgren, Jez Humble, Gene Kim (2018)**, *Accelerate: The Science of Lean Software and DevOps*, IT Revolution Press.

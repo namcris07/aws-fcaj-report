@@ -10,52 +10,80 @@ pre : " <b> 5.4.1. </b> "
 
 ---
 
-Hệ thống `devsecops-factory` và ứng dụng `tetris-app` được thiết kế có chủ ý chứa 6 nhóm lỗ hổng bảo mật điển hình tại các tầng khác nhau nhằm thử nghiệm toàn diện khả năng phát hiện của đường ống CI/CD:
+Bảo mật là yêu cầu không thể thiếu trong mọi hệ thống phần mềm vận hành trên môi trường đám mây. Dự án devsecops-factory và ứng dụng kiểm thử 	etris-app được thiết kế có chủ ý chứa 6 nhóm lỗ hổng bảo mật điển hình tại các tầng nhằm thử nghiệm toàn diện khả năng phòng thủ của đường ống CI/CD.
 
 ---
 
-### 1. Lọt lộ thông tin nhạy cảm (Hardcoded Secrets) - Target: Gate 1 (Gitleaks)
+### 1. Lộ lọt Thông tin Nhạy cảm (Hardcoded Secrets)
 
-- **Mô tả trong dự án:** Lập trình viên vô tình commit các chuỗi thông tin bí mật như AWS Access Keys (`AKIA...`), Private Keys hoặc JWT secret trực tiếp vào file cấu hình hoặc lịch sử Git.
-- **Rủi ro:** Kẻ tấn công dùng bot rà quét công khai trên GitHub để chiếm đoạt tài khoản AWS hoặc quyền truy cập hệ thống chỉ trong vài giây.
-- **Công cụ phát hiện:** **Gitleaks** được tích hợp tại Stage 1 (`ci/stages/01-secrets-scan.sh`), tự động quét từng commit diff và toàn bộ lịch sử git.
+Trong áp lực tiến độ, lập trình viên thường vô tình hardcode thông tin xác thực trực tiếp vào mã nguồn: AWS Access Keys, API Keys, Database Passwords, Private Keys hoặc GitHub Personal Access Tokens.
 
----
-
-### 2. Lỗ hổng thư viện phụ thuộc (SCA Vulnerabilities) - Target: Gate 2 (Trivy FS)
-
-- **Mô tả trong dự án:** Tệp `package.json` và `package-lock.json` của `tetris-app` sử dụng các thư viện Node.js phiên bản cũ chứa các CVEs đã công bố (ví dụ: các lỗ hổng HIGH/CRITICAL trong `express`, `lodash` hoặc `react-scripts`).
-- **Rủi ro:** Tin tặc khai thác lỗ hổng trong thư viện bên thứ ba để thực thi mã từ xa (RCE) hoặc gây từ chối dịch vụ (DoS).
-- **Công cụ phát hiện:** **Trivy FileSystem** (`ci/stages/02-sca-scan.sh`) quét mã nguồn và cây phụ thuộc gián tiếp trước khi build image.
+- **Cơ chế khai thác:** Các bot quét tự động công khai liên tục lùng sục repository public và private bị lộ. Việc phát hiện có thể diễn ra trong vòng vài giây sau khi push code.
+- **Hậu quả:** Kẻ tấn công có thể sử dụng Access Key để chiếm quyền AWS Account, khởi tạo EC2 instances đào tiền ảo, làm phát sinh hóa đơn AWS hàng nghìn đô la trong vài giờ.
+- **Mục tiêu kiểm thử:** `app/src/config.js` tiêm sẵn `AKIAIOSFODNN7EXAMPLEFAKE` và GitHub PAT → **Gate 1 (Gitleaks)** phát hiện và dừng pipeline lập tức.
 
 ---
 
-### 3. Lỗi chất lượng mã nguồn tĩnh (SAST Code Flaws) - Target: Gate 3 (SonarQube)
+### 2. Lỗ hổng Thành phần Phụ thuộc (Vulnerable Dependencies - SCA)
 
-- **Mô tả trong dự án:** Các đoạn mã nguồn React/JavaScript chứa lỗi logic, thiếu xác thực dữ liệu đầu vào (Unsanitized Inputs), hoặc vi phạm chuẩn mã sạch (Code Smells / Vulnerabilities).
-- **Rủi ro:** Tạo nguy cơ tấn công Cross-Site Scripting (XSS) hoặc làm rò rỉ dữ liệu phiên làm việc của người dùng.
-- **Công cụ phát hiện:** **SonarQube Scanner** (`ci/stages/03-sast-scan.sh`) phân tích cú pháp mã nguồn tĩnh và đối chiếu với bộ quy tắc an toàn.
-
----
-
-### 4. Cấu hình sai hạ tầng mã hóa (IaC Misconfigurations) - Target: Gate 4 (Checkov)
-
-- **Mô tả trong dự án:** Các tệp Terraform (`infrastructure/terraform/main.tf`) và Kubernetes/Docker manifests (`app/Dockerfile`, `kubernetes/base/deployment.yaml`) chứa các lỗi cấu hình:
-  - Dockerfile thiếu chỉ thị `USER` (chạy với quyền root - lỗi `CKV_DOCKER_3`).
-  - Dockerfile thiếu kiểm tra trạng thái sức khỏe `HEALTHCHECK` (`CKV_DOCKER_2`).
-  - Security Group trong Terraform cho phép truy cập ingress mở rộng `0.0.0.0/0`.
-- **Công cụ phát hiện:** **Checkov** (`ci/stages/04-iac-scan.sh`) quét tĩnh hạ tầng Terraform và file Dockerfile/K8s với chế độ Soft-fail (không block build nhưng ghi nhận báo cáo).
+Ứng dụng web React hiện đại phụ thuộc vào hàng trăm thư viện npm, tạo thành một cây phụ thuộc phức tạp (dependency tree):
+- **Direct dependencies:** Khai báo trực tiếp trong package.json.
+- **Transitive dependencies:** Thư viện con của thư viện con, rất khó kiểm soát thủ công.
+- **Supply Chain Attack:** Kẻ tấn công tạo package giả mạo tên gần giống (*typosquatting*) hoặc chèn mã độc vào package phổ biến.
+- **Mục tiêu kiểm thử:** package-lock.json sử dụng `react-scripts 4.0.3`, `nth-check 1.0.2` (ReDoS HIGH), `serialize-javascript 4.0.0` (XSS HIGH) → **Gate 2 (Trivy FS)** phát hiện 4 CVEs mức HIGH.
 
 ---
 
-### 5. Lỗ hổng Container Image (Base Image CVEs) - Target: Gate 5 (Trivy Image)
+### 3. Lỗ hổng Mã nguồn Tĩnh (SAST & OWASP Code Vulnerabilities)
 
-- **Mô tả trong dự án:** Dockerfile phiên bản chưa gia cố sử dụng base image `nginx:1.18.0` (Debian-based) chứa hơn 40+ lỗ hổng hệ điều hành cấp độ CRITICAL và HIGH.
-- **Giải pháp gia cố (Hardening):** Chuyển sang sử dụng base image siêu nhẹ và gia cố `nginxinc/nginx-unprivileged:alpine` chạy dưới user non-root `user: 101` với `readonlyRootFilesystem: true`.
-- **Công cụ phát hiện:** **Trivy Image** (`ci/stages/05-container-scan.sh`) quét trực tiếp container image sau khi đóng gói.
+Phân tích tĩnh mã nguồn React/JavaScript phát hiện:
+- **Security Hotspots:** Các điểm nguy hiểm tiềm ẩn cần review thủ công (sử dụng eval(), cấu hình CORS lỏng lẻo).
+- **Vulnerabilities:** Lỗ hổng có thể khai thác như Cross-Site Scripting (XSS), SQL Injection, Insecure Deserialization.
+- **Mục tiêu kiểm thử:** `app/src/App.js` sử dụng dangerouslySetInnerHTML không qua sanitize → **Gate 3 (SonarQube)** đánh dấu Quality Gate FAILED.
 
 ---
 
-### 6. Lỗ hổng ứng dụng web động (DAST Web Flaws) - Target: Gate 6 (OWASP ZAP)
+### 4. Cấu hình Sai Hạ tầng (IaC Misconfigurations)
 
-- **Mô tả trong dự án:** Môi trường staging sau khi triển khai lên Amazon ECS Fargate được quét động từ bên ngoài bằng **OWASP ZAP** (`ci/stages/06-dast-scan.sh`) để phát hiện các lỗ hổng như thiếu HTTP Security Headers (X-Frame-Options, CSP, HSTS), hoặc rò rỉ thông tin máy chủ Nginx.
+Ứng dụng `tetris-app` và hạ tầng Terraform/Kubernetes được thiết kế sẵn các lỗi cấu hình:
+- **[CKV_DOCKER_3]:** Thiếu chỉ thị USER trong Dockerfile → container chạy mặc định với quyền 
+oot.
+- **[CKV_DOCKER_2]:** Thiếu chỉ thị HEALTHCHECK trong Dockerfile.
+- **[CKV_K8S_8]:** Thiếu livenessProbe trong Kubernetes Deployment.
+- **[CKV_K8S_15]:** Container Image sử dụng :latest tag thay vì pin phiên bản cố định.
+- **[CKV_AWS_130]:** Security Group cho phép Ingress IP 0.0.0.0/0.
+- **Mục tiêu kiểm thử:** **Gate 4 (Checkov)** phát hiện 34 lỗi cấu hình với chế độ Soft-fail.
+
+---
+
+### 5. Lỗ hổng Container Image (CVEs trong Base Image)
+
+Sử dụng base image lớn như 
+ginx:1.18.0 (Debian Buster) kéo theo hàng chục lỗ hổng CVE của hệ điều hành nền:
+
+```bash
+# nginx:1.18.0 (Debian) - chứa nhiều CVE CRITICAL
+$ trivy image nginx:1.18.0 --severity CRITICAL,HIGH
+Total: 40+ CVEs (CRITICAL: 15, HIGH: 25+)
+
+# nginxinc/nginx-unprivileged:alpine - sạch sẽ và an toàn
+$ trivy image nginxinc/nginx-unprivileged:alpine
+Total: 0 CVEs (CRITICAL: 0, HIGH: 0)
+```
+
+- **Mục tiêu kiểm thử:** **Gate 5 (Trivy Image)** quét Docker image trên ECR, phát hiện 15 CRITICAL CVEs trên 
+ginx:1.18.0 và **FAIL ngay tại Stage 9**, không cho phép push image lỗi lên ECR.
+
+---
+
+### 6. Lỗ hổng OWASP Top 10 & DAST Scan
+
+OWASP ZAP DAST scan thực hiện kiểm thử động trên URL Staging đang chạy để phát hiện các lỗ hổng tầng Web:
+
+| OWASP ID | Tên Lỗ hổng | Mức độ | Công cụ phát hiện trong Pipeline |
+|---|---|---|---|
+| **A01:2021** | Broken Access Control | Critical | DAST (OWASP ZAP) |
+| **A03:2021** | Injection (XSS, SQLi) | High | SAST (SonarQube) + DAST |
+| **A05:2021** | Security Misconfiguration | Medium | IaC (Checkov) + DAST |
+| **A06:2021** | Vulnerable Components | High | SCA (Trivy FS) + Container Scan |
+| **A09:2021** | Security Logging Failures | Medium | Manual Review + CloudWatch Insights |

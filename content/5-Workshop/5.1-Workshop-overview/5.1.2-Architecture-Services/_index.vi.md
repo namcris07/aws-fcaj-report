@@ -25,7 +25,8 @@ pre : " <b> 5.1.2. </b> "
 | **Amazon ECS Fargate** | **Serverless Container Runtime:** Tự động mở rộng và chỉ tính phí theo thời gian task chạy. Không mất phí cố định duy trì cluster tĩnh ($72/tháng của EKS), dễ dàng scale số lượng task về 0 khi không sử dụng để tối ưu chi phí. |
 | **Amazon ECR** | **Private Registry Bảo mật:** Đăng ký lưu trữ Docker Image riêng tư, hỗ trợ mã hóa Server-Side, tính năng Immutable Tag và tính năng Scan-on-Push tích hợp sẵn. |
 | **Amazon S3** | **Lưu trữ Báo cáo Tập trung:** Độ tin cậy 99.999999999% (11 số 9), hỗ trợ SSE-S3 encryption và S3 Lifecycle Policy tự động dọn dẹp báo cáo sau 30 ngày để tối ưu chi phí. |
-| **AWS Lambda** | **Event-Driven Processing:** Tự động kích hoạt khi có báo cáo mới trên S3 (S3 Event Notification), phân tích kết quả rà quét mà không cần duy trì máy chủ chạy thường trực. |
+| **AWS Lambda** | **Event-Driven Processing:** Tự động kích hoạt khi có báo cáo mới trên S3 (S3 Event Notification), chuyển đổi báo cáo sang chuẩn ASFF và gọi API `batch_import_findings` đẩy dữ liệu vào Security Hub. |
+| **AWS Security Hub** | **CSPM & Findings Management:** Quản lý tập trung các thông số an ninh và lỗ hổng hạ tầng/ứng dụng theo định dạng chuẩn ASFF. |
 | **Amazon CloudWatch** | **Observability & Budget Control:** Thu thập logs/metrics từ ECS Fargate Tasks thông qua Container Insights và phát thông báo cảnh báo chi phí (AWS Budget Alerts). |
 | **AWS IAM** | **Security & Access Control:** Quản lý phân quyền hạt mịn theo nguyên tắc Least Privilege cho Jenkins Build Agent, ECS Task Execution Role và Lambda Execution Role. |
 

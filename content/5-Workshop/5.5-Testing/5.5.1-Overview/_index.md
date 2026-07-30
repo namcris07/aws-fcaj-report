@@ -12,9 +12,9 @@ pre: " <b> 5.5.1. </b> "
 
 The `devsecops-factory` system is designed following the **"Shift Left Security"** principle, placing security validation as early as possible in the CI/CD pipeline. To verify the pipeline, the team designed **[tetris-app](https://github.com/lamelihuynh/tetris-app.git)** (ReactJS + Nginx multi-stage build) as an intentional vulnerability target.
 
-![DevSecOps 11-stage Pipeline Flow](/images/5-Workshop/5.5-Testing/pipeline_stages.png)
+![DevSecOps 22-stage Pipeline Flow](/images/5-Workshop/5.5-Testing/pipeline_stages.png)
 
-_Figure 5.5.1: Full DevSecOps 11-stage pipeline architecture running on Jenkins._
+_Figure 5.5.1: Full DevSecOps 22-stage automated pipeline architecture running on Jenkins._
 
 # STAGE 2: Deploy (Serve static files via Nginx)
 

@@ -25,7 +25,8 @@ pre : " <b> 5.1.2. </b> "
 | **Amazon ECS Fargate** | **Serverless Container Runtime:** Scales automatically and charges strictly by task execution time. Eliminates fixed cluster management fees ($72/month for EKS), allowing tasks to scale to 0 when idle. |
 | **Amazon ECR** | **Secure Private Registry:** Private Docker image registry supporting Server-Side Encryption, Tag Immutability, and Scan-on-Push. |
 | **Amazon S3** | **Centralized Report Storage:** 99.999999999% (11 9's) durability, supporting SSE-S3 encryption and S3 Lifecycle Policies for cost optimization. |
-| **AWS Lambda** | **Event-Driven Processing:** Triggers automatically on S3 report uploads via S3 Event Notifications, parsing vulnerability metrics without requiring persistent servers. |
+| **AWS Lambda** | **Event-Driven Processing:** Triggers automatically on S3 report uploads via S3 Event Notifications, converting findings to ASFF standard and calling `batch_import_findings` to ingest into Security Hub. |
+| **AWS Security Hub** | **CSPM & Findings Management:** Centralized security posture dashboard ingesting normalized ASFF vulnerability findings across cloud and container layers. |
 | **Amazon CloudWatch** | **Observability & Budget Control:** Collects telemetry via Container Insights and manages cost alarms via AWS Budget Alerts. |
 | **AWS IAM** | **Security & Access Control:** Enforces Least-Privilege permissions across Jenkins Build Agents, ECS Execution Roles, and Lambda Functions. |
 

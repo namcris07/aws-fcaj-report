@@ -8,7 +8,7 @@ pre: " <b> 3.3. </b> "
 
 # Giám sát và mở rộng quy mô ứng dụng Amazon ECS trên AWS Fargate của bạn bằng các chỉ số Prometheus
 
-**bởi Mike George vào ngày 05 THÁNG 2 2021 trong [Advanced (300)](https://aws.amazon.com/blogs/mt/category/learning-levels/advanced-300/), [Amazon CloudWatch](https://aws.amazon.com/blogs/mt/category/management-tools/amazon-cloudwatch/), [Auto Scaling](https://aws.amazon.com/blogs/mt/category/compute/auto-scaling/), [AWS Fargate](https://aws.amazon.com/blogs/mt/category/compute/aws-fargate/), [Containers](https://aws.amazon.com/blogs/mt/category/compute/containers/), [Management Tools](https://aws.amazon.com/blogs/mt/category/management-tools/), Technical How-to**
+**bởi Mike George vào ngày 05 THÁNG 2 2021 trong [Advanced (300)](https://aws.amazon.com/blogs/mt/category/learning-levels/advanced-300/), [Amazon CloudWatch](https://aws.amazon.com/blogs/mt/category/management-tools/amazon-cloudwatch/), [Auto Scaling](https://aws.amazon.com/blogs/mt/category/compute/auto-scaling/), [AWS Fargate](https://aws.amazon.com/blogs/mt/category/compute/aws-fargate/), [Containers](https://aws.amazon.com/blogs/mt/category/compute/containers/), [Management Tools](https://aws.amazon.com/blogs/mt/category/management-tools/), Technical How-to** | 👉 **[Bài viết trên FB Group](https://www.facebook.com/groups/awsstudygroupfcj/posts/2227911197973840)**
 
 ---
 

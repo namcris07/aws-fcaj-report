@@ -35,7 +35,7 @@ pre: " <b> 8. </b> "
 - **Blog 2: Building an end-to-end Kubernetes-based DevSecOps software factory on AWS**  
   👉 **[Post on Facebook Group](https://www.facebook.com/groups/awsstudygroupfcj/posts/2225170508247909)**
 - **Blog 3: Monitoring and Autoscaling Amazon ECS on AWS Fargate using Prometheus Metrics**  
-  👉 **[Detailed Translated Post on Site](../3-blogsposted/3.3-blog3/)**
+  👉 **[Post on Facebook Group](https://www.facebook.com/groups/awsstudygroupfcj/posts/2227911197973840)**
 
 ---
 

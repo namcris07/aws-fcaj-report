@@ -1,18 +1,18 @@
 ---
-title : "Stage 6 – Quét Hạ tầng (IaC Scan)"
+title : "Stage 7 – Quét Hạ tầng (IaC Scan)"
 date : 2026-07-06 
 weight : 5
 chapter : false
 pre : " <b> 5.5.5. </b> "
 ---
 
-# 5.5.5 Stage 6 – Quét cấu hình Hạ tầng (IaC Scan - Checkov)
+# 5.5.5 Stage 7 — Quét cấu hình Hạ tầng (IaC Scan — Checkov)
 
 ---
 
 ### 1. Kết quả tổng quan
 
-Công cụ **Checkov** được tích hợp tại Stage 6 (`ci/stages/04-iac-scan.sh`) để kiểm tra tĩnh toàn bộ mã nguồn định nghĩa hạ tầng dưới dạng mã (Infrastructure as Code - IaC) bao gồm các tệp **Terraform (`infrastructure/terraform/*.tf`)**, **Dockerfile (`app/Dockerfile`)** và **Amazon ECS Task Definitions (`infrastructure/task-definition.json`)**.
+Công cụ **Checkov** được tích hợp tại Stage 7 (`ci/stages/iac-scan.sh`) để kiểm tra tĩnh toàn bộ mã nguồn định nghĩa hạ tầng dưới dạng mã (Infrastructure as Code - IaC) bao gồm các tệp **Terraform (`infrastructure/terraform/*.tf`)**, **Dockerfile (`app/Dockerfile`)** và **Amazon ECS Task Definitions (`infrastructure/task-definition.json`)**.
 
 Checkov kiểm tra hạ tầng theo các tiêu chuẩn an ninh AWS Well-Architected Framework và CIS Benchmarks:
 
@@ -55,3 +55,13 @@ Passed checks: 14, Failed checks: 3, Skipped checks: 0
 | **CKV_AWS_336** | ECS Task Definition cho phép privileged mode | `task-definition.json` | Đặt `"privileged": false` |
 | **CKV_AWS_55** | ECR Repository chưa bật KMS Key CMK | `terraform/ecr.tf` | Cấu hình encryption_configuration với AWS KMS |
 
+---
+
+> **Ghi chú quan trọng:** Checkov chạy với `--soft-fail` flag trong pipeline — pipeline tiếp tục nhưng báo cáo được ghi nhận đầy đủ. Kết quả kiểm thử thực tế phát hiện **34 FAILED, 12 PASSED**.
+
+Chi tiết các lỗi chính phát hiện trong ứng dụng `tetris-app`:
+- **CKV_DOCKER_3**: Thiếu chỉ thị `USER` → container chạy dưới quyền root (`app/Dockerfile`).
+- **CKV_DOCKER_2**: Thiếu chỉ thị `HEALTHCHECK` trong Dockerfile.
+- **CKV_K8S_8**: Thiếu `livenessProbe` trong Kubernetes Deployment.
+- **CKV_K8S_15**: Container Image không chỉ định tag cố định (dùng `:latest`).
+- **CKV_AWS_130**: VPC subnet gán IP công khai (cố ý để ECS Fargate pull images từ ECR).

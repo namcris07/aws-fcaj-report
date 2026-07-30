@@ -69,7 +69,7 @@ Trong quá trình thực tập, em đã tham gia 4 events, với mỗi event là
 ### [Event 3](4.3-Event3/)
 &emsp;**Tên sự kiện:** AWS Tech Meetup & Community Knowledge Sharing
 
-&emsp;**Thời gian:** 22/07/2026
+&emsp;**Thời gian:** 11/07/2026
 
 &emsp;**Địa điểm:** Tầng 26, tòa nhà Bitexco, số 02 đường Hải Triều, phường Sài Gòn, thành phố Hồ Chí Minh
 

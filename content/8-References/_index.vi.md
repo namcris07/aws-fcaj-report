@@ -31,7 +31,7 @@ pre: " <b> 8. </b> "
 - **Blog 2: Xây dựng nhà máy phần mềm DevSecOps end-to-end dựa trên Kubernetes trên AWS**  
   👉 **[Bài viết chia sẻ trên Facebook Group](https://www.facebook.com/groups/awsstudygroupfcj/posts/2225170508247909)**
 - **Blog 3: Giám sát và mở rộng quy mô ứng dụng Amazon ECS trên AWS Fargate bằng chỉ số Prometheus**  
-  👉 **[Nội dung dịch chi tiết trên Site](../3-blogsposted/3.3-blog3/)**
+  👉 **[Bài viết chia sẻ trên Facebook Group](https://www.facebook.com/groups/awsstudygroupfcj/posts/2227911197973840)**
 
 ---
 
