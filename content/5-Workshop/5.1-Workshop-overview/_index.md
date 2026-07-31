@@ -18,5 +18,5 @@ This section introduces the real-world context, problem statement, project objec
 
 ## Table of Contents
 
-1. [5.1.1 Problem Statement & Objectives](5.1.1-Context-Goals/)
-2. [5.1.2 Architecture Diagram & AWS Service Selection](5.1.2-Architecture-Services/)
+1. [5.1.1 Problem Statement & Objectives](5.1.1-context-goals/)
+2. [5.1.2 Architecture Diagram & AWS Service Selection](5.1.2-architecture-services/)

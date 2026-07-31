@@ -14,9 +14,9 @@ pre: " <b> 5. </b> "
 
 #### Danh mục bài học
 
-1. [5.1. Ý tưởng, Mục tiêu & Kiến trúc Kỹ thuật](5.1-Workshop-overview/)
-2. [5.2. Các bước chuẩn bị (Prerequisites)](5.2-Prerequiste/)
-3. [5.3. Hướng dẫn thực hành Step-by-Step](5.3-Step-by-Step/)
-4. [5.4. Bảo mật](5.4-Security/)
-5. [5.5. Kiểm thử toàn diện quy trình bảo mật DevSecOps](5.5-Testing/)
-6. [5.6. Dọn dẹp tài nguyên (Clean-up)](5.6-Cleanup/)
+1. [5.1. Ý tưởng, Mục tiêu & Kiến trúc Kỹ thuật](5.1-workshop-overview/)
+2. [5.2. Các bước chuẩn bị (Prerequisites)](5.2-prerequiste/)
+3. [5.3. Hướng dẫn thực hành Step-by-Step](5.3-step-by-step/)
+4. [5.4. Bảo mật](5.4-security/)
+5. [5.5. Kiểm thử toàn diện quy trình bảo mật DevSecOps](5.5-testing/)
+6. [5.6. Dọn dẹp tài nguyên (Clean-up)](5.6-cleanup/)

@@ -14,9 +14,9 @@ The **DevSecOps Factory** represents the core technical project designed to embe
 
 #### Table of Contents
 
-1. [5.1. Idea, Objectives & Technical Architecture](5.1-Workshop-overview/)
-2. [5.2. Prerequisites & IAM Setup](5.2-Prerequiste/)
-3. [5.3. Step-by-Step Lab Guide](5.3-Step-by-Step/)
-4. [5.4. Security Analysis & Controls](5.4-Security/)
-5. [5.5. Comprehensive DevSecOps Security Testing](5.5-Testing/)
-6. [5.6. Resource Clean-up](5.6-Cleanup/)
+1. [5.1. Idea, Objectives & Technical Architecture](5.1-workshop-overview/)
+2. [5.2. Prerequisites & IAM Setup](5.2-prerequiste/)
+3. [5.3. Step-by-Step Lab Guide](5.3-step-by-step/)
+4. [5.4. Security Analysis & Controls](5.4-security/)
+5. [5.5. Comprehensive DevSecOps Security Testing](5.5-testing/)
+6. [5.6. Resource Clean-up](5.6-cleanup/)

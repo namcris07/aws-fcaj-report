@@ -20,6 +20,6 @@ Chương này phân tích toàn diện 6 nhóm lỗ hổng bảo mật phổ bi�
 
 ## Danh mục các bài viết thực hành
 
-1. [5.4.1 Các lỗ hổng bảo mật thường gặp và mô hình kiểm thử](5.4.1-Vulnerabilities/)
-2. [5.4.2 Biện pháp bảo mật theo mô hình Defense in Depth (7 tầng)](5.4.2-Defense-Measures/)
-3. [5.4.3 Chuẩn hóa báo cáo ASFF & Phân tích hiệu quả bảo mật (ROI)](5.4.3-Focus-Scenarios/)
+1. [5.4.1 Các lỗ hổng bảo mật thường gặp và mô hình kiểm thử](5.4.1-vulnerabilities/)
+2. [5.4.2 Biện pháp bảo mật theo mô hình Defense in Depth (7 tầng)](5.4.2-defense-measures/)
+3. [5.4.3 Chuẩn hóa báo cáo ASFF & Phân tích hiệu quả bảo mật (ROI)](5.4.3-focus-scenarios/)

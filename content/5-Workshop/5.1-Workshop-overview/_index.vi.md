@@ -18,5 +18,5 @@ Phần này giới thiệu bối cảnh thực tế, tuyên bố bài toán, m�
 
 ## Danh mục các bài viết
 
-1. [5.1.1 Bối cảnh, Bài toán & Mục tiêu Dự án](5.1.1-Context-Goals/)
-2. [5.1.2 Sơ đồ Kiến trúc & Lựa chọn Dịch vụ AWS](5.1.2-Architecture-Services/)
+1. [5.1.1 Bối cảnh, Bài toán & Mục tiêu Dự án](5.1.1-context-goals/)
+2. [5.1.2 Sơ đồ Kiến trúc & Lựa chọn Dịch vụ AWS](5.1.2-architecture-services/)

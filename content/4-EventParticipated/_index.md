@@ -20,7 +20,7 @@ pre: " <b> 4. </b> "
 
 During my internship, I participated in four events. Each one was a memorable experience that provided new, interesting, and useful knowledge, along with gifts and wonderful moments.
 
-### [Event 1](4.1-Event1/)  
+### [Event 1](4.1-event1/)  
 &emsp;**Event Name:** FCAJ Community Day – June 2026  
 
 &emsp;**Date & Time:** June 27, 2026  
@@ -42,7 +42,7 @@ During my internship, I participated in four events. Each one was a memorable ex
 
 ---
 
-### [Event 2](4.2-Event2/)  
+### [Event 2](4.2-event2/)  
 &emsp;**Event Name:** Enterprise Cloud Architectures and Industry Application Study Tour  
 
 &emsp;**Date & Time:** July 04, 2026  
@@ -64,7 +64,7 @@ During my internship, I participated in four events. Each one was a memorable ex
 
 ---
 
-### [Event 3](4.3-Event3/)  
+### [Event 3](4.3-event3/)  
 &emsp;**Event Name:** AWS Tech Meetup & Community Knowledge Sharing  
 
 &emsp;**Date & Time:** July 11, 2026  
@@ -85,7 +85,7 @@ During my internship, I participated in four events. Each one was a memorable ex
 
 ---
 
-### [Event 4](4.4-Event4/)  
+### [Event 4](4.4-event4/)  
 &emsp;**Event Name:** FCAJ x Agentic AI Build Week – "Show Up. Build. Pitch. WIN!"  
 
 &emsp;**Date & Time:** July 25, 2026  

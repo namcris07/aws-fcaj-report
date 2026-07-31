@@ -20,6 +20,6 @@ This section details common security vulnerabilities, defense-in-depth security 
 
 ## Table of Contents
 
-1. [5.4.1 Common Security Vulnerabilities](5.4.1-Vulnerabilities/)
-2. [5.4.2 Implemented Defense Controls](5.4.2-Defense-Measures/)
-3. [5.4.3 Critical Security Focus Scenarios](5.4.3-Focus-Scenarios/)
+1. [5.4.1 Common Security Vulnerabilities](5.4.1-vulnerabilities/)
+2. [5.4.2 Implemented Defense Controls](5.4.2-defense-measures/)
+3. [5.4.3 Critical Security Focus Scenarios](5.4.3-focus-scenarios/)

@@ -22,7 +22,7 @@ pre: " <b> 4. </b> "
 
 Trong quá trình thực tập, em đã tham gia 4 events, với mỗi event là một trải nghiệm đáng nhớ với những kiến thức mới, hay và bổ ích, cùng với đó là những món quà và những khoảnh khắc rất tuyệt vời.
 
-### [Event 1](4.1-Event1/)
+### [Event 1](4.1-event1/)
 &emsp;**Tên sự kiện:** FCAJ Community Day – June 2026
 
 &emsp;**Thời gian:** 27/06/2026
@@ -44,7 +44,7 @@ Trong quá trình thực tập, em đã tham gia 4 events, với mỗi event là
 
 ---
 
-### [Event 2](4.2-Event2/)
+### [Event 2](4.2-event2/)
 &emsp;**Tên sự kiện:** Enterprise Cloud Architectures and Industry Application Study Tour
 
 &emsp;**Thời gian:** 04/07/2026
@@ -66,7 +66,7 @@ Trong quá trình thực tập, em đã tham gia 4 events, với mỗi event là
 
 ---
 
-### [Event 3](4.3-Event3/)
+### [Event 3](4.3-event3/)
 &emsp;**Tên sự kiện:** AWS Tech Meetup & Community Knowledge Sharing
 
 &emsp;**Thời gian:** 11/07/2026
@@ -87,7 +87,7 @@ Trong quá trình thực tập, em đã tham gia 4 events, với mỗi event là
 
 ---
 
-### [Event 4](4.4-Event4/)
+### [Event 4](4.4-event4/)
 &emsp;**Tên sự kiện:** FCAJ x Agentic AI Build Week – "Show Up. Build. Pitch. WIN!"
 
 &emsp;**Thời gian:** 25/07/2026
