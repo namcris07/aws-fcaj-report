@@ -122,6 +122,14 @@ CloudWatch Container Insights & Logs (logs, metrics, alarms)
 | Container Scan | Trivy Image | OS base image CVE vulnerabilities in container layers | Amazon S3 |
 | DAST | OWASP ZAP | Runtime web application flaws on running staging endpoints | Amazon S3 |
 
+*Component Design*
+
+- **Application Layer:** Tetris web application written in React, packaged using a multi-stage Dockerfile (Node 16 build → Nginx Unprivileged runtime), exposing port 8080 with a health check endpoint `/`.
+- **CI Pipeline (Jenkins):** Declarative Jenkinsfile defining **22 stages** (3 presets: `CUSTOM`, `FULL_AWS_DEMO`, `FULL_PROJECT_DEMO`), standardized environment variables (`AWS_REGION`, `REGISTRY`, `IMAGE_TAG`, `SCAN_REPORT_DIR`), automatically uploading scan artifacts to S3.
+- **Security & Aggregation:** S3 Bucket serving as centralized scan data storage; Lambda Aggregator automatically parsing severity levels and determining pipeline pass/fail status.
+- **CD & Runtime (ECS Fargate / Argo CD):** Staging environment automatically deployed with new image tags; Production requiring a Manual Approval Gate before initiating new ECS Tasks.
+- **Observability:** CloudWatch Container Insights collecting ECS metrics/logs, local Prometheus/Grafana monitoring, and AWS Budget alerts enforcing spending limits.
+
 ---
 
 ### 4. Technical Implementation & Roadmap
@@ -134,9 +142,29 @@ The project is structured across 9 internship weeks (June 15, 2026 – August 14
 2. **Phase 2 — Pipeline Construction, Security Gates & Cloud Deployment (Weeks 4–6, July 06 – July 26):** Standardize Jenkins pipeline, integrate 6 security scan scripts, provision ECR & S3 buckets, deploy Lambda aggregator, enforce SHA commit tagging, configure ECS Fargate & ALBs, and achieve GitOps deployment.
 3. **Phase 3 — Observability, Quality Assurance, Documentation & Teardown (Weeks 7–9, July 27 – August 14):** Enable CloudWatch Container Insights, aggregate security findings, construct Hugo workshop documentation site, publish 3 technical blog posts, complete bilingual quality audits, submit final deliverables, scale ECS tasks to 0, and tear down cloud resources.
 
+*Team Allocation*
+
+| Team Member | Core Role | Primary Focus & Deliverables | Email |
+|---|---|---|---|
+| Vu Hai An | AWS Infrastructure & Platform | AWS accounts, IAM, ECR, ECS Fargate, S3 (reports), networking infrastructure. | 23520035@gm.uit.edu.vn |
+| Huynh Nhat Linh | CI/CD & GitOps | Jenkinsfile pipeline, ECR image pushing, ECS Fargate & Argo CD deployment promotion. | linh.huynhnhat@hcmut.edu.vn |
+| Bui Huu Loi | DevSecOps Security | Secrets scan, SCA, SAST, IaC scan, container scan, DAST, S3 reports, Lambda aggregator. | loi.bui2311972@hcmut.edu.vn |
+| Nguyen Van Hao | Application, Docker & K8s | React app, Dockerfile, health checks, K8s manifests, ECS Task Definitions. | 23520448@gm.uit.edu.vn |
+| Nguyen Chu Hai Nam | Observability, QA & Docs | CloudWatch Container Insights, Prometheus/Grafana, testing, workshop website, presentation slides. | nam.nguyennamcris7@hcmut.edu.vn |
+
 ---
 
-### 5. Estimated AWS Operating Cost (< $20.50/month)
+### 5. Implementation Roadmap & Milestones
+
+| Phase | Timeline | Core Tasks & Activities | Key Deliverables & Outcomes |
+|---|---|---|---|
+| **Foundations & Analysis** | Weeks 1–3 (June 15 – July 05) | Learn AWS fundamentals, analyze architecture, build local React app/Docker container, implement initial secrets scan, draft proposal outline. | Buildable app, local working Dockerfile, draft CI pipeline, approved proposal outline. |
+| **Pipeline, Security & Cloud Deployment** | Weeks 4–6 (July 06 – July 26) | Create ECR & S3 buckets, push images, configure ECS Fargate & ALBs, deploy Lambda aggregator, complete 6 security gates, deploy staging/production via ECS & Argo CD. | End-to-end pipeline operational, ECR images populated, S3 report storage live, ECS Fargate tasks running, Argo CD Synced & Healthy. |
+| **Monitoring, Documentation & Delivery** | Weeks 7–9 (July 27 – August 14) | Enable CloudWatch Insights, aggregate findings, design presentation slides, construct Hugo workshop site, write 3 technical blog posts, perform bilingual audit, final submission, scale ECS tasks to 0 & cleanup AWS resources. | CloudWatch dashboards active, presentation slide deck ready, complete Hugo workshop website, 3 published blogs, final report submitted, AWS resources safely scaled down to 0 cost. |
+
+---
+
+### 6. Estimated AWS Operating Cost (< $20.50/month)
 
 | AWS Cloud Service | Estimated Monthly Charge | Usage Specification |
 |---|---|---|
@@ -149,9 +177,18 @@ The project is structured across 9 internship weeks (June 15, 2026 – August 14
 | Data Transfer Out | ~$1.00 USD/month | Outbound HTTP demo traffic. |
 | **Total Estimated Expense** | **~$20.50 USD/month** | **> 85% cost savings compared to EKS (~$131/month)** |
 
+> **Note:** By adopting **Amazon ECS Fargate Serverless**, the project avoids paying the $73/month fixed fee required for an EKS Control Plane. Total actual AWS expenditure for the entire internship duration is estimated between **$20 – $35 USD**.
+
+*Cost Optimization Strategy*
+
+- Utilize ECS Fargate Serverless with automatic scale-to-zero (`desired-count 0`) immediately following demo sessions.
+- Develop and test offline on local k3d clusters (zero cloud cost).
+- Configure S3 Lifecycle Policies to automatically purge old security reports after 30 days.
+- Set AWS Budget Alerts at 50%, 80%, and 100% threshold levels.
+
 ---
 
-### 6. Risk Assessment Matrix
+### 7. Risk Assessment Matrix
 
 | Risk Factor | Impact Level | Likelihood | Mitigation Strategy |
 |---|---|---|---|
@@ -161,9 +198,41 @@ The project is structured across 9 internship weeks (June 15, 2026 – August 14
 | Code Merge Conflicts | Medium | Medium | Work on isolated feature branches (`aws-infra`, `cicd-gitops`, `security`); enforce mandatory PR reviews. |
 | Network Instability | Medium | Low | Maintain offline k3d local demo environment with cached images. |
 
+*Contingency Plan*
+
+- If ECS Fargate experiences outages: Fall back to local k3d cluster demo with local Docker registry.
+- If Jenkins server fails: Present via static backup slide deck showcasing verified pipeline execution logs.
+- Immediately after demo completion: Execute `aws ecs update-service --desired-count 0` to stop container tasks and cease charges.
+
 ---
 
-### 7. References
+### 8. Expected Results & Value Proposition
+
+*Technical Improvements*
+
+- Successfully built an end-to-end DevSecOps CI/CD pipeline over 9 weeks on Amazon ECS Fargate, S3, and Lambda.
+- Integrated 6 automated security gates, centralizing scan reports on S3 and aggregating findings via Lambda Aggregator.
+- Achieved automated GitOps staging deployment and controlled production releases via manual approval gates.
+- Established comprehensive observability using CloudWatch Container Insights and Prometheus/Grafana at minimal cost (~$20/month).
+
+*Key Deliverables*
+
+- Bilingual (English & Vietnamese) Hugo workshop documentation site following FCAJ template standards, complete with step-by-step lab guides.
+- 3 technical blog posts published on AWS Study Group.
+- Security findings consolidation matrix and remediation recommendations.
+- Resource cleanup & scale-to-zero automation scripts for AWS infrastructure.
+
+*Long-Term Value*
+
+- Serverless DevSecOps architecture on ECS Fargate proves highly feasible and cost-effective for small-to-medium enterprise projects.
+- Workshop website serves as a high-quality reference resource for future internship cohorts.
+- Rich hands-on experience in DevSecOps, ECS Fargate, S3/Lambda, GitOps, and CloudWatch for all team members.
+
+---
+
+### 9. References & Demo Video
+
+- **DevSecOps CI/CD Pipeline Demo Video:** 👉 **[Watch Video Demo on Google Drive](https://drive.google.com/file/d/1OZUILa0fnkHPgLaj_94Nr9XAnyTR94IJ/view)**
 
 The solution is engineered according to official security standards published by AWS, NIST, and OWASP:
 

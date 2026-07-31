@@ -234,7 +234,9 @@ _Giá trị dài hạn_
 
 ---
 
-### 9. Tài liệu tham khảo (References)
+### 9. Tài liệu tham khảo & Video Demo (References & Demo Video)
+
+- **Video Demo Quy trình CI/CD DevSecOps:** 👉 **[Xem Video Demo trên Google Drive](https://drive.google.com/file/d/1OZUILa0fnkHPgLaj_94Nr9XAnyTR94IJ/view)**
 
 Dự án được xây dựng dựa trên các tiêu chuẩn an ninh chính thức từ AWS, NIST và OWASP:
 
