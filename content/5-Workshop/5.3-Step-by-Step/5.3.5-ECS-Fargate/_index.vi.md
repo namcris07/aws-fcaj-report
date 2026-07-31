@@ -10,13 +10,14 @@ pre : " <b> 5.3.5. </b> "
 
 ---
 
-### 1. Cấu hình ECS Task Definition (	etris-app)
+### 1. Cấu hình ECS Task Definition (tetris-app)
 
 Task Definition được cấu hình bảo mật nghiêm ngặt (Container Hardening) trong infrastructure/terraform/main.tf và ecs-task-def.json:
 - **CPU / Memory:** 256 CPU (.25 vCPU) / 512 MiB RAM.
 - **Runtime:** FARGATE (Production) và FARGATE_SPOT (Staging — tiết kiệm chi phí 70%).
 - **Container Port:** 8080 (Nginx Unprivileged non-root user 101).
-- **Security Context:** user: "101", eadonlyRootFilesystem: true.
+- **Security Context:** user: "101", 
+eadonlyRootFilesystem: true.
 - **Init Container Pattern:** Sử dụng container olume-permissions (chạy root 0) để cấp quyền trên /var/cache/nginx và /tmp trước khi main container 	etris khởi động.
 - **CloudWatch Logging:** Đẩy logs trực tiếp lên Log Group /ecs/devsecops-factory.
 - **ECS Cluster:** devsecops-factory-cluster.

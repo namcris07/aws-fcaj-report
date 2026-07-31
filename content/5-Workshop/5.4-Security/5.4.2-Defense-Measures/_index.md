@@ -115,7 +115,95 @@ Cloud infrastructure posture is guarded by 10 core controls:
 | **S3 Encryption** | SSE-S3 (AES256) encrypts data at rest across all stored security reports. |
 | **S3 Public Access Block** | All 4 S3 Block Public Access flags explicitly enabled on the report bucket. |
 | **AWS Budget Alerts** | Automated email alerts emitted upon reaching 50%, 80%, and 100% monthly budget limits. |
+| **CloudWatch Alarms** | Application-level alerts: ECS Task stop alarm, Lambda error alarm, Security Hub CRITICAL finding alarm. |
 | **AWS Security Hub** | Centralized security dashboard aggregating findings automatically dispatched by Lambda. |
 | **ECR Scan-on-Push** | Immediate CVE scanning triggered on every container image push to ECR. |
 | **Read-Only Root Filesystem** | ECS Task Definition enforces `"readonlyRootFilesystem": true` for runtime containers. |
 | **Non-Root Container User** | Tetris application container executes under `user: 101` (Nginx unprivileged), barring root permissions. |
+
+---
+
+### 6. CloudWatch Alarms — Application-Level Monitoring
+
+Beyond AWS Budget cost alerts, the project provisions **3 CloudWatch Alarms** targeting ECS task health, Lambda function errors, and Security Hub critical findings:
+
+```hcl
+# infrastructure/terraform/main.tf
+
+# Alarm 1: ECS Task stopped unexpectedly (desired != running)
+resource "aws_cloudwatch_metric_alarm" "ecs_task_stopped" {
+  alarm_name          = "devsecops-ecs-task-stopped"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = 1
+  metric_name         = "RunningTaskCount"
+  namespace           = "ECS/ContainerInsights"
+  period              = 60
+  statistic           = "Average"
+  threshold           = 1
+  alarm_description   = "Alert when ECS running task count drops below 1 (task crash or OOM)"
+  alarm_actions       = [aws_sns_topic.alerts.arn]
+  dimensions = {
+    ClusterName = "devsecops-factory-cluster"
+    ServiceName = "tetris-production"
+  }
+}
+
+# Alarm 2: Lambda Aggregator execution errors
+resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
+  alarm_name          = "devsecops-lambda-aggregator-errors"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 1
+  metric_name         = "Errors"
+  namespace           = "AWS/Lambda"
+  period              = 60
+  statistic           = "Sum"
+  threshold           = 0
+  alarm_description   = "Alert on any Lambda Aggregator execution error (ASFF import failure)"
+  alarm_actions       = [aws_sns_topic.alerts.arn]
+  dimensions = {
+    FunctionName = "devsecops-factory-securityhub-importer"
+  }
+}
+
+# Alarm 3: Security Hub CRITICAL findings spike
+resource "aws_cloudwatch_metric_alarm" "securityhub_critical" {
+  alarm_name          = "devsecops-securityhub-critical-findings"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 1
+  metric_name         = "Findings"
+  namespace           = "AWS/SecurityHub"
+  period              = 300
+  statistic           = "Sum"
+  threshold           = 0
+  alarm_description   = "Alert when any CRITICAL severity finding is imported into Security Hub"
+  alarm_actions       = [aws_sns_topic.alerts.arn]
+  dimensions = {
+    ComplianceStatus = "FAILED"
+    SeverityLabel    = "CRITICAL"
+  }
+}
+
+# SNS Topic for alarm notifications (email subscription)
+resource "aws_sns_topic" "alerts" {
+  name = "devsecops-factory-alerts"
+}
+```
+
+**Verify Alarms via AWS CLI:**
+
+```bash
+aws cloudwatch describe-alarms \
+  --alarm-names \
+    "devsecops-ecs-task-stopped" \
+    "devsecops-lambda-aggregator-errors" \
+    "devsecops-securityhub-critical-findings" \
+  --profile devsecops-factory \
+  --region ap-southeast-1 \
+  --query 'MetricAlarms[].{Name:AlarmName,State:StateValue}'
+```
+
+| Alarm | Trigger Condition | Notification Channel |
+|---|---|---|
+| `devsecops-ecs-task-stopped` | ECS Production running task count < 1 | SNS → Email |
+| `devsecops-lambda-aggregator-errors` | Lambda error count > 0 | SNS → Email |
+| `devsecops-securityhub-critical-findings` | Security Hub CRITICAL finding imported | SNS → Email |

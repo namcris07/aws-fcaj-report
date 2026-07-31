@@ -10,7 +10,7 @@ pre: " <b> 5. </b> "
 
 #### Tổng quan
 
-**DevSecOps Factory** là dự án kỹ thuật chính nhằm tích hợp tự động hóa bảo mật vào mọi giai đoạn của vòng đời phát triển phần mềm (Shift-Left Security). Nội dung phần này được xây dựng chuẩn hóa theo **Thang điểm đánh giá Project Workshop của FCAJ / AWS**, bao gồm 6 mục nội dung bám sát tiêu chí: Bối cảnh & Mục tiêu, Kiến trúc & Lựa chọn Dịch vụ AWS, Hướng dẫn Thực hành Step-by-Step, Phân tích Bảo mật, Kiểm thử Validation và Dọn dẹp Tài nguyên.
+**DevSecOps Factory** là dự án kỹ thuật chính nhằm tích hợp tự động hóa bảo mật vào mọi giai đoạn của vòng đời phát triển phần mềm (Shift-Left Security). Nội dung phần này được xây dựng chuẩn hóa theo **Thang điểm đánh giá Project Workshop của FCAJ / AWS**, bao gồm 7 mục nội dung bám sát tiêu chí: Bối cảnh & Mục tiêu, Kiến trúc & Lựa chọn Dịch vụ AWS, Hướng dẫn Thực hành Step-by-Step, Phân tích Bảo mật, Kiểm thử Validation, Dọn dẹp Tài nguyên và Đánh giá & Bài học kinh nghiệm.
 
 #### Danh mục bài học
 
@@ -20,3 +20,4 @@ pre: " <b> 5. </b> "
 4. [5.4. Bảo mật](5.4-security/)
 5. [5.5. Kiểm thử toàn diện quy trình bảo mật DevSecOps](5.5-testing/)
 6. [5.6. Dọn dẹp tài nguyên (Clean-up)](5.6-cleanup/)
+7. [5.7. Đánh giá & Bài học kinh nghiệm](5.7-reflection/)

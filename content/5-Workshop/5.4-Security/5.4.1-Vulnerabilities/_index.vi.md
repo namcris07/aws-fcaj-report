@@ -46,8 +46,7 @@ Phân tích tĩnh mã nguồn React/JavaScript phát hiện:
 ### 4. Cấu hình Sai Hạ tầng (IaC Misconfigurations)
 
 Ứng dụng `tetris-app` và hạ tầng Terraform/Kubernetes được thiết kế sẵn các lỗi cấu hình:
-- **[CKV_DOCKER_3]:** Thiếu chỉ thị USER trong Dockerfile → container chạy mặc định với quyền 
-oot.
+- **[CKV_DOCKER_3]:** Thiếu chỉ thị USER trong Dockerfile → container chạy mặc định với quyền root.
 - **[CKV_DOCKER_2]:** Thiếu chỉ thị HEALTHCHECK trong Dockerfile.
 - **[CKV_K8S_8]:** Thiếu livenessProbe trong Kubernetes Deployment.
 - **[CKV_K8S_15]:** Container Image sử dụng :latest tag thay vì pin phiên bản cố định.
@@ -58,8 +57,7 @@ oot.
 
 ### 5. Lỗ hổng Container Image (CVEs trong Base Image)
 
-Sử dụng base image lớn như 
-ginx:1.18.0 (Debian Buster) kéo theo hàng chục lỗ hổng CVE của hệ điều hành nền:
+Sử dụng base image lớn như nginx:1.18.0 (Debian Buster) kéo theo hàng chục lỗ hổng CVE của hệ điều hành nền:
 
 ```bash
 # nginx:1.18.0 (Debian) - chứa nhiều CVE CRITICAL
@@ -71,8 +69,7 @@ $ trivy image nginxinc/nginx-unprivileged:alpine
 Total: 0 CVEs (CRITICAL: 0, HIGH: 0)
 ```
 
-- **Mục tiêu kiểm thử:** **Gate 5 (Trivy Image)** quét Docker image trên ECR, phát hiện 15 CRITICAL CVEs trên 
-ginx:1.18.0 và **FAIL ngay tại Stage 9**, không cho phép push image lỗi lên ECR.
+- **Mục tiêu kiểm thử:** **Gate 5 (Trivy Image)** quét Docker image trên ECR, phát hiện 15 CRITICAL CVEs trên nginx:1.18.0 và **FAIL ngay tại Stage 9**, không cho phép push image lỗi lên ECR.
 
 ---
 

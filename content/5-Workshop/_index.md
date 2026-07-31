@@ -10,7 +10,7 @@ pre: " <b> 5. </b> "
 
 #### Overview
 
-The **DevSecOps Factory** represents the core technical project designed to embed security automation across all stages of the software development lifecycle (Shift-Left Security). This section is structured strictly according to the **FCAJ / AWS Workshop Evaluation Criteria**, covering Context & Objectives, Architecture & AWS Service Selection, Step-by-Step Lab Guide, Security Analysis, End-to-End Validation Testing, and Resource Clean-up.
+The **DevSecOps Factory** represents the core technical project designed to embed security automation across all stages of the software development lifecycle (Shift-Left Security). This section is structured strictly according to the **FCAJ / AWS Workshop Evaluation Criteria**, covering Context & Objectives, Architecture & AWS Service Selection, Step-by-Step Lab Guide, Security Analysis, End-to-End Validation Testing, Resource Clean-up, and Reflection & Lessons Learned.
 
 #### Table of Contents
 
@@ -20,3 +20,4 @@ The **DevSecOps Factory** represents the core technical project designed to embe
 4. [5.4. Security Analysis & Controls](5.4-security/)
 5. [5.5. Comprehensive DevSecOps Security Testing](5.5-testing/)
 6. [5.6. Resource Clean-up](5.6-cleanup/)
+7. [5.7. Reflection & Lessons Learned](5.7-reflection/)

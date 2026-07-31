@@ -14,7 +14,7 @@ pre: " <b> 7. </b> "
 Môi trường tại FCAJ vô cùng năng động, thân thiện và cởi mở. Các diễn giả, mentor và thành viên ban tổ chức luôn sẵn sàng hỗ trợ, giải đáp các thắc mắc kỹ thuật phức tạp (từ cấu hình IAM, VPC Peering đến EKS Cluster và GitOps với Argo CD) bất kể trong hay ngoài giờ làm việc. Sự kết nối giữa các thành viên trong nhóm cũng như sự giao lưu giữa các nhóm giúp tạo nên một không khí học tập tràn đầy năng lượng và cảm hứng.
 
 **2. Sự hỗ trợ từ Mentor & Team Admin**  
-Đội ngũ Mentor hướng dẫn vô cùng tận tâm, truyền đạt tư duy kiến trúc (Architecture Thinking) thay vì chỉ đưa ra đáp án có sẵn. Mentor luôn khuyến khích sinh viên tự tay thực hành (Hands-on), tự đọc tài liệu official và thử nghiệm xử lý các sự cố thực tế (như lỗi lệch cổng container, lỗi xác thực token ECR hay đứt gãy pipeline). Team Admin hỗ trợ nhanh chóng về tài liệu, kênh trao đổi Discord/Slack và theo sát tiến độ từng tuần của từng nhóm.
+Đội ngũ Mentor hướng dẫn vô cùng tận tâm, truyền đạt tư duy kiến trúc (Architecture Thinking) thay vì chỉ đưa ra đáp án có sẵn. Mentor luôn khuyến khích sinh viên tự tay thực hành (Hands-on), tự đọc tài liệu official và thử nghiệm xử lý các sự cố thực tế (như lỗi lệch cổng container, lỗi xác thực token ECR hay đứt gãy pipeline). Team Admin hỗ trợ nhanh chóng về tài liệu, kênh trao đổi Whatsapp và theo sát tiến độ từng tuần của từng nhóm.
 
 **3. Sự phù hợp giữa dự án và chuyên ngành học**  
 Đồ án thực tế **DevSecOps CI/CD Factory trên Amazon ECS Fargate** rất sát với định hướng công nghệ hiện đại. Những kiến thức học được tại FCAJ không chỉ củng cố nền tảng mạng và hệ điều hành từ nhà trường mà còn mở rộng vượt bậc sang các lĩnh vực Cloud-Native, DevSecOps (Trivy, SonarQube, OWASP), GitOps (Argo CD) và Observability (CloudWatch).

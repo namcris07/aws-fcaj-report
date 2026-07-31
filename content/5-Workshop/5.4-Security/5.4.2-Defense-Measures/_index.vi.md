@@ -115,7 +115,95 @@ Bảo mật hạ tầng AWS được đảm bảo thông qua 10 cơ chế cốt 
 | **S3 Encryption** | SSE-S3 (AES256) mã hóa dữ liệu at-rest cho toàn bộ báo cáo bảo mật. |
 | **S3 Public Block** | Bật cả 4 cấu hình Block Public Access trên S3 Report Bucket. |
 | **AWS Budget Alert** | Cảnh báo email khi chi phí đạt ngưỡng 50%, 80% và 100% ngân sách tháng. |
+| **CloudWatch Alarms** | Cảnh báo ở cấp ứng dụng: ECS Task dừng đột ngột, Lambda báo lỗi, Security Hub nhận finding CRITICAL. |
 | **AWS Security Hub** | Quản lý tập trung thông số an ninh, tiếp nhận findings từ Lambda. |
 | **ECR Scan-on-Push** | Tự động quét CVE ngay khi Docker image được đẩy lên ECR. |
 | **Readonly Root Filesystem** | ECS Task Definition bật `"readonlyRootFilesystem": true` cho container. |
 | **Non-root Container User** | Container Tetris chạy dưới `user: 101` (Nginx unprivileged user), không dùng root. |
+
+---
+
+### 6. CloudWatch Alarms — Giám sát Cấp Ứng dụng
+
+Ngoài AWS Budget Alerts kiểm soát chi phí, dự án cấu hình thêm **3 CloudWatch Alarms** theo dõi trực tiếp sức khỏe của ECS task, lỗi Lambda, và findings bảo mật nghiêm trọng từ Security Hub:
+
+```hcl
+# infrastructure/terraform/main.tf
+
+# Alarm 1: ECS Task dừng đột ngột (số task chạy < 1)
+resource "aws_cloudwatch_metric_alarm" "ecs_task_stopped" {
+  alarm_name          = "devsecops-ecs-task-stopped"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = 1
+  metric_name         = "RunningTaskCount"
+  namespace           = "ECS/ContainerInsights"
+  period              = 60
+  statistic           = "Average"
+  threshold           = 1
+  alarm_description   = "Cảnh báo khi số task đang chạy xuống dưới 1 (task crash hoặc OOM)"
+  alarm_actions       = [aws_sns_topic.alerts.arn]
+  dimensions = {
+    ClusterName = "devsecops-factory-cluster"
+    ServiceName = "tetris-production"
+  }
+}
+
+# Alarm 2: Lambda Aggregator xảy ra lỗi thực thi
+resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
+  alarm_name          = "devsecops-lambda-aggregator-errors"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 1
+  metric_name         = "Errors"
+  namespace           = "AWS/Lambda"
+  period              = 60
+  statistic           = "Sum"
+  threshold           = 0
+  alarm_description   = "Cảnh báo khi Lambda Aggregator xảy ra lỗi (nhập ASFF thất bại)"
+  alarm_actions       = [aws_sns_topic.alerts.arn]
+  dimensions = {
+    FunctionName = "devsecops-factory-securityhub-importer"
+  }
+}
+
+# Alarm 3: Security Hub nhận finding mức CRITICAL
+resource "aws_cloudwatch_metric_alarm" "securityhub_critical" {
+  alarm_name          = "devsecops-securityhub-critical-findings"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 1
+  metric_name         = "Findings"
+  namespace           = "AWS/SecurityHub"
+  period              = 300
+  statistic           = "Sum"
+  threshold           = 0
+  alarm_description   = "Cảnh báo khi có bất kỳ finding mức CRITICAL nào được nhập vào Security Hub"
+  alarm_actions       = [aws_sns_topic.alerts.arn]
+  dimensions = {
+    ComplianceStatus = "FAILED"
+    SeverityLabel    = "CRITICAL"
+  }
+}
+
+# SNS Topic để nhận email thông báo
+resource "aws_sns_topic" "alerts" {
+  name = "devsecops-factory-alerts"
+}
+```
+
+**Kiểm tra trạng thái các Alarm bằng AWS CLI:**
+
+```bash
+aws cloudwatch describe-alarms \
+  --alarm-names \
+    "devsecops-ecs-task-stopped" \
+    "devsecops-lambda-aggregator-errors" \
+    "devsecops-securityhub-critical-findings" \
+  --profile devsecops-factory \
+  --region ap-southeast-1 \
+  --query 'MetricAlarms[].{Name:AlarmName,State:StateValue}'
+```
+
+| Alarm | Điều kiện kích hoạt | Kênh thông báo |
+|---|---|---|
+| `devsecops-ecs-task-stopped` | Số ECS Production task đang chạy < 1 | SNS → Email |
+| `devsecops-lambda-aggregator-errors` | Lambda báo lỗi > 0 lần | SNS → Email |
+| `devsecops-securityhub-critical-findings` | Security Hub nhận finding CRITICAL | SNS → Email |
