@@ -18,7 +18,7 @@ pre: " <b> 4. </b> "
 > * Outcomes or value gained (lessons learned, new skills, contribution to the team/project)
 > * This listing helps demonstrate your actual participation as well as the soft skills and experience you have gained from each event.
 
-During my internship, I participated in four events. Each one was a memorable experience that provided new, interesting, and useful knowledge, along with gifts and wonderful moments.
+During my internship, I participated in five events. Each one was a memorable experience that provided new, interesting, and useful knowledge, along with gifts and wonderful moments.
 
 ### [Event 1](4.1-event1/)  
 &emsp;**Event Name:** FCAJ Community Day – June 2026  
@@ -104,5 +104,27 @@ During my internship, I participated in four events. Each one was a memorable ex
 
 &emsp;**Outcomes & Values Gained:**  
 * Mastered Multi-Agent Systems architecture (A2A – Agent to Agent) and Validation Loop mechanisms combined with Human-in-the-Loop controls to prevent hallucination in production AI systems.  
-* Deeply internalized the Business-First mindset: every technical solution must originate from solving a real pain point — not showcasing architectural complexity; gained lasting lessons in Teamwork & Low Ego through candid, hands-on sharing from Hackathon teams.  
+* Deeply internalized the Business-First mindset: every technical solution must originate from solving a real pain point — not showcasing architectural complexity; gained lasting lessons in Teamwork & Low Ego through candid, hands-on sharing from Hackathon teams.
+
+---
+
+### [Event 5](4.5-event5/)  
+&emsp;**Event Name:** AWS FCAJ Agent Forge – Deepdive (Day 1: Foundations & Agent Setup)  
+
+&emsp;**Date & Time:** August 01, 2026  
+
+&emsp;**Location:** 26th Floor, Bitexco Tower, 02 Hai Trieu Street, Saigon Ward, Ho Chi Minh City  
+
+&emsp;**Role:** Attendee  
+
+&emsp;**Main Content & Activities:**  
+* **Agentic AI & Autonomous Spectrum:** Analyzed the nature of autonomous AI systems, the spectrum from Deterministic Workflows to Fully Autonomous Agents, and two new standardized protocols — MCP (Model Context Protocol) & A2A (Agent-to-Agent Protocol).  
+* **AgentCore Runtime & Firecracker MicroVM:** Serverless Pay-as-you-go architecture; MicroVM Isolation technology for complete per-session data isolation; 3 deployment methods (Strands SDK, Docker/ECR, Zip/S3); Canary Deployment and Rollback via Alias/Versioning.  
+* **AgentCore Identity – Bidirectional Security:** Inbound authentication (JWT/Cognito) controlling who may invoke the Agent; Outbound governance controlling what external resources the Agent may call; WAT Token model with encrypted Token Vault to protect original credentials.  
+* **AgentCore Gateway – Central Middleware:** A single control plane for all security policies; Human-in-the-Loop & Interceptor mechanisms for automatic PII filtering; Semantic Tool Search for automatic semantic-based tool matching via JSON Schema.  
+* **Hands-on Lab:** Direct practice packaging an Agent with Strands SDK, configuring Amazon Cognito authentication, designing JSON Schemas for MCP Tools, and navigating the AgentCore management console.  
+
+&emsp;**Outcomes & Values Gained:**  
+* Gained a clear understanding of Amazon Bedrock AgentCore's layered architecture (Runtime → Identity → Gateway) and how each layer solves a distinct challenge in a Production-Ready system.  
+* Internalized the Middleware Pattern design mindset — separating concerns clearly across components — and understood why an Agent that performs well in testing is still not Production-ready without proper Identity and Gateway layers.  
 

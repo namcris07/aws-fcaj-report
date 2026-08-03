@@ -20,7 +20,7 @@ pre: " <b> 4. </b> "
 > * Việc liệt kê này giúp thể hiện rõ sự tham gia thực tế của bạn, cũng như các kỹ năng mềm và kinh nghiệm bạn đã tích lũy qua từng sự kiện.
 
 
-Trong quá trình thực tập, em đã tham gia 4 events, với mỗi event là một trải nghiệm đáng nhớ với những kiến thức mới, hay và bổ ích, cùng với đó là những món quà và những khoảnh khắc rất tuyệt vời.
+Trong quá trình thực tập, em đã tham gia 5 events, với mỗi event là một trải nghiệm đáng nhớ với những kiến thức mới, hay và bổ ích, cùng với đó là những món quà và những khoảnh khắc rất tuyệt vời.
 
 ### [Event 1](4.1-event1/)
 &emsp;**Tên sự kiện:** FCAJ Community Day – June 2026
@@ -107,4 +107,26 @@ Trong quá trình thực tập, em đã tham gia 4 events, với mỗi event là
 &emsp;**Kết quả & Giá trị đạt được:**
 * Nắm vững kiến trúc Multi-Agent Systems (A2A – Agent to Agent) và cơ chế Validation Loop kết hợp Human-in-the-Loop để kiểm soát hallucination trong các hệ thống AI sản xuất.
 * Thấm nhuần tư duy Business-first: mọi giải pháp kỹ thuật phải xuất phát từ việc giải quyết đúng pain-point thực tế, không chỉ thể hiện sự phức tạp công nghệ; đồng thời học được bài học Teamwork & Low Ego qua những chia sẻ thực chiến từ các đội thi Hackathon.
+
+---
+
+### [Event 5](4.5-event5/)
+&emsp;**Tên sự kiện:** AWS FCAJ Agent Forge – Deepdive (Day 1: Foundations & Agent Setup)
+
+&emsp;**Thời gian:** 01/08/2026
+
+&emsp;**Địa điểm:** Tầng 26, tòa nhà Bitexco, số 02 đường Hải Triều, phường Sài Gòn, thành phố Hồ Chí Minh
+
+&emsp;**Vai trò trong sự kiện:** Người tham dự
+
+&emsp;**Nội dung & Hoạt động chính:**
+* **Agentic AI & Autonomous Spectrum:** Phân tích bản chất của hệ thống AI tự chủ, dải tự chủ từ Deterministic Workflow đến Fully Autonomous, và 2 giao thức mới MCP (Model Context Protocol) & A2A (Agent-to-Agent Protocol).
+* **AgentCore Runtime & Firecracker MicroVM:** Kiến trúc Serverless Pay-as-you-go; công nghệ MicroVM Isolation cách ly hoàn toàn dữ liệu từng User Session; 3 phương thức đóng gói (Strands SDK, Docker/ECR, Zip/S3) và chiến lược Canary Deployment/Rollback bằng Alias.
+* **AgentCore Identity – Bảo mật Hai chiều:** Xác thực Inbound (JWT/Cognito) kiểm soát ai được gọi Agent; Outbound kiểm soát Agent gọi đến đâu; mô hình WAT Token kết hợp Token Vault mã hóa tránh lộ token gốc.
+* **AgentCore Gateway – Middleware trung tâm:** Một điểm kiểm soát duy nhất cho toàn bộ security policy; cơ chế Human-in-the-Loop & Interceptor lọc PII tự động; Semantic Tool Search tự động khớp công cụ đúng theo ngữ nghĩa JSON Schema.
+* **Hands-on Lab:** Thực hành trực tiếp đóng gói Agent bằng Strands SDK, cấu hình Amazon Cognito, thiết kế JSON Schema cho MCP Tools và thao tác trên console AgentCore.
+
+&emsp;**Kết quả & Giá trị đạt được:**
+* Hiểu rõ kiến trúc phân lớp của Amazon Bedrock AgentCore (Runtime → Identity → Gateway) và cách từng lớp giải quyết một bài toán riêng biệt trong hệ thống Production-Ready.
+* Nắm vững tư duy thiết kế Middleware Pattern — tách biệt rõ vai trò của từng thành phần — và hiểu tại sao một Agent hoạt động tốt ở môi trường thử nghiệm vẫn chưa đủ điều kiện để triển khai Production nếu thiếu lớp Identity và Gateway.
 
